@@ -53,7 +53,9 @@ export default function Login() {
         color="#EDA01F"
       
          />
+         <TouchableOpacity onPress={()=>navigation.navigate('Daftar')}>
           <Text  style = {{marginBottom:20,marginTop:20}}>Daftar</Text>
+          </TouchableOpacity>
       </View>
       <View style={styles.links}>
      
