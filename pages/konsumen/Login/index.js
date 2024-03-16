@@ -1,11 +1,15 @@
 import { View, TextInput, Button, StyleSheet,Text,TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-// Import FormInput if used
+// import { Login, Dashboard, Daftar, Profile, Transaksi } from './pages/route';
+
 
 export default function Login() {
     const navigation = useNavigation();
-    // Define form, error, errorPassword, handleInputChange, handleInputPassword, loginUser if needed
+
+    const handleLoginPress = () => {
+      navigation.navigate('MainTab'); // Navigate to the MainTab navigator
+    };
 
     return (
         <>
@@ -64,12 +68,11 @@ export default function Login() {
     </View>
 
         </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
-            <Text style={{marginTop:10,backgroundColor:'#0B111F' , padding:10}}>
-           
-            </Text>
-          </TouchableOpacity>
-
+        <TouchableOpacity onPress={handleLoginPress}>
+      <Text style={{marginTop: 10, backgroundColor: '#0B111F', padding: 10}}>
+        {/* Login button content */}
+      </Text>
+    </TouchableOpacity>
         </>
 
       );
