@@ -1,7 +1,13 @@
-import { StyleSheet, Text, View,Image,Button } from 'react-native'
+import { StyleSheet, Text, View,Image,Button,TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Profile() {
+  const navigation = useNavigation();
+
+  const handleLoginPress = () => {
+    navigation.navigate('Login'); // navigasi ke login
+  };
   return (
     <>
       <View style={{ alignItems: 'center', flexDirection: 'column' , ...StyleSheet.absoluteFillObject, backgroundColor: '#EDA01F' }}>
@@ -54,7 +60,9 @@ export default function Profile() {
                           borderWidth:1.3,
                           borderRadius:4,
     }}>
+         <TouchableOpacity onPress={handleLoginPress}>
           <Text style={styles.text}>Keluar</Text>
+          </TouchableOpacity>
           </View>
           
         </View>
