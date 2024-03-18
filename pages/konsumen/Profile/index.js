@@ -8,6 +8,9 @@ export default function Profile() {
   const handleLoginPress = () => {
     navigation.navigate('Login'); // navigasi ke login
   };
+  const handleAlamat = () => {
+    navigation.navigate('Alamat'); // navigasi ke Alamat
+  };
   return (
     <>
       <View style={{ alignItems: 'center', flexDirection: 'column' , ...StyleSheet.absoluteFillObject, backgroundColor: '#EDA01F' }}>
@@ -29,9 +32,11 @@ export default function Profile() {
         <View style={styles.button}>
           <Text style={styles.text}>Edit Profile</Text>
         </View>
+        <TouchableOpacity onPress={handleAlamat}>
         <View style={styles.button2}>
           <Text style={styles.text}>Tambah Alamat</Text>
         </View>
+        </TouchableOpacity>
         </View>
 
         <View style={{display:'flex', flexDirection:'row-reverse',justifyContent:'space-between' , marginTop:10}}>
