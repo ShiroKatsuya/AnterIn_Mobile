@@ -3,14 +3,22 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 export default function Alamat() {
+
+    const navigation = useNavigation();
+    const handleTambahAlamat=()=>{
+        navigation.navigate('TambahAlamat')
+    }
+    
   return (
     // Container
     <View style={styles.container}>
+    <TouchableOpacity onPress={handleTambahAlamat}>
       <View style={styles.alamat}>
         <Text style={styles.textalamat}>
             Tambah Alamat
         </Text>
       </View>
+      </TouchableOpacity>
       {/* CardForm */}
       <View style={styles.form}>
         <Text style={styles.cardtext}>ALamat Lengkap : </Text>

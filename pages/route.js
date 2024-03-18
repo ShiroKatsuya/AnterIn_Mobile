@@ -4,5 +4,5 @@ import Daftar from "./konsumen/Daftar";
 import Profile from "./konsumen/Profile";
 import Transaksi from "./konsumen/Transaksi";
 import Alamat from "./konsumen/Alamat";
-
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat}
+import TambahALamat from "./konsumen/Alamat/Tambah";
+export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat}

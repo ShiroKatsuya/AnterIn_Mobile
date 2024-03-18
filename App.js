@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -119,6 +119,15 @@ function App() {
                   ...headerOption,
                   HeaderCustome: (props) => <headerTitle {...props} />, 
                   title: "Alamat",
+                }}
+              />
+                <Tab.Screen
+                name="TambahAlamat"
+                component={TambahALamat}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Tambah Alamat",
                 }}
               />
 
