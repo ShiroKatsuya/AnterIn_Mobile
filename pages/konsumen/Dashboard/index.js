@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 
 const Dashboard = () => {
   const navigation = useNavigation();
+
 
   return (
     <View style={styles.container}>
@@ -24,11 +26,11 @@ const Dashboard = () => {
       {/* Card Fitur Unggulan */}
       <View style={styles.unggulanCard}>
         <View style={styles.unggulanRow}>
-          <Text style={styles.unggulanText1}>Chat</Text>
-          <Text style={styles.unggulanText1}>Riwayat</Text>
-          <Text style={styles.unggulanText1}>Pesanan</Text>
-          <Text style={styles.unggulanText1}>Checkout</Text>
-          <Text style={styles.unggulanText1}>Scan</Text>
+          <Text style={styles.unggulanText1}></Text>
+          <Text style={styles.unggulanText1}></Text>
+          <Text style={styles.unggulanText1}></Text>
+          <Text style={styles.unggulanText1}></Text>
+          <Text style={styles.unggulanText1}></Text>
         </View>
         <View style={styles.unggulanRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
@@ -41,9 +43,9 @@ const Dashboard = () => {
             <Text style={styles.unggulanText}>Pesanan</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-            <Text style={styles.unggulanText}>Checkout</Text>
+            <Text style={styles.unggulanText}>Chekout</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
           </TouchableOpacity>
         </View>
@@ -51,17 +53,76 @@ const Dashboard = () => {
       <Text style={styles.unggulanArtikel}>Beberapa Rating atau Komentar</Text>
       <View style={styles.button}>
       <Text style={styles.text}>Semua</Text>
+      {/* card rating dan komentar */}
+     
       </View>
+
+      <View style={{ }}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.cardrating}>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Dalam proses pengiriman sangat cepat</Text>
+          </View>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Terkadang Pengiriman Ngaret</Text>
+          </View>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Lumayan Lah</Text>
+          </View>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Kok lama ya pengirimannya ?</Text>
+          </View>
+          {/* tambah banyak */}
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Oke Siap Sampai Tujuan</Text>
+          </View>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Mantul</Text>
+          </View>
+          <View style={styles.cardmessage}>
+            <Text style={styles.cardratingteks}>Rizky</Text>
+            <Text style={styles.cardratingteks}>Kurir ramah </Text>
+          </View>
+        </View>
+        
+      </ScrollView>
+    </View>
     
     </View>
   );
 };
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Make the container take up the entire screen
+    flex: 1, 
     backgroundColor: '#EDA01F',
     padding: 10,
+  },
+  cardratingteks:{
+    color:'white',
+    marginTop:5,
+    textAlign:'auto'
+  },
+  cardrating:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 15,
+    
+  },
+  cardmessage:{
+    backgroundColor: 'black',
+    width: width * 0.2, 
+    height: width * 0.2, 
+    borderRadius: 7,
+    color: 'white',
+    padding: 10,
+    marginRight: 10,
   },
   text:{
     // alignContent:'flex-start',
@@ -148,9 +209,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   unggulanText: {
-    fontWeight: 'bold',
+    // backgroundColor: 'black',
+    width: width * 0.1, 
+    height: width * 0.1, 
+    borderRadius: 7,
     color: 'black',
-    alignItems:'center',
+    // padding: 5,
+    marginRight: 10,
+    textAlign:'center',
+    // justifyContent:'center',
+    // alignItems:'center'
+    marginTop:5
    
   },
 
@@ -162,13 +231,14 @@ const styles = StyleSheet.create({
   },
 
   unggulanText1: {
-    fontWeight: 'bold',
-    backgroundColor:'black',
-    color: 'black',
-    alignItems:'center',
-    paddingBottom:20,
-    borderRadius:10
-
+    backgroundColor: 'black',
+    width: width * 0.1, 
+    height: width * 0.1, 
+    borderRadius: 7,
+    color: 'white',
+    // padding: 5,
+    marginRight: 10,
+    marginTop:40
     
  
   },

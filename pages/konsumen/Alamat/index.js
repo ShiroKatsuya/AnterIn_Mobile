@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
       },
       textalamat:{
         fontWeight:'bold',
-        fontSize:25,
+        fontSize:15,
         color:'white'
       },
       form:{

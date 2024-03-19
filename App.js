@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -42,7 +42,7 @@ function MainTab() {
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
     
-        if (route.name === 'Dashboard') {
+        if (route.name === 'Home') {
           iconName = "ios-information-circle-outline"
         } else if (route.name === 'Profile') {
           iconName = "ios-information-circle-outline"
@@ -55,7 +55,7 @@ function MainTab() {
     })}
     >
       <Tab.Screen
-        name="Dashboard"
+        name="Home"
         component={Dashboard}
         options={{
    
@@ -128,6 +128,15 @@ function App() {
                   ...headerOption,
                   HeaderCustome: (props) => <headerTitle {...props} />, 
                   title: "Tambah Alamat",
+                }}
+              />
+                   <Tab.Screen
+                name="KlasifikasiObjek"
+                component={KlasifikasiObjek}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Klasifikasi Objek",
                 }}
               />
 
