@@ -5,4 +5,5 @@ import Profile from "./konsumen/Profile";
 import Transaksi from "./konsumen/Transaksi";
 import Alamat from "./konsumen/Alamat";
 import TambahALamat from "./konsumen/Alamat/Tambah";
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat}
+import KlasifikasiObjek from "./konsumen/Klasifikasi";
+export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek}
