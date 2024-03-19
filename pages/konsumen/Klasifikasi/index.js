@@ -39,7 +39,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         width: 120,
         padding: 8,
-        alignSelf:'flex-end'
+        alignSelf:'flex-end',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+
 
         
     },
@@ -51,7 +57,13 @@ const styles = StyleSheet.create({
         // flexDirection:'row-reverse',
         padding:20,
         marginTop:10,
-        borderRadius:20
+        borderRadius:20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+
     },
     result:{
         flexDirection:'column',
@@ -62,7 +74,8 @@ const styles = StyleSheet.create({
     textresul:{
             fontWeight:'bold',
             fontSize:20,
-            color:'black'
+            color:'black',
+            
 
     },
     fotocontainer:{
@@ -71,7 +84,13 @@ const styles = StyleSheet.create({
         padding:15,
         // paddingBottom:400
         // width:530
-        borderRadius:10
+        borderRadius:10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+
     },
     foto:{
         backgroundColor:'#FFFFFF',
@@ -80,7 +99,13 @@ const styles = StyleSheet.create({
         flexDirection:'row-reverse',
         padding:90,
         paddingBottom:400,
-        borderRadius:10
+        borderRadius:10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+
     },
     container: {
         flex: 1, 

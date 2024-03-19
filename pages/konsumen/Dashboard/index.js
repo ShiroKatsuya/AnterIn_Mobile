@@ -33,7 +33,7 @@ const Dashboard = () => {
           <Text style={styles.unggulanText1}></Text>
         </View>
         <View style={styles.unggulanRow}>
-          <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   userDetails: {
-    // No styles needed here for now
+
   },
   userName: {
     fontWeight: 'bold',
