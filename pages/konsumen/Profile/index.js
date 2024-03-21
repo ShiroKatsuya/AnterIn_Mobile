@@ -40,9 +40,18 @@ export default function Profile() {
         </View>
 
         <View style={{display:'flex', flexDirection:'row-reverse',justifyContent:'space-between' , marginTop:10}}>
-          <Text style={styles.text2}>Minute</Text>
-          <Text style={styles.text2}>5 Foto</Text>
-          <Text style={styles.text2}> 25 Age</Text>
+          <View style={{flexDirection:'column'}}>
+            <Image source={require('../../img/Time.png')} style={styles.icon} />
+            <Text style={styles.text2}> Minute</Text>
+          </View>
+          <View style={{flexDirection:'column'}}>
+            <Image source={require('../../img/camera.png')} style={styles.icon} />
+            <Text style={styles.text2}> 5 Foto</Text>
+          </View>
+          <View style={{flexDirection:'column'}}>
+            <Image source={require('../../img/Age.png')} style={styles.icon} />
+            <Text style={styles.text2}> 25 Age</Text>
+          </View>
         </View>
         </View>
         <View style={{flexDirection:'column', alignItems:'stretch', flex:1 , marginTop:50}}>
@@ -53,7 +62,7 @@ export default function Profile() {
           <Text style={styles.text2}>Ubah Email</Text>
           </View>
           <View style={styles.button3}>
-          <Text style={styles.text2}>Pusah Bantuan</Text>
+          <Text style={styles.text2}>Pusat Bantuan</Text>
           </View>
           <View style={{  backgroundColor: '#34CC43',
                           padding:10,
@@ -162,5 +171,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#fff',
     marginTop: 20,
+  },
+
+  icon: {
+    width:  40, 
+    height: 40, 
+    // padding: 5,
+    marginRight: 10,
+    textAlign:'center',
+    // justifyContent:'center',
+    // alignItems:'center'
+    marginTop:1,
   },
 })

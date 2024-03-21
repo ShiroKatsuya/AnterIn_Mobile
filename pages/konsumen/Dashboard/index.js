@@ -26,24 +26,25 @@ const Dashboard = () => {
       {/* Card Fitur Unggulan */}
       <View style={styles.unggulanCard}>
         <View style={styles.unggulanRow}>
-          <Text style={styles.unggulanText1}></Text>
-          <Text style={styles.unggulanText1}></Text>
-          <Text style={styles.unggulanText1}></Text>
-          <Text style={styles.unggulanText1}></Text>
-          <Text style={styles.unggulanText1}></Text>
+    
+          <Image source={require('../../img/ikon-navigasi/checkout.png')} style={styles.unggulanText1} />
+          <Image source={require('../../img/ikon-navigasi/order-history.png')} style={styles.unggulanText1}/>
+          <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/>
+          <Image source={require('../../img/ikon-navigasi/chat.png')} style={styles.unggulanText1}/>
+          <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/>
         </View>
         <View style={styles.unggulanRow}>
-          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
-            <Text style={styles.unggulanText}>Chat</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
+            <Text style={styles.unggulanText}>Checkout</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
             <Text style={styles.unggulanText}>Riwayat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Pesanan')}>
-            <Text style={styles.unggulanText}>Pesanan</Text>
+            <Text style={styles.unggulanText}>Detail Pesanan</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-            <Text style={styles.unggulanText}>Chekout</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+            <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
@@ -174,6 +175,11 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 10,
   },
+  logo1: {
+    width: 50,
+    height: 100,
+    marginRight: 10,
+  },
   userDetails: {
 
   },
@@ -219,8 +225,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
     // justifyContent:'center',
     // alignItems:'center'
-    marginTop:5
-   
+    marginTop:5,
   },
 
   unggulanArtikel:{
@@ -238,8 +243,8 @@ const styles = StyleSheet.create({
     color: 'white',
     // padding: 5,
     marginRight: 10,
-    marginTop:40
-    
+    marginTop:40,
+    padding: 20
  
   },
 });
