@@ -1,9 +1,18 @@
 import { StyleSheet, Text, View,TextInput,Button,TouchableOpacity,Image,rgba} from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 
 export default function Daftar() {
+  const handlelogin=()=>{
+    navigation.navigate('Dashboard')
+}
+
   return (
     <>
+
+
+const navigation = useNavigation();
+
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={styles.container}>
 
@@ -46,15 +55,18 @@ export default function Daftar() {
         {/* bagian bottom */}
         <Button title="Daftar"
         color="#EDA01F"
+
+
          />
         <Text style={{marginTop:12 , color:(255, 255, 255, 0.5), }}>
           Jika Memiliki Akun?
         </Text>
       <View style={{marginTop:12}}>
         <Button title='Login' 
-        
-        color="#EDA01F"/>
+        onPress={handlelogin}
+              color="#EDA01F"/>
           </View>
+     
       </View>
       </View>
     </View>

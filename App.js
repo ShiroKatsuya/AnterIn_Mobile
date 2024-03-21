@@ -61,6 +61,7 @@ function MainTab() {
    
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
+          title : "Home",
         }}
 
       
