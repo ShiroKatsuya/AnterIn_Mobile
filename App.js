@@ -54,6 +54,14 @@ function MainTab() {
           iconName = focused
             ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
             : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
+        } else if (route.name === 'Profile') {
+          iconName = focused
+            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
+        } else if (route.name === 'Profile') {
+          iconName = focused
+            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
         } 
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -70,9 +78,6 @@ function MainTab() {
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
         }}
-
-      
-
       />
       <Tab.Screen
         name="Transaksi"
@@ -81,6 +86,24 @@ function MainTab() {
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Transaksi",
+        }}
+      />
+      <Tab.Screen
+        name="Pilih Paket"
+        component={Transaksi}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "",
+        }}
+      />
+      <Tab.Screen
+        name="Pemberitahuan"
+        component={Profile}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Profile",
         }}
       />
       <Tab.Screen
