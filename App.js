@@ -1,6 +1,6 @@
 // app.js
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -43,15 +43,23 @@ function MainTab() {
         let iconName;
     
         if (route.name === 'Home') {
-          iconName = "ios-information-circle-outline"
+          iconName = focused
+            ? require('./pages/img/Home.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Home.png'); // Ganti dengan path ke gambar default Anda
+        } else if (route.name === 'Transaksi') {
+          iconName = focused
+            ? require('./pages/img/Transaksi.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Transaksi.png'); // Ganti dengan path ke gambar default Anda
         } else if (route.name === 'Profile') {
-          iconName = "ios-information-circle-outline"
-        } else if  (route.name === 'Transaksi'){
-          iconName = "ios-information-circle-outline"
-        }
+          iconName = focused
+            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
+        } 
 
         return <Ionicons name={iconName} size={size} color={color} />;
       },
+      tabBarActiveTintColor: '#eda01f',
+      tabBarInactiveTintColor: '#0b111f',
     })}
     >
       <Tab.Screen
