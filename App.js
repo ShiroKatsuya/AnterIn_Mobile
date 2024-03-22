@@ -88,24 +88,8 @@ function MainTab() {
           title: "Transaksi",
         }}
       />
-      <Tab.Screen
-        name="Pilih Paket"
-        component={Transaksi}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "",
-        }}
-      />
-      <Tab.Screen
-        name="Pemberitahuan"
-        component={Profile}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Profile",
-        }}
-      />
+  
+
       <Tab.Screen
         name="Profile"
         component={Profile}
