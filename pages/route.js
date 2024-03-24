@@ -8,4 +8,6 @@ import TambahALamat from "./konsumen/Alamat/Tambah";
 import KlasifikasiObjek from "./konsumen/Klasifikasi";
 import Chatting from "./konsumen/Chatting";
 import Riwayat from "./konsumen/Riwayat";
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat}
+import DetailPesanan from "./konsumen/DetailPesanan";
+import Checkout from "./konsumen/Checkout";
+export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout}
