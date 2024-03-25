@@ -1,11 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import React from 'react';
 
 export default function Checkout() {
   return (
     <View style={styles.container}>
       <View style={styles.alamat}>
-        <Text style={styles.text1}>Alamat Pengiriman ---> | </Text>
+        <Text style={styles.text1}>Alamat Pengiriman --- | </Text>
         <View style={styles.body}>
           <Text style={styles.text}>Delia Putri Andari</Text>
           <Text style={styles.text}>(+62)0895335992932</Text>
@@ -23,7 +23,8 @@ export default function Checkout() {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.button1}></Text>
           <View style={styles.button2}>
-            <Text style={{ color: 'black' }}>PAKET CEPAT</Text>
+            <Text style={styles.orderpack}>PAKET</Text>
+            <Text style={styles.orderpack}>CEPAT</Text>
           </View>
           <View style={styles.button3}>
             {/* icon here */}
@@ -36,10 +37,10 @@ export default function Checkout() {
           <Text style={styles.pembayaran}>METODE PEMBAYARAN</Text>
         </View>
         <View style={styles.footer1}>
-          <Text style={styles.buttonbayar}></Text>
-          <Text style={styles.buttonbayar}></Text>
-          <Text style={styles.buttonbayar}></Text>
-          <Text style={styles.buttonbayar}></Text>
+            <Image source={require('../../img/Logo-Dana.png')} style={styles.buttonbayar} />
+            <Image source={require('../../img/Logo-BNI.png')} style={styles.buttonbayar} />
+            <Image source={require('../../img/Logo-CIMB.png')} style={styles.buttonbayar} />
+            <Image source={require('../../img/Logo-Sponsor-Liga-terbaik-Dunia-Akhirat.png')} style={styles.buttonbayar} />
         </View>
       </View>
 
@@ -57,7 +58,7 @@ export default function Checkout() {
     </View>
   );
 }
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   checkout: {
     alignItems: 'flex-end',
@@ -93,12 +94,11 @@ const styles = StyleSheet.create({
     borderWidth: 4,
   },
   buttonbayar: {
-    color: '#fff',
     fontSize: 13,
     fontWeight: 'bold',
-    width: '15%',
-    padding: '1%',
-    backgroundColor: 'white',
+    width:130,
+    height:40,
+    backgroundColor: '#eda01f',
     borderRadius: 3,
     marginLeft: '5%',
   },
@@ -113,20 +113,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     fontWeight: 'bold',
-    width: '5%',
+    width: '3%',
     backgroundColor: 'white',
     borderRadius: 3,
     marginLeft: '5%',
   },
   button2: {
-    color: '#fff',
     fontSize: 13,
     fontWeight: 'bold',
     width: '55%',
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     alignItems: 'center',
     marginLeft: '5%',
-    padding: '10%',
+    padding: '6%',
     borderRadius: 5,
   },
   button3: {
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: '9%',
     padding: '7%',
-    borderRadius: 40,
+    borderRadius: 30,
   },
   container: {
     flex: 1,
@@ -174,4 +173,22 @@ const styles = StyleSheet.create({
     borderColor: '#EDA01F',
     borderWidth: 4,
   },
+  ikonpembayaran: {
+    backgroundColor: 'black',
+    width: width * 0.2, 
+    height: width * 0.2, 
+    borderRadius: 7,
+    color: 'white',
+    // padding: 5,
+    marginRight: 10,
+    marginTop:40,
+    padding: 20
+ 
+  },
+  orderpack: {
+    color: '#eda01f',
+    fontSize: 30,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  }
 });
