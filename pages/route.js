@@ -10,4 +10,5 @@ import Chatting from "./konsumen/Chatting";
 import Riwayat from "./konsumen/Riwayat";
 import DetailPesanan from "./konsumen/DetailPesanan";
 import Checkout from "./konsumen/Checkout";
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout}
+import InputPesanan from "./konsumen/InputPesanan";
+export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan}

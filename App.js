@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +62,10 @@ function MainTab() {
           iconName = focused
             ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
             : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
+        } else if (route.name === 'InputPesanan') {
+          iconName = focused
+            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
+            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
         } 
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -88,6 +92,16 @@ function MainTab() {
           title: "Transaksi",
         }}
       />
+      <Tab.Screen
+        name="InputPesanan"
+        component={InputPesanan}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Input Pesanan",
+        }}
+      />
+  
   
 
       <Tab.Screen
