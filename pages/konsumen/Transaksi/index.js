@@ -8,13 +8,16 @@ export default function Transaksi() {
     <View style={styles.container}>
       <Text style={styles.text}>Pilih Paket yang Anda Mau:</Text>
       <View style={styles.cardPaket}>
-        <View style={styles.cardPaketChild}>
+        <View style={styles.cardPaket1}>
+          <View style={styles.cardPaketChild}>
+          </View>
+          <View style={styles.cardPaketChild}>
+          </View>
         </View>
-        <View style={styles.cardPaketChild}>
+        <View style={styles.cardPaket2}>
+          <View style={styles.cardPaketChild}>
+          </View>
         </View>
-        <View style={styles.cardPaketChild}>
-        </View>
-      
       </View>
     </View>
   )
@@ -28,8 +31,7 @@ const styles = StyleSheet.create({
   },
   cardPaket:{
     backgroundColor: '#0b111f',
-    flexDirection: 'row',
-    borderRadius: 30,
+    borderRadius: 25,
     padding: 20,
     marginTop: 20,
     shadowColor: '#000',
@@ -37,28 +39,37 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    alignContent: 'center',
+    alignItems: 'center'
+    
+  },
+  cardPaket1:{
+    backgroundColor: '#0b111f',
+    borderRadius: 25,
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: 'row',
   },
   text: {
     fontSize: 18,
     fontStyle: 'italic',
     fontWeight:'bold',
   },
-  text1: {
-    fontSize: 18,
-    color: 'white',
-    fontStyle: 'italic',
-    fontWeight:'bold',
-  },
   cardPaketChild:{
-    backgroundColor: 'grey',
-    
-    width: 0.1, 
-    height: 0.1, 
-    borderRadius: 7,
+    backgroundColor: 'yellow',
+    marginBottom: 10,
+    flexDirection: 'row',
+    width: 10, 
+    height: 10, 
+    borderRadius: 10,
     color: 'white',
-    // padding: 5,
-    marginRight: 10,
-    marginTop:40,
-    padding: 20
+    marginLeft:15,
+    marginRight: 15,
+    marginTop:30,
+    padding: 55,
   }
 })
