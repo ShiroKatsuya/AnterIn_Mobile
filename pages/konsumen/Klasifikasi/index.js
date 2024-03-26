@@ -1,16 +1,17 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 
 export default function KlasifikasiObjek() {
   return (
     <View style={styles.container}>
         <View style={styles.kamera}>
-            <Text style={styles.kameratext}>KAMERA DISINI</Text>
+        <Image source={require('../../img/camera.png')} style={styles.camera}/>
+        <Text style={styles.txt}>Camera</Text>
         </View>
 
         <View style={styles.fotocontainer}>
             <View style={styles.foto}>
-                
+                <Image source={require('../../img/Kursi.png')} style={styles.img}/>
             </View>
         </View>
             <View style={styles.resultcontainer}>
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        alignContent: 'space-between',
 
     },
     foto:{
@@ -97,8 +99,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         // alignContent:'center',
         flexDirection:'row-reverse',
-        padding:90,
-        paddingBottom:400,
+        padding:0.1,
+        paddingBottom:0.1,
         borderRadius:10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -114,14 +116,29 @@ const styles = StyleSheet.create({
       },
       kamera:{
         justifyContent:'center',
-        // alignContent:'center',
-        flexDirection:'row-reverse',
-        marginTop:40
+        alignContent:'center',
+        flexDirection:'column',
+        alignItems: 'center',
 
       },
       kameratext:{
             fontWeight:'bold',
             fontSize:20,
             color:'black'
+      },
+      img:{
+        width: 670,
+        height: 800,
+        borderRadius:10,
+      },
+      camera:{
+        height:150,
+        width:150,
+        marginTop: -30
+      },
+      txt:{
+        fontWeight:'bold',
+        fontSize: 20,
+        marginTop: -40
       }
 })

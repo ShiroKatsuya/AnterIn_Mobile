@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    marginRight:15,
   },
   button: {
     backgroundColor: 'white',
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     marginRight: 350
   },
   buttonlist: {
-    backgroundColor: 'white',
+    backgroundColor: '#d9d9d9',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   buttontrash: {
-    backgroundColor: 'white',
+    backgroundColor: '#eda01f',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
