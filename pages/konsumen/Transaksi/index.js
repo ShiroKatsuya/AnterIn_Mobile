@@ -20,6 +20,7 @@ export default function Transaksi() {
         </View>
       </View>
     </View>
+    
   )
 }
 
