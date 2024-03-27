@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Dimensions} from 'react-native'
+import { StyleSheet, Text, View,Dimensions,Image} from 'react-native'
 import React from 'react'
 
 export default function Riwayat() {
@@ -45,16 +45,14 @@ export default function Riwayat() {
         </Text>
 
         <View style={styles.jenispaket}>
-            <Text style={{textAlign:'center',color:'white',fontWeight:'bold'}}>
-                LOGO HERE
-            </Text>
-            <Text style={{textAlign:'center',color:'white' ,marginTop:30 , fontWeight:'bold'}}>
+            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={{height:40, width: 300, alignSelf: 'center',marginTop: -20}} />
+            <Text style={{textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold'}}>
                 PAKET CEPAT
             </Text>
         </View>
         <View style={styles.produkproses}>
         <Text style={styles.textproses}>
-                Paket yang Sedang Diproses
+          <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={{height:40, width: 300, alignSelf: 'center',marginTop: -20}}/>Paket yang Sedang Diproses
         </Text>
         <Text style={styles.textdetail}>
              Cek detail disini
@@ -109,7 +107,8 @@ const styles = StyleSheet.create({
         // marginRight :10,
         marginLeft:20,
         marginTop:20,
-        // marginRight:40
+        // marginRight:40,
+        flexDirection: 'row'
         
     },
     textdetail:{
