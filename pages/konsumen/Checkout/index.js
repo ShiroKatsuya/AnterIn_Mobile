@@ -25,7 +25,8 @@ export default function Checkout() {
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonlist}></View>
           <View style={styles.button}>
-            <Text style={styles.orderPackText}>PAKET CEPAT</Text>
+            <Text style={styles.orderPackText}>PAKET</Text>
+            <Text style={styles.orderPackText}>CEPAT</Text>
           </View>
           <View style={styles.buttontrash}></View>
         </View>
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: '#0B111F',
     borderRadius: 10,
-    marginBottom: 100,
+    marginBottom: 10,
     padding: 10,
   },
   sectionTitle: {
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    height: 50,
   },
   addressBody: {
     justifyContent: 'center',
@@ -91,13 +91,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
-
   },
   buttonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-    marginRight:15,
   },
   button: {
     backgroundColor: 'white',
@@ -107,12 +104,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     paddingVertical: 10,
-    height:150,
-    marginLeft: 50,
-    marginRight: 350
   },
   buttonlist: {
-    backgroundColor: '#d9d9d9',
+    backgroundColor: 'white',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -122,7 +116,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   buttontrash: {
-    backgroundColor: '#eda01f',
+    backgroundColor: 'white',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -143,7 +137,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 10,
-
   },
   paymentLogos: {
     flexDirection: 'row',
@@ -151,28 +144,23 @@ const styles = StyleSheet.create({
 
   },
   paymentLogo: {
-    width: 150,
-    height: 50,
+    width: Dimensions.get('window').width * 0.1,
+    height: Dimensions.get('window').width * 0.1,
     borderRadius: 3,
-    marginTop:10, 
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-    backgroundColor:'#EDA01F',
-    borderRadius: 10
+    marginLeft: 5,
+
+
+    backgroundColor:'#EDA01F'
   },
   checkoutSection: {
     backgroundColor: '#0B111F',
     borderRadius: 10,
     marginBottom: 10,
     padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   priceContainer: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
     marginBottom: 10,
   },
   priceText: {
@@ -182,7 +170,6 @@ const styles = StyleSheet.create({
   },
   checkoutButton: {
     alignItems: 'flex-end',
-    
   },
   checkoutButtonText: {
     backgroundColor: '#EDA01F',
@@ -192,8 +179,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     borderRadius: 10,
-    marginTop: 15,
-    marginBottom: 15,
-    alignContent: 'center',
   },
 });
