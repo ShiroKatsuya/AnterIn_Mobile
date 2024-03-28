@@ -222,8 +222,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   deleteButton: {
-    // width: Dimensions.get('window').width * 0.1,
-    // height: Dimensions.get('window').width * 0.1,
     width:70,
     height: 70,
     borderRadius: 3,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 import React from 'react';
 import { Dimensions } from 'react-native';
 
@@ -30,6 +30,17 @@ export default function Chatting() {
             </View>
             <View style={styles.result3}>
               <Text style={styles.text}>Paketmu sudah sampai kocak, sini keluar</Text>
+            </View>
+          </View>
+          <View style={styles.chatbar}>
+            <TextInput
+              style={[styles.input, styles.form2]}
+              placeholder="Ketik Pesan"
+              multiline={true}
+              numberOfLines={4}
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"/>
+            <View style={styles.buttonsend}>
+              <Image source={require('../../img/Send-Message.png')} style={styles.sendbuttonicon}/>
             </View>
           </View>
         </View>
@@ -107,4 +118,40 @@ text:{color: 'white'},
     marginTop: 15,
     height: 800,
   },
+  chatbar: {
+    marginRight: 20,
+    marginLeft: 20,
+    flex:1,
+    marginTop:300,
+    flexDirection: "row",
+  },
+  input: {
+    height: 40,
+    width: 600,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  form2: {
+    backgroundColor:'#d9d9d9',
+    color:'white'
+  },
+  buttonsend:{
+    backgroundColor:'pink',
+    width:40,
+    height:40,
+    justifyContent: 'space-between',
+    marginLeft:10,
+    borderRadius:100,
+    alignItems: 'center',
+  },
+  sendbuttonicon:{
+    width:40,
+    height: 40,
+    borderRadius: 3,
+    marginLeft: 5,
+    alignSelf:'center',
+  }
 });
