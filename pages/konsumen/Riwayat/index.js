@@ -45,8 +45,8 @@ export default function Riwayat() {
         </Text>
 
         <View style={styles.jenispaket}>
-            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={{height:40, width: 300, alignSelf: 'center',marginTop: -20}} />
-            <Text style={{textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold'}}>
+            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
+            <Text style={styles.paketcepat}>
                 PAKET CEPAT
             </Text>
         </View>
@@ -80,6 +80,12 @@ export default function Riwayat() {
 }
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  paketcepat:{
+    textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold'
+  },
+  img:{
+    height:40, width: 300, alignSelf: 'center',marginTop: -20
+  },
   mobil: {
     width: 180,
     height: 180,

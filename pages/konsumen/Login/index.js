@@ -13,15 +13,15 @@ export default function Login() {
 
     return (
         <>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.headercontainer  }>
     
         <View style={styles.container}>
 
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.foto}>
           <Image
             source={require('../../img/logo.png')}
             resizeMode="cover"
-            style={{ width: 150, height: 150 }}
+            style={styles.img}
           />
         </View>
      
@@ -58,7 +58,7 @@ export default function Login() {
       
          />
          <TouchableOpacity onPress={()=>navigation.navigate('Daftar')}>
-          <Text  style = {{marginBottom:20,marginTop:20}}>Daftar</Text>
+          <Text  style = {styles.daftar}>Daftar</Text>
           </TouchableOpacity>
       </View>
       <View style={styles.links}>
@@ -79,6 +79,18 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+  foto:{
+    justifyContent: 'center', alignItems: 'center'
+  },
+  daftar:{
+    marginBottom:20,marginTop:20
+  },
+  img:{
+    width: 150, height: 150
+  },
+  headercontainer:{
+    flex: 1, alignItems: 'center', justifyContent: 'center'
+  },
 
     anter:{
         fontSize:20,

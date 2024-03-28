@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
 export default function InputPesanan() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.headerinput}>
@@ -30,10 +32,34 @@ export default function InputPesanan() {
             />
           </View>
           <Text style={styles.text}>Kurir</Text>
-          <TextInput
-            style={[styles.input, styles.forminside]}
-            placeholder="Kurir"
-          />
+          <View style={styles.pilihkurir}>
+            <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
+              <View style={styles.logo}>
+                <Text>Sicepat</Text>
+              </View>
+              </TouchableOpacity>
+              
+              <View style={styles.logo}>
+                <Text>J&T</Text>
+              </View>
+              <View style={styles.logo}>
+                <Text>Logo Here</Text>
+              </View>
+              <View style={styles.logo}>
+                <Text>Logo Here</Text>
+              </View>
+              
+          </View>
+          <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
+          <View >
+            <TextInput
+              style={[styles.input, styles.forminside]}
+              // placeholder="Kurir"
+              // multiline={true}
+              // numberOfLines={4}
+            />
+          </View>
+
           <Button title="Submit" onPress={null} color="black" />
         </View>
       </View>
@@ -42,6 +68,19 @@ export default function InputPesanan() {
 }
 
 const styles = StyleSheet.create({
+  pilihkurir:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginTop:15,
+    marginBottom:20
+
+  },
+  logo:{
+    backgroundColor:'#EDA01F',
+    padding:20,
+    borderRadius:5
+  },
+
   textAreaContainer: {
     borderRadius: 2,
     padding: 5,

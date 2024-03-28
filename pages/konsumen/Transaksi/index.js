@@ -52,7 +52,7 @@ export default function Transaksi() {
             </Text>
         </View>
         <View style={styles.button}>
-          <Text style={{color:'white' , fontWeight:'bold' ,justifyContent:'center' ,alignSelf:'center'}}>
+          <Text style={styles.buttoncheckout}>
             Checkout
           </Text>
           </View>
@@ -62,6 +62,9 @@ export default function Transaksi() {
 }
 
 const styles = StyleSheet.create({
+  buttoncheckout:{
+    color:'white' , fontWeight:'bold' ,justifyContent:'center' ,alignSelf:'center'
+  },
   img1:{
     height:50, width: 200, alignSelf: 'center',marginTop: -20
   },
