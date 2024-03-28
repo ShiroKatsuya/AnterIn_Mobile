@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
@@ -35,15 +35,14 @@ export default function InputPesanan() {
           <View style={styles.pilihkurir}>
             <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
               <View style={styles.logo}>
-                <Text>Sicepat</Text>
+                <Image source={require('../../img/SiCepat.png')} style={styles.logo1}/>
               </View>
-              </TouchableOpacity>
-              
+              </TouchableOpacity> 
               <View style={styles.logo}>
-                <Text>J&T</Text>
+                <Image source={require('../../img/J&T.png')} style={styles.logo1}/>
               </View>
               <View style={styles.logo}>
-                <Text>Logo Here</Text>
+              <Image source={require('../../img/JNE.png')} style={styles.logo2}/>
               </View>
               <View style={styles.logo}>
                 <Text>Logo Here</Text>
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
 
   },
   logo:{
-    backgroundColor:'#EDA01F',
+    backgroundColor:'#ffffff',
     padding:20,
     borderRadius:5
   },
@@ -129,4 +128,18 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+  logo1:{
+    width:100,
+    height: 20,
+    borderRadius: 3,
+    marginLeft: 5,
+    alignSelf:'center',
+  },
+  logo2:{
+    width:100,
+    height: 41,
+    borderRadius: 3,
+    marginLeft: 5,
+    alignSelf:'center',
+  }
 });
