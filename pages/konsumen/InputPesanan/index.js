@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width:50,
     height: 10,
     borderRadius: 3,
-    marginLeft: 5,
+    marginLeft: 3,
     alignSelf:'center',
   },
   logo2:{
