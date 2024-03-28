@@ -50,14 +50,25 @@ export default function Riwayat() {
                 PAKET CEPAT
             </Text>
         </View>
+
+        
         <View style={styles.produkproses}>
-        <Text style={styles.textproses}>
-          <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={{height:40, width: 300, alignSelf: 'center',marginTop: -20}}/>Paket yang Sedang Diproses
-        </Text>
+        {/* <Text style={styles.textproses}>
+ 
+        </Text> */}
+       
+        <View style={styles.textdetailcontainer}>
         <Text style={styles.textdetail}>
              Cek detail disini
         </Text>
         </View>
+        </View>
+        <View style={styles.mobilcontainer}>
+       <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil}/> 
+       <Text style={styles.infopaket}>
+        Paket Sedang Diproses
+       </Text>
+       </View>
       </View>
 
 
@@ -69,9 +80,33 @@ export default function Riwayat() {
 }
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  mobil: {
+    width: 180,
+    height: 180,
+
+  },
+  infopaket: {
+    color: 'white',
+
+    marginTop:-60
+  },
+  textdetailcontainer: {
+    padding: 10,
+    alignSelf: 'flex-end',
+    marginTop: 40,
+  },
+  mobilcontainer: {
+    // padding: 10,
+    marginTop: -135,
+    marginRight: 330,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
     produkproses:{
-        flexDirection:'row',
-        justifyContent:'space-between'
+        // flexDirection:'row',
+        // justifyContent:'space-between'
+        
     },
     jenispaket:{
         backgroundColor:'#000000',
@@ -89,7 +124,7 @@ const styles = StyleSheet.create({
         marginTop:20,
         backgroundColor:'#0B111F',
         padding:10,
-        paddingBottom:25,
+        paddingBottom:30,
         borderColor:'black', // Added border color
         borderWidth:1,
         shadowColor: '#000',
@@ -115,13 +150,16 @@ const styles = StyleSheet.create({
         color:'white',
         fontWeight:'bold',
         // marginRight :10,
-        marginLeft:20,
-        marginTop:20,
-        marginRight:40,
+        // marginLeft:20,
+        // marginTop:20,
+        // marginRight:40,
         backgroundColor:'#EDA01F',
         padding:10,
         borderRadius:10,
-        textAlign:'center'
+        textAlign:'center',
+        // width:200,
+        // height:200,
+
     },
     
     

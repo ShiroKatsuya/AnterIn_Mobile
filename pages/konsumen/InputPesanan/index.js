@@ -21,12 +21,12 @@ export default function InputPesanan() {
           />
 
           <Text style={styles.text}>Jenis Paket</Text>
-          <View style={styles.textAreaContainer}>
+          <View >
             <TextInput
-              style={styles.textArea}
+              style={[styles.input, styles.forminside]}
               placeholder="Jenis Paket"
-              multiline={true}
-              numberOfLines={4}
+              // multiline={true}
+              // numberOfLines={4}
             />
           </View>
           <Text style={styles.text}>Kurir</Text>
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
   },
   textArea: {
-    height: 100,
-    justifyContent: 'flex-start',
+    // height: 100,
+    // justifyContent: 'flex-start',
   },
   text: {
     fontWeight: 'bold',
