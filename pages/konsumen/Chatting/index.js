@@ -127,7 +127,7 @@ text:{color: 'white'},
   },
   input: {
     height: 40,
-    width: 600,
+    width: 400,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
