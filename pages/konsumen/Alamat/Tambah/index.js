@@ -11,7 +11,7 @@ export default function TambahALamat() {
     
 
       <View style={styles.form }>
-      <Text style = {{ fontWeight:'bold' }}>Lokasi Alamat</Text>
+      <Text style = {styles.text}>Lokasi Alamat</Text>
       <TextInput
           style={[styles.input, styles.form2]}
           placeholder="Alamat Baru"
@@ -21,7 +21,7 @@ export default function TambahALamat() {
         //   onChangeText={setUsername}
         />
       
-      <Text style={{ fontWeight:'bold' }}>Detail Alamat</Text>
+      <Text style={styles.text}>Detail Alamat</Text>
       <TextInput
           style={[styles.input, styles.form2]}
           placeholder="Alamat Lengkap"
@@ -30,7 +30,7 @@ export default function TambahALamat() {
         //   value={username}
         //   onChangeText={setUsername}
         />
-      <Text style = {{ fontWeight:'bold' }}>Simpan Sebagai</Text>
+      <Text style = {styles.text}>Simpan Sebagai</Text>
       <View style={styles.tempat}>
         <TouchableOpacity>  
         <View style = {styles.rumah}>
@@ -65,6 +65,7 @@ export default function TambahALamat() {
 }
 
 const styles = StyleSheet.create({
+text:{fontWeight:'bold'},
   container: {
     flex: 1,
     backgroundColor: '#EDA01F',

@@ -43,11 +43,7 @@ const styles = StyleSheet.create({
         padding: 8,
         alignSelf: 'flex-end',
         borderRadius: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+
     },
     resultcontainer:{
         backgroundColor:'#FFFFFF',
@@ -111,8 +107,8 @@ const styles = StyleSheet.create({
 
     },
     img:{
-        width:450 ,
-        height: 450,
+        width:650 ,
+        height: 400,
         borderRadius: 10,
         alignSelf:'center'
     }

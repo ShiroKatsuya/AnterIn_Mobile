@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,17 +10,17 @@ export default function Transaksi() {
       <View style={styles.cardPaket}>
         <View style={styles.cardPaket1}>
           <View style={styles.cardPaketChild}>
-            <Text style={styles.textpaket}>Logo</Text>
+            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img1}></Image>
             <Text style={styles.textpaket}>Paket Standar</Text>
           </View>
           <View style={styles.cardPaketChild}>
-            <Text style={styles.textpaket}>Logo</Text>
+          <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img2}></Image>
             <Text style={styles.textpaket}>Paket Reguler</Text>
           </View>
         </View>
         <View style={styles.cardPaket2}>
           <View style={styles.cardPaketChild}>
-            <Text style={styles.textpaket}>Logo</Text>
+          <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img3}></Image>
             <Text style={styles.textpaket}>Paket Cepat</Text>
           </View>
         </View>
@@ -62,6 +62,11 @@ export default function Transaksi() {
 }
 
 const styles = StyleSheet.create({
+  img1:{
+    height:50, width: 200, alignSelf: 'center',marginTop: -20
+  },
+  img2:{height:50, width: 200, alignSelf: 'center',marginTop: -20},
+  img3:{height:50, width: 200, alignSelf: 'center',marginTop: -20},
   pilihpaket:{
     color:'black' ,
     marginTop:20 , 
@@ -74,19 +79,20 @@ const styles = StyleSheet.create({
     backgroundColor:'#EDA01F',
     padding:10,
     // width:110,
-    alignSelf:'flex-end'
+    alignSelf:'flex-end',
+    marginTop: -30
   },
   checkout:{
     marginTop:30,
     backgroundColor:'#0B111F',
     padding:10,
-    // flex:1
+     flex:1
 
   },
   paket:{
     backgroundColor:'#0B111F',
     padding:30,
-    marginTop:180,
+    marginTop:480,
     // flex:1
     flexDirection:'row',
     justifyContent:'space-between'
