@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   alldescriptOrder:{
     backgroundColor: '#0b111f',
-    borderRadius: 25,
+    borderRadius: 1,
     padding: 20,
     marginTop: 20,
     shadowColor: '#000',
@@ -25,5 +25,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     alignContent: 'center',
+    marginLeft:10,
+    marginRight:10,
+
   }
 })
