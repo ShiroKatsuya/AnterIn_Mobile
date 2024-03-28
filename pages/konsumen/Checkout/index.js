@@ -7,7 +7,7 @@ export default function Checkout() {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Alamat Pengiriman --- | </Text>
+        <Text style={styles.sectionTitle}>Alamat Pengiriman <Text style={{ fontSize: 30 }}> →</Text> | </Text>
         <View style={styles.addressBody}>
           <Text style={styles.addressText}>Delia Putri Andari</Text>
           <Text style={styles.addressText}>(+62)0895335992932</Text>
@@ -17,22 +17,28 @@ export default function Checkout() {
         </View>
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.section2}>
         <View style={styles.subSection}>
           <Text style={styles.sectionTitle}>Produk Yang Dipesan</Text>
-          <Text style={styles.sectionTitle}> LOGO HERE</Text>
+          <View style={styles.sectionTitle}>
+            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
+          </View>
         </View>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonlist}></View>
           <View style={styles.button}>
-            <Text style={styles.orderPackText}>PAKET</Text>
-            <Text style={styles.orderPackText}>CEPAT</Text>
+            <View style={styles.iconLimited}>
+              <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
+            </View>
+            <Text style={styles.orderPackText}>PAKET CEPAT</Text>
           </View>
-          <View style={styles.buttontrash}></View>
+          <View style={styles.buttontrash}>
+          <Image source={require('../../img/Trashcan.png')} style={styles.deleteButton} />
+          </View>
         </View>
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.section1}>
         <Text style={styles.paymentMethod}>METODE PEMBAYARAN</Text>
         <View style={styles.paymentLogos}>
           <Image source={require('../../img/Logo-Dana.png')} style={styles.paymentLogo} />
@@ -60,6 +66,7 @@ export default function Checkout() {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -70,7 +77,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B111F',
     borderRadius: 10,
     marginBottom: 10,
+    padding: 20,
+    paddingBottom:20,
+    flex: 1,
+
+  },
+  section2: {
+    backgroundColor: '#0B111F',
+    borderRadius: 10,
+    marginTop: 10,
     padding: 10,
+    paddingBottom:40,
+
+  },
+  section1: {
+    backgroundColor: '#0B111F',
+    borderRadius: 10,
+    marginBottom: 80,
+    padding: 10,
+    marginTop: 400,
+    flex: 1,
+    justifyContent: 'center',
   },
   sectionTitle: {
     color: '#fff',
@@ -84,8 +111,9 @@ const styles = StyleSheet.create({
   },
   addressText: {
     color: '#fff',
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center'
   },
   subSection: {
     flexDirection: 'row',
@@ -95,15 +123,24 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent:'space-between',
+    marginBottom: 10,
+    marginRight: 40,
+    
   },
   button: {
-    backgroundColor: 'white',
+    backgroundColor: '#000000',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    // flex: 1,
     marginHorizontal: 5,
     paddingVertical: 10,
+    paddingBottom:30,
+    paddingTop:30,
+    alignSelf:'flex-start',
+    marginRight:300
+    
   },
   buttonlist: {
     backgroundColor: 'white',
@@ -116,15 +153,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   buttontrash: {
-    backgroundColor: 'white',
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#eda01f',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     // flex: 1,
-    padding:30,
+    padding:0.1,
     // marginHorizontal: 5,
     // paddingVertical: 10,
-    borderRadius:10,
+    borderRadius: 100,
+    justifyContent:'flex-end',
+    
   },
   orderPackText: {
     color: '#eda01f',
@@ -137,6 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 10,
+    marginLeft: 5
   },
   paymentLogos: {
     flexDirection: 'row',
@@ -148,8 +187,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').width * 0.1,
     borderRadius: 3,
     marginLeft: 5,
-
-
     backgroundColor:'#EDA01F'
   },
   checkoutSection: {
@@ -157,10 +194,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     padding: 10,
+    
   },
   priceContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
+    marginTop: 10,
     marginBottom: 10,
   },
   priceText: {
@@ -170,6 +209,8 @@ const styles = StyleSheet.create({
   },
   checkoutButton: {
     alignItems: 'flex-end',
+    marginTop: -40,
+    marginBottom: 20
   },
   checkoutButtonText: {
     backgroundColor: '#EDA01F',
@@ -180,4 +221,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderRadius: 10,
   },
+  deleteButton: {
+    // width: Dimensions.get('window').width * 0.1,
+    // height: Dimensions.get('window').width * 0.1,
+    width:70,
+    height: 70,
+    borderRadius: 3,
+    marginLeft: 5,
+    alignSelf:'center',
+  },
+  iconLimited: {
+    width:180,
+    height: 30,
+    borderRadius: 3,
+    marginLeft: 5,
+    alignSelf:'center',
+  }
 });
