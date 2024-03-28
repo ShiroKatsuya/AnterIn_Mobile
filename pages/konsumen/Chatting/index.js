@@ -13,8 +13,8 @@ export default function Chatting() {
             <View style={styles.cardInfoRow}>
               <Image source={require('../../img/logo.png')} style={styles.logo} />
               <View style={{ flex: 1 }}>
-                <Text style={{ color: 'white' }}>Delia</Text>
-                <Text style={{ color: 'white' }}>Hidup Seperti Lerry</Text>
+                <Text style={styles.text}>Delia</Text>
+                <Text style={styles.text}>Hidup Seperti Lerry</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={{ color: '#EDA01F' }}>0812121313131</Text>
@@ -23,13 +23,13 @@ export default function Chatting() {
           </View>
           <View style={styles.resultcontainer}>
             <View style={styles.result1}>
-              <Text style={{ color: 'white' }}>Halo, maaf mengganggu Pekerjaan anda</Text>
+              <Text style={styles.text}>Halo, maaf mengganggu Pekerjaan anda</Text>
             </View>
             <View style={styles.result2}>
-              <Text style={{ color: 'white' }}>Iya, ada apa kawanku?</Text>
+              <Text style={styles.text}>Iya, ada apa kawanku?</Text>
             </View>
             <View style={styles.result3}>
-              <Text style={{ color: 'white' }}>Paketmu sudah sampai kocak, sini keluar</Text>
+              <Text style={styles.text}>Paketmu sudah sampai kocak, sini keluar</Text>
             </View>
           </View>
         </View>
@@ -39,6 +39,7 @@ export default function Chatting() {
 }
 
 const styles = StyleSheet.create({
+text:{color: 'white'},
   resultcontainer: {
     flexDirection: 'column',
     marginTop: 40,

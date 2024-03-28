@@ -4,18 +4,18 @@ import React from 'react'
 export default function Daftar() {
   return (
     <>
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  <View style={styles.flexheader}>
       <View style={styles.container}>
 
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <Image
             source={require('../../img/logo.png')}
             resizeMode="cover"
-            style={{ width: 150, height: 150 }}
+            style={styles.img}
           />
         </View>
 
-      <View style={{marginBottom:20}}>
+      <View style={styles.regisakun}>
         <Text style={styles.daftar}>DAFTAR AKUN</Text>
         <Text> Silahkan Daftarkan Akun Terlebih Dahulu</Text>
       </View>
@@ -47,7 +47,7 @@ export default function Daftar() {
         <Button title="Daftar"
         color="#EDA01F"
          />
-        <Text style={{marginTop:12 , color:(255, 255, 255, 0.5), }}>
+        <Text style={styles.akun}>
           Jika Memiliki Akun?
         </Text>
       <View style={{marginTop:12}}>
@@ -63,6 +63,18 @@ export default function Daftar() {
 }
 
 const styles = StyleSheet.create({
+  regisakun:{
+    marginBottom:20
+  },
+  flexheader:{
+    flex: 1, alignItems: 'center', justifyContent: 'center' 
+  },
+  img:{
+    width: 150, height: 150
+  },
+  akun:{
+    marginTop:12 , color:(255, 255, 255, 0.5), 
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
