@@ -75,11 +75,11 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: '#0B111F',
+
     borderRadius: 10,
     marginBottom: 10,
     padding: 10,
-    paddingBottom:20,
-    flex: 1,
+
 
   },
   section2: {
