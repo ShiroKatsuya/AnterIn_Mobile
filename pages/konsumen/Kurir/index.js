@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image } from 'react-native'
+import { StyleSheet, Text, View,Image, Dimensions } from 'react-native'
 import React from 'react'
 
 export default function Kurir() {
@@ -17,21 +17,38 @@ export default function Kurir() {
     
             <Text style={styles.text}>Pilih Disini</Text>
             </View>
-            <Text style={styles.rating}>Icon Bintang</Text>
+            <View style={styles.rating}>
+              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
+              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
+              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
+              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
+              <Image source={require('../../img/rating-star/unselect-star.png')} style={styles.star}/>
+            </View>
       </View>
       
     </View>
     
-    
   )
+  
 }
 
 const styles = StyleSheet.create({
   rating:{
     color:'white',
-    fontWeight:'900',
-    // marginTop:1
+    // marginTop:1,
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    alignItems:'flex-start',
+    width: 20,
+    height: 20,
 
+  },
+  star:{
+    width: 20,
+    height: 50,
+    borderRadius: 1,
+    marginLeft: 0.1,
+    marginTop: -40
   },
   Pilih:{
     alignSelf:'flex-end',
