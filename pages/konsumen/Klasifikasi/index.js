@@ -1,39 +1,102 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { Image, Text, TouchableOpacity, View, PermissionsAndroid, Dimensions,StyleSheet } from 'react-native';
+import { launchCamera } from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function KlasifikasiObjek() {
-  return (
-    <View style={styles.container}>
-        <View style={styles.kamera}>
-            <Image source={require('../../img/camera.png')} style={styles.camera}/>
-            <Text style={styles.txt}>Camera</Text>
-        </View>
+export default function KlasifikasiObjek  () {
+    const navigation = useNavigation();
+    const [cameraData, setCameraData] = useState(null);
 
-        <View style={styles.fotocontainer}>
-            <View style={styles.foto}>
-                <Image source={require('../../img/Kursi.png')} style={styles.img}/>
+    const requestCameraPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    title: "App Camera Permission",
+                    message: "App needs access to your camera",
+                    buttonNeutral: "Ask Me Later",
+                    buttonNegative: "Cancel",
+                    buttonPositive: "OK"
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("Camera permission given");
+                openCamera();
+            } else {
+                console.log("Camera permission denied");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+    const openCamera = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 1,
+        };
+
+        launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('Dibatalkan');
+            } else if (response.errorCode) {
+                console.log(response.errorMessage);
+            } else {
+                const data = response.assets;
+                console.log(data);
+                setCameraData(data);
+
+                if (data && data[0] && data[0].uri) {
+      
+                }
+            }
+        });
+    };
+
+    useEffect(() => {
+        requestCameraPermission();
+    }, []);
+
+    return (
+        <View style={styles.container}>
+                     <TouchableOpacity onPress={openCamera}>
+            <View style={styles.kamera}>
+       
+                    <Image source={require('../../img/camera.png')} style={styles.camera} />
+                    <Text style={styles.txt}>Camera</Text>
+       
             </View>
+            </TouchableOpacity>
+            <View style={styles.fotocontainer}>
+                {cameraData && cameraData[0] && cameraData[0].uri && (
+                    <View style={styles.foto}>
+                        <Image source={{ uri: cameraData[0].uri }} style={styles.img} />
+                    </View>
+                )}
+            </View>
+
+            <View style={styles.resultcontainer}>
+                <View style={styles.result}>
+                    <Text style={styles.textresul}>
+                        Deskripsi : Barang Direkomendasikan ke Mobil
+                    </Text>
+                    <Text style={styles.textresul}>Percentase : 80%</Text>
+                    <Text style={styles.textresul}>Nama : Kursi</Text>
+                    <Text style={styles.textresul}>Klasifikasi : Berat</Text>
+                </View>
+            </View>
+
+            <TouchableOpacity>
+                <View style={styles.button}>
+                    <Text style={{ color: 'white', textAlign: 'center' }}>Kirim Sekarang !</Text>
+                </View>
+            </TouchableOpacity>
         </View>
-        <View style={styles.resultcontainer}>
-            <View style={styles.result}>
-                <Text style={styles.textresul}>
-                    Deskripsi : Barang Direkomendasikan ke Mobil
-                </Text>
-                <Text style={styles.textresul}>Percentase : 80%</Text>
-                <Text style={styles.textresul}>Nama : Kursi</Text>
-                <Text style={styles.textresul}>Klasifikasi : Berat</Text>
-            </View>
-        </View>
-        <TouchableOpacity>
-            <View style={styles.button}>
-                <Text style={{color:'white',textAlign:'center'}}>Kirim Sekarang !</Text>
-            </View>
-        </TouchableOpacity>
-    </View>
-  )
+    );
 }
+
 
 const styles = StyleSheet.create({
     button:{
@@ -107,7 +170,7 @@ const styles = StyleSheet.create({
 
     },
     img:{
-        width:650 ,
+        width:450 ,
         height: 400,
         borderRadius: 10,
         alignSelf:'center'
