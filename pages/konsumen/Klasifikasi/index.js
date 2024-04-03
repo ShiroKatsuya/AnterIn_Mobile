@@ -43,8 +43,8 @@ export default function KlasifikasiObjek() {
           
                 let responseJson = response.data;
                 SetResult(responseJson.response.Nama);
-                SetDeskription(responseJson.response.Deskripsi)
-                SetDedection(responseJson.response.Persentase)
+                SetDeskription(responseJson.response.Deskripsi);
+                SetDedection(responseJson.response.Persentase);
 
             } else {
                 console.error('Upload gagal. Status:', response.status, 'Data:', response.data);
