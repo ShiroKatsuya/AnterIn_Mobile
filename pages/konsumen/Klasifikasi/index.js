@@ -1,13 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, TouchableOpacity, View, PermissionsAndroid, Dimensions,StyleSheet } from 'react-native';
+import { Image, Text, TouchableOpacity, View, PermissionsAndroid, Dimensions, StyleSheet } from 'react-native';
 import { launchCamera } from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function KlasifikasiObjek  () {
+export default function KlasifikasiObjek() {
     const navigation = useNavigation();
     const [cameraData, setCameraData] = useState(null);
+    const [diagnosaResult, setDiagnosaResult] = useState(null);
+    const [diagnosaDeskription, setDiagnosaDeskription] = useState(null);
+    const [diagnosaDedection, setDiagnosaDedection] = useState(null);
+
+    const generateUniquePictureName = () => {
+        return Math.random().toString(36).substring(2, 15);
+    };
+
+    const uploadPhoto = async (fileUri) => {
+        try {
+            let uniquePictureName = generateUniquePictureName();
+            let formData = new FormData();
+            formData.append('file', {
+                uri: fileUri,
+                type: 'image/jpeg',
+                name: uniquePictureName + '.jpg',
+            });
+
+            // Ganti URL sesuai dengan URL yang dapat diakses dari perangkat Handhpne
+            let response = await axios.post(
+                'http://192.168.100.56:8888/api/send-klasifikasi',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                console.log('Upload berhasil:', response.data);
+
+                let data = response.data.response; 
+                console.log(data);
+
+            } else {
+                console.error('Upload gagal. Status:', response.status, 'Data:', response.data);
+            }
+        } catch (error) {
+            console.error('Kesalahan mengunggah file:', error);
+        }
+    };
+
+    const openCamera = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 1,
+        };
+
+        launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('Dibatalkan');
+            } else if (response.errorCode) {
+                console.log(response.errorMessage);
+            } else {
+                const data = response.assets;
+                console.log(data);
+                setCameraData(data);
+
+                if (data && data[0] && data[0].uri) {
+                    uploadPhoto(data[0].uri);
+                }
+            }
+        });
+    };
 
     const requestCameraPermission = async () => {
         try {
@@ -32,33 +98,9 @@ export default function KlasifikasiObjek  () {
         }
     };
 
-    const openCamera = () => {
-        const options = {
-            mediaType: 'photo',
-            quality: 1,
-        };
-
-        launchCamera(options, (response) => {
-            if (response.didCancel) {
-                console.log('Dibatalkan');
-            } else if (response.errorCode) {
-                console.log(response.errorMessage);
-            } else {
-                const data = response.assets;
-                console.log(data);
-                setCameraData(data);
-
-                if (data && data[0] && data[0].uri) {
-      
-                }
-            }
-        });
-    };
-
     useEffect(() => {
         requestCameraPermission();
     }, []);
-
     return (
         <View style={styles.container}>
                      <TouchableOpacity onPress={openCamera}>
@@ -79,12 +121,9 @@ export default function KlasifikasiObjek  () {
 
             <View style={styles.resultcontainer}>
                 <View style={styles.result}>
-                    <Text style={styles.textresul}>
-                        Deskripsi : Barang Direkomendasikan ke Mobil
-                    </Text>
-                    <Text style={styles.textresul}>Percentase : 80%</Text>
-                    <Text style={styles.textresul}>Nama : Kursi</Text>
-                    <Text style={styles.textresul}>Klasifikasi : Berat</Text>
+                    <Text style={styles.textresul}>Nama : {diagnosaResult}</Text>
+                    <Text style={styles.textresul}>Percentase : {diagnosaDeskription}</Text>
+                    <Text style={styles.textresul}>Klasifikasi : {diagnosaDedection}</Text>
                 </View>
             </View>
 
