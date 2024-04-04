@@ -64,31 +64,38 @@ const Dashboard = () => {
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Dalam proses pengiriman sangat cepat</Text>
+            <Image source={require('../../img/rating-star/5-star.png')} style={styles.star}/>
           </View>
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Terkadang Pengiriman Ngaret</Text>
+            <Image source={require('../../img/rating-star/2-star.png')} style={styles.star}/>
           </View>
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Lumayan Lah</Text>
+            <Image source={require('../../img/rating-star/4-star.png')} style={styles.star}/>
           </View>
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Kok lama ya pengirimannya ?</Text>
+            <Image source={require('../../img/rating-star/3-star.png')} style={styles.star}/>
           </View>
           {/* tambah banyak */}
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Oke Siap Sampai Tujuan</Text>
+            <Image source={require('../../img/rating-star/4-star.png')} style={styles.star}/>
           </View>
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Mantul</Text>
+            <Image source={require('../../img/rating-star/5-star.png')} style={styles.star}/>
           </View>
           <View style={styles.cardmessage}>
             <Text style={styles.cardratingteks}>Rizky</Text>
             <Text style={styles.cardratingteks}>Kurir ramah </Text>
+            <Image source={require('../../img/rating-star/5-star.png')} style={styles.star}/>
           </View>
         </View>
         
@@ -119,10 +126,10 @@ const styles = StyleSheet.create({
   cardmessage:{
     backgroundColor: 'black',
     width: width * 0.2, 
-    height: width * 0.2, 
+    height: width * 0.25, 
     borderRadius: 7,
     color: 'white',
-    padding: 10,
+    padding: 8,
     marginRight: 10,
   },
   text:{
@@ -246,6 +253,13 @@ const styles = StyleSheet.create({
     marginTop:40,
     padding: 20
  
+  },
+  star:{
+    width: 50,
+    height: 50,
+    borderRadius: 1,
+    marginLeft: -5,
+    marginTop: -10,
   },
 });
 

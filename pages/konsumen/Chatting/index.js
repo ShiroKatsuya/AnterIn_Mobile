@@ -139,7 +139,7 @@ text:{color: 'white'},
     color:'white'
   },
   buttonsend:{
-    backgroundColor:'pink',
+    backgroundColor:'green',
     width:40,
     height:40,
     justifyContent: 'space-between',
