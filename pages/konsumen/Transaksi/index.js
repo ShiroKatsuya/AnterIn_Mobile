@@ -1,52 +1,64 @@
-import { Image, StyleSheet, Text, View, Dimensions } from 'react-native';
-import React from 'react';
+import { Image, StyleSheet, Text, View, Dimensions,FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
 const windowWidth = Dimensions.get('window').width;
 
 export default function Transaksi() {
   const navigation = useNavigation();
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilData, data] = useState([]); 
+
+  // const getDataUserLocal = () => {
+  //   getData('dataUser').then(res => {
+  //     setDataPribadi(res);
+  //   });
+  // };
+
+  useEffect(() => {
+    // getDataUserLocal();
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios({
+          url: 'http://192.168.100.56:8888/api/input_pilihan_paket',
+          headers: {
+            Authorization: 'Bearer ' + dataPribadi.token
+          },
+          method: "GET"
+        });
+        data(response.data); 
+      } catch (error) {
+        console.error(error);
+
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.pilihpaket}>Pilih Paket yang Anda Mau:</Text>
       <View style={styles.cardPaket}>
-        <View style={styles.cardPaket1}>
+      <FlatList
+        data={ambilData}
+        renderItem={({ item }) => (
           <View style={styles.cardPaketChild}>
             <Image
               source={require('../../img/ikon-riwayatpesanan/limited.png')}
               style={styles.img}
             />
-            <Text style={styles.textpaket}>Paket Standar</Text>
+            <Text style={styles.textpaket}>{item.Nama_Paket}</Text>
+            <Text style={styles.textpaket}>Rp{item.Harga_Paket}</Text>
           </View>
-          <View style={styles.cardPaketChild}>
-            <Image
-              source={require('../../img/ikon-riwayatpesanan/limited.png')}
-              style={styles.img}
-            />
-            <Text style={styles.textpaket}>Paket Reguler</Text>
-          </View>
-        </View>
-        <View style={styles.cardPaket2}>
-          <View style={styles.cardPaketChild}>
-            <Image
-              source={require('../../img/ikon-riwayatpesanan/limited.png')}
-              style={styles.img}
-            />
-            <Text style={styles.textpaket}>Paket Cepat</Text>
-          </View>
-        </View>
-      </View>
-      {/* Deskripsi Paket */}
-      <View style={styles.paket}>
-        <View>
-          <Text style={styles.textpaket2}>1X</Text>
-        </View>
-        <View>
-          <Text style={styles.textpaket1}>Paket Standar yang sangat mantap</Text>
-        </View>
-        <Text style={styles.textpaket1}>Rp35.000</Text>
-      </View>
+        )}
+        keyExtractor={item => item.id}
+        numColumns={2} 
+      />
+
+</View>
       {/* Checkout */}
       <View style={styles.checkout}>
         <View>
@@ -141,6 +153,15 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     marginLeft: 10,
     marginRight: 10,
+    // justifyContent:'space-between',
+    // justifyContent:'space-between',
+    // flexDirection:'row'
+    // justifyContent:'center'
+    // flexDirection:'row',
+    // alignSelf:'center',
+    // justifyContent:''
+    
+
   },
   cardPaket1: {
     backgroundColor: '#0b111f',
@@ -155,10 +176,12 @@ const styles = StyleSheet.create({
   },
   cardPaketChild: {
     backgroundColor: '#000000',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
+    // flexDirection:'column',
+    // justifyContent:'center',
     marginLeft: 10,
     marginTop: 15,
     padding: 40,
+    width: windowWidth * 0.4,
+alignSelf:'center'
   },
 });

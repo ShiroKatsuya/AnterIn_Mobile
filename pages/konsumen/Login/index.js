@@ -2,6 +2,7 @@ import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,erro
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
     const navigation = useNavigation();
@@ -18,6 +19,7 @@ export default function Login() {
       }
     }
 
+
     const handleEmailChange = (value) => {
       setEmail(value);
       if (value === '') {
@@ -28,14 +30,11 @@ export default function Login() {
     }
 
     const handleLoginPress = async () => {
-        try {
-
-   
- 
+      try {
           const formData = new FormData();
           formData.append('email', email);
           formData.append('password', password);
-
+  
           const response = await axios.post(
               'http://192.168.100.56:8888/api/login',
               formData,
@@ -45,21 +44,26 @@ export default function Login() {
                   },
               }
           );
-      
+  
           console.log(response.data);
-          navigation.navigate('MainTab');
+  
+          if (response.data.success) {
+              await AsyncStorage.setItem('token', response.data.data.token);
+              navigation.navigate('MainTab');
+
+          } else {
+              setError('Username/Password Salah !');
+          }
       } catch (error) {
           console.log('Username/Password Salah !');
-          // throw error;
-
+  
           if (!email || !password) {
-            setError('Username/Password Salah !');
-            return;
-          }else{
+              setError('Username/Password Salah !');
+          } else {
             setError('Username/Password Salah !');
           }
       }
-    };
+  };
 
 
 
