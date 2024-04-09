@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View, Image, Dimensions,trim } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Kurir() {
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, setAmbilData] = useState([]);
 
-  const token = getTokenFromStorage();
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //Tydaakkkk... AsyncStorage ... meyelamatkan saya !!
+        const token = await AsyncStorage.getItem('token');
         const response = await axios.get('http://192.168.100.56:8888/api/datauser', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -22,7 +24,7 @@ export default function Kurir() {
       }
     };
     fetchData();
-  }, [token]);
+  }, []);
 
   return (
     <>
