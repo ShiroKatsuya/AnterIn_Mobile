@@ -2,13 +2,14 @@ import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,erro
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
-
+    const [token, setToken] = useState('');
     const handlePasswordChange = (value) => {
       setPassword(value);
       if (value === '') {
@@ -17,6 +18,14 @@ export default function Login() {
         setError('');
       }
     }
+
+    const storeToken = async (token) => {
+      try {
+          await AsyncStorage.setItem('token', token);
+      } catch (error) {
+          console.error('Failed to store token');
+      }
+  };
 
     const handleEmailChange = (value) => {
       setEmail(value);
@@ -45,6 +54,7 @@ export default function Login() {
                   },
               }
           );
+          storeToken(response.data.token);
       
           console.log(response.data);
           navigation.navigate('MainTab');

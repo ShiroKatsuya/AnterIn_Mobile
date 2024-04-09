@@ -43,7 +43,7 @@ export default function Daftar() {
       setShowMessage('Masukkan No.Hp');
       return;
     }
-
+                                    //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
     try {                           // jangan lupa /api/... adalah benar untuk routing nya
       const response = await axios.post('http://192.168.100.56:8888/api/register', form); 
       if (response.data.success) {
