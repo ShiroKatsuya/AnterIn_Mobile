@@ -1,135 +1,187 @@
-import { View, TextInput, Button, StyleSheet,Text,TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error } from 'react-native';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-// import { Login, Dashboard, Daftar, Profile, Transaksi } from './pages/route';
-
+import axios from 'axios';
 
 export default function Login() {
     const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
 
-    const handleLoginPress = () => {
-      navigation.navigate('MainTab'); // Navigate to the MainTab navigator
+    const handlePasswordChange = (value) => {
+      setPassword(value);
+      if (value === '') {
+        setError('Password Tidak Boleh Kosong');
+      } else {
+        setError('');
+      }
+    }
+
+    const handleEmailChange = (value) => {
+      setEmail(value);
+      if (value === '') {
+        setError('Email Tidak Boleh Kosong');
+      } else {
+        setError('');
+      }
+    }
+
+    const handleLoginPress = async () => {
+        try {
+
+   
+ 
+          const formData = new FormData();
+          formData.append('email', email);
+          formData.append('password', password);
+
+          const response = await axios.post(
+              'http://192.168.100.56:8888/api/login',
+              formData,
+              {
+                  headers: {
+                      'Content-Type': 'multipart/form-data',
+                  },
+              }
+          );
+      
+          console.log(response.data);
+          navigation.navigate('MainTab');
+      } catch (error) {
+          console.log('Username/Password Salah !');
+          // throw error;
+
+          if (!email || !password) {
+            setError('Username/Password Salah !');
+            return;
+          }else{
+            setError('Username/Password Salah !');
+          }
+      }
     };
 
+
+
+
     return (
-        <>
-        <View style={styles.headercontainer  }>
-    
-        <View style={styles.container}>
+        <>  
 
-        <View style={styles.foto}>
-          <Image
-            source={require('../../img/logo.png')}
-            resizeMode="cover"
-            style={styles.img}
-          />
-        </View>
-     
-      
-        <Text style = {styles.anter}>
-                ANTER-IN
+            <View style={styles.headercontainer}>
+              <View>
+              <Text style={{ marginTop: 10, padding: 10, color:'black'}}>
+              {error ? 'Username/Password Salah !' : null}
+              {/* Username/Password Salah ! */}
+          </Text>
+              </View>
+                <View style={styles.container}>
+   
+                    <View style={styles.foto}>
+                        <Image
+                            source={require('../../img/logo.png')}
+                            resizeMode="cover"
+                            style={styles.img}
+                        />
+                    </View>
+                    <Text style={styles.anter}>
+                        ANTER-IN
+                    </Text>
+                    <Text>
+                        Silahkan Login Aplikasi
+                    </Text>
+                    <Text style={{ marginBottom: 4 }}>
+                        Terlebih Dahulu Untuk Antar Barang
+                    </Text>
+                    <View style={styles.form}>
+                        <TextInput
+                            style={[styles.input, styles.form2]}
+                            placeholder="Nama atau Email"
+                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                            value={email}
+                            onChangeText={handleEmailChange}
+                            // secureTextEntry={true}
+                        />
+                        <TextInput
+                            style={[styles.input, styles.form2]}
+                            placeholder="Password"
+                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                            value={password}
+                            onChangeText={handlePasswordChange}
+                            secureTextEntry={true}
+                        />
+                        <Button
+                            title="Login"
+                            color="#EDA01F"
+                            onPress={handleLoginPress}
+                        />
+                        <TouchableOpacity onPress={() => navigation.navigate('Daftar')}>
+                            <Text style={styles.daftar}>Daftar</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.links}>
+                        <Text style={styles.link}>Lupa Password?</Text>
+                    </View>
+                </View>
+            </View>
+            <Text style={{ marginTop: 10, backgroundColor: '#0B111F', padding: 10 }}>
+                {/* Login button content */}
             </Text>
-            <Text >
-               Silahkan Login Aplikasi 
-            </Text>
-            <Text style={{marginBottom:4 }}>
-            Terlebih Dahulu Untuk Antar Barang
-            </Text>
-      <View style={styles.form}>
-        <TextInput
-          style={[styles.input, styles.form2]}
-          placeholder="Nama atau Email"
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          
-        //   value={username}
-        //   onChangeText={setUsername}
-        />
-        <TextInput
-          style={[styles.input,styles.form2]}
-          placeholder="Password"
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-      
-        //   value={password}
-        //   onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Button title="Login"
-        color="#EDA01F"
-      
-         />
-         <TouchableOpacity onPress={()=>navigation.navigate('Daftar')}>
-          <Text  style = {styles.daftar}>Daftar</Text>
-          </TouchableOpacity>
-      </View>
-      <View style={styles.links}>
-     
-        <Text style={styles.link}>Lupa Password?</Text>
-      </View>
-    </View>
-
-        </View>
-        <TouchableOpacity onPress={handleLoginPress}>
-      <Text style={{marginTop: 10, backgroundColor: '#0B111F', padding: 10}}>
-        {/* Login button content */}
-      </Text>
-    </TouchableOpacity>
         </>
-
-      );
+    );
 }
 
 const styles = StyleSheet.create({
-  foto:{
-    justifyContent: 'center', alignItems: 'center'
-  },
-  daftar:{
-    marginBottom:20,marginTop:20
-  },
-  img:{
-    width: 150, height: 150
-  },
-  headercontainer:{
-    flex: 1, alignItems: 'center', justifyContent: 'center'
-  },
-
-    anter:{
-        fontSize:20,
-        fontWeight:'bold',
-
-        color:'black'
-    },  
+    foto: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    daftar: {
+        marginBottom: 20,
+        marginTop: 20
+    },
+    img: {
+        width: 150,
+        height: 150
+    },
+    headercontainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    anter: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'black'
+    },
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     form: {
-      width: 300,
-      padding: 20,
-      borderRadius: 10,
-      backgroundColor: '#fff',
+        width: 300,
+        padding: 20,
+        borderRadius: 10,
+        backgroundColor: '#fff',
     },
-
     form2: {
-        backgroundColor:'black',
-        color:'white'
-      },
+        backgroundColor: 'black',
+        color: 'white'
+    },
     input: {
-      height: 40,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      padding: 10,
-      marginBottom: 10,
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
     },
     links: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         marginTop: 10,
-      },
-    link: {
-      color: '#000',
-    
     },
-  });
+    link: {
+        color: '#000',
+    },
+});

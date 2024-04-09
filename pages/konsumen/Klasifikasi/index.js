@@ -27,7 +27,7 @@ export default function KlasifikasiObjek() {
                 name: uniquePictureName + '.jpg',
             });
 
-            // Ganti URL sesuai dengan URL yang dapat diakses dari perangkat Handhpne
+
             let response = await axios.post(
                 'http://192.168.100.56:8888/api/send-klasifikasi',
                 formData,
