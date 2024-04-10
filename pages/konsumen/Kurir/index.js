@@ -1,23 +1,22 @@
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Kurir() {
-  const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, setAmbilData] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //Tydaakkkk... AsyncStorage ... meyelamatkan saya !!
         const token = await AsyncStorage.getItem('token');
         const response = await axios.get('http://192.168.100.56:8888/api/datauser', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
         setAmbilData(response.data.message);
       } catch (error) {
         console.error(error);
@@ -26,36 +25,43 @@ export default function Kurir() {
     fetchData();
   }, []);
 
-  return (
-    <>
+  const handleCheckout = (pkg) => {
+    if (pkg) {
+      console.log("Checkout dengan kurir:", pkg);
+      navigation.navigate('InputPesanan', { pilihkurir: pkg });
+    } else {
+      console.log("Pilih kurir terlebih dahulu!");
+    }
+  };
 
-          <View style={styles.container} >
-          {Array.isArray(ambilData) && ambilData.filter(pkg => pkg.role_id == 3)
-        .map((pkg, index) => (
-            <View style={styles.cardInfo} key={index}>
-              <View style={styles.cardInfoRow}>
-                <Image source={require('../../img/logo.png')} style={styles.logo} />
-                <View style={styles.userDetails}>
-                  <Text style={styles.userName}>Nama : {pkg.nama}</Text>
-                  <Text style={styles.userPhone}>Nomor Hp : {pkg.nohp}</Text>
-                  <Text style={styles.userPhone}>Role_id : {pkg.role_id}</Text>
-                </View>
-              </View>
-              <View style={styles.bottomRow}>
-                <View style={styles.rating}>
-                  {[...Array(5)].map((_, i) => (
-                    <Image key={i} source={i < 4 ? require('../../img/rating-star/select-star.png') : require('../../img/rating-star/unselect-star.png')} style={styles.star} />
-                  ))}
-                </View>
-                <View style={styles.Pilih}>
-                  <Text style={styles.text}>Pilih Disini</Text>
-                </View>
-              </View>
+  return (
+    <View style={styles.container}>
+  {Array.isArray(ambilData) && ambilData.filter(pkg => pkg.role_id == 3)
+        .map((pkg, index) =>(
+        <View style={styles.cardInfo} key={index}>
+          <View style={styles.cardInfoRow}>
+            <Image source={require('../../img/logo.png')} style={styles.logo} />
+            <View style={styles.userDetails}>
+              <Text style={styles.userName}>Nama : {pkg.nama}</Text>
+              <Text style={styles.userPhone}>Nomor Hp : {pkg.nohp}</Text>
+              <Text style={styles.userPhone}>Role_id : {pkg.role_id}</Text>
             </View>
-               ))}
           </View>
-     
-    </>
+          <View style={styles.bottomRow}>
+            <View style={styles.rating}>
+              {[...Array(5)].map((_, i) => (
+                <Image key={i} source={i < 4 ? require('../../img/rating-star/select-star.png') : require('../../img/rating-star/unselect-star.png')} style={styles.star} />
+              ))}
+            </View>
+            <TouchableOpacity onPress={() => handleCheckout(pkg)}>
+              <View style={styles.Pilih}>
+                <Text style={styles.text}>Pilih Disini</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))}
+    </View>
   );
 }
 

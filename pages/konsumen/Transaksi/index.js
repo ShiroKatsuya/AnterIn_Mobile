@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, Dimensions,FlatList } from 'react-native';
+import { Image, StyleSheet, Text, View, Dimensions,FlatList,TouchableOpacity} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -8,12 +8,28 @@ export default function Transaksi() {
   const navigation = useNavigation();
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, data] = useState([]); 
+  const [pilih, setpilih] = useState(null);
 
   // const getDataUserLocal = () => {
   //   getData('dataUser').then(res => {
   //     setDataPribadi(res);
   //   });
   // };
+
+  const handlePilih = (item) => {
+    setpilih(item);
+  };
+
+  const handleCheckout = () => {
+    if (pilih) {
+      console.log("Checkout dengan paket:", pilih);
+      navigation.navigate('InputPesanan',{pilih});
+    } else {
+      console.log("Pilih paket terlebih dahulu!");
+
+    }
+  };
+
 
   useEffect(() => {
     // getDataUserLocal();
@@ -45,30 +61,38 @@ export default function Transaksi() {
       <FlatList
         data={ambilData}
         renderItem={({ item }) => (
-          <View style={styles.cardPaketChild}>
+          <TouchableOpacity onPress={() => handlePilih(item)} style={styles.cardPaketChild}>
             <Image
               source={require('../../img/ikon-riwayatpesanan/limited.png')}
               style={styles.img}
             />
             <Text style={styles.textpaket}>{item.Nama_Paket}</Text>
             <Text style={styles.textpaket}>Rp{item.Harga_Paket}</Text>
-          </View>
+            </TouchableOpacity>
         )}
         keyExtractor={item => item.id}
         numColumns={2} 
       />
 
 </View>
-      {/* Checkout */}
       <View style={styles.checkout}>
-        <View>
           <Text style={styles.textpaket4}>Jumlah</Text>
-          <Text style={styles.textpaket4}>Rp350.000</Text>
-        </View>
+         {pilih && (
+          <Text style={styles.textpaket4}>
+             {pilih.Nama_Paket}
+          </Text>
+         )}
+                {pilih && (
+          <Text style={styles.textpaket4}>
+             Rp.{pilih.Harga_Paket}
+          </Text>
+         )}
+  <TouchableOpacity onPress={handleCheckout} >
         <View style={styles.button}>
           <Text style={styles.buttoncheckout}>Checkout</Text>
         </View>
-      </View>
+    </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -105,6 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B111F',
     padding: 10,
     flex: 1,
+    flexDirection:'column'
   },
   paket: {
     backgroundColor: '#0B111F',
@@ -122,6 +147,7 @@ const styles = StyleSheet.create({
   textpaket4: {
     color: 'white',
     fontSize: 20,
+
   },
   textpaket2: {
     color: 'white',
