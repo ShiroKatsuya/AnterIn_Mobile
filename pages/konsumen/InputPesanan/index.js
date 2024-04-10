@@ -1,9 +1,28 @@
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
 
-export default function InputPesanan() {
+const InputPesanan = ({ route }) => {
   const navigation = useNavigation();
+  const [pilihPaket, setpilihPaket] = useState(route.params.pilih || {});
+  const [pilihKurir, setpilihKurir] = useState(route.params.pilihkurir || {});
+  const [pilihPaketData, setpilihPaketData] = useState({});
+
+  useEffect(() => {
+    setpilihPaket(route.params.pilih || {});
+  }, [route.params.pilih]);
+
+  useEffect(() => {
+    setpilihKurir(route.params.pilihkurir || {});
+  }, [route.params.pilihkurir]);
+
+
+  useEffect(() => {
+    if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
+      setpilihPaketData(pilihPaket);
+    }
+  }, [pilihPaket]);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerinput}>
@@ -23,40 +42,37 @@ export default function InputPesanan() {
           />
 
           <Text style={styles.text}>Jenis Paket</Text>
-          <View >
-            <TextInput
-              style={[styles.input, styles.forminside]}
-              placeholder="Jenis Paket"
-              // multiline={true}
-              // numberOfLines={4}
-            />
+          <View>
+            <Text style={[styles.input, styles.forminside]}>
+              {pilihPaketData.Nama_Paket}
+            </Text>
+            <Text style={styles.text}>Harga</Text>
+            <Text style={[styles.input, styles.forminside]}>
+              {pilihPaketData.Harga_Paket}
+            </Text>
           </View>
           <Text style={styles.text}>Kurir</Text>
           <View style={styles.pilihkurir}>
             <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
               <View style={styles.logo}>
-                <Image source={require('../../img/SiCepat.png')} style={styles.logo1}/>
+                <Image source={require('../../img/SiCepat.png')} style={styles.logo1} />
               </View>
-              </TouchableOpacity> 
-              <View style={styles.logo}>
-                <Image source={require('../../img/J&T.png')} style={styles.logo1}/>
-              </View>
-              <View style={styles.logo}>
-              <Image source={require('../../img/JNE.png')} style={styles.logo2}/>
-              </View>
-              <View style={styles.logo}>
-                <Text>Logo Here</Text>
-              </View>
-              
+            </TouchableOpacity>
+            <View style={styles.logo}>
+              <Image source={require('../../img/J&T.png')} style={styles.logo1} />
+            </View>
+            <View style={styles.logo}>
+              <Image source={require('../../img/JNE.png')} style={styles.logo2} />
+            </View>
+            <View style={styles.logo}>
+              <Text>Logo Here</Text>
+            </View>
           </View>
           <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
-          <View >
-            <TextInput
-              style={[styles.input, styles.forminside]}
-              // placeholder="Kurir"
-              // multiline={true}
-              // numberOfLines={4}
-            />
+          <View>
+            <Text style={[styles.input, styles.forminside]}>
+              {pilihKurir.nama}
+            </Text>
           </View>
 
           <Button title="Submit" onPress={null} color="black" />
@@ -65,6 +81,7 @@ export default function InputPesanan() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   pilihkurir:{
@@ -143,3 +160,5 @@ const styles = StyleSheet.create({
     alignSelf:'center',
   }
 });
+
+export default InputPesanan
