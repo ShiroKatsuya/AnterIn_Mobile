@@ -1,27 +1,89 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'; 
 
 const InputPesanan = ({ route }) => {
   const navigation = useNavigation();
-  const [pilihPaket, setpilihPaket] = useState(route.params.pilih || {});
-  const [pilihKurir, setpilihKurir] = useState(route.params.pilihkurir || {});
-  const [pilihPaketData, setpilihPaketData] = useState({});
+  const [pilihPaket, setPilihPaket] = useState(route.params.pilih || {});
+  const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
+  const [pilihPaketData, setPilihPaketData] = useState({});
 
   useEffect(() => {
-    setpilihPaket(route.params.pilih || {});
+    setPilihPaket(route.params.pilih || {});
   }, [route.params.pilih]);
 
   useEffect(() => {
-    setpilihKurir(route.params.pilihkurir || {});
+    setPilihKurir(route.params.pilihkurir || {});
   }, [route.params.pilihkurir]);
-
 
   useEffect(() => {
     if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
-      setpilihPaketData(pilihPaket);
+      setPilihPaketData(pilihPaket);
     }
   }, [pilihPaket]);
+
+  const [form, setForm] = useState({
+    Nama_Barang: '',
+    Alamat_Tujuan: '',
+    Nama_Paket: '',
+    Harga_Paket: '',
+    Nama_Kurir: '',
+  });
+
+  const [showMessage, setShowMessage] = useState(null);
+
+  const handleInputChange = (name, value) => {
+    if (name === 'Nama_Kurir') {
+      setForm({
+        ...form,
+        Nama_Kurir: pilihKurir.nama, // Simpan nama kurir dari pilihKurir ke dalam form
+      });
+    } else {
+      setForm({
+        ...form,
+        [name]: value,
+      });
+    }
+  };
+
+  const kirimPesanan = async () => {
+    if (!form.Nama_Barang) {
+      setShowMessage('Masukkan Nama Barang');
+      return;
+    } else if (!form.Alamat_Tujuan) {
+      setShowMessage('Masukkan Alamat Tujuan');
+      return;
+    } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
+      setShowMessage('Pilih Jenis Paket');
+      return;
+    } else if (!form.Nama_Kurir) {
+      setShowMessage('Pilih Nama Kurir');
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const data = {
+        Nama_Barang: form.Nama_Barang,
+        Alamat_Tujuan: form.Alamat_Tujuan,
+        Nama_Paket: pilihPaketData.Nama_Paket,
+        Harga_Paket: pilihPaketData.Harga_Paket,
+        Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
+     
+      };
+
+      const response = await axios.post('http://192.168.100.56:8888/api/inputpesanan', data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,55 +96,70 @@ const InputPesanan = ({ route }) => {
           <TextInput
             style={[styles.input, styles.forminside]}
             placeholder="Nama Barang"
+            value={form.Nama_Barang}
+            onChangeText={(text) => handleInputChange('Nama_Barang', text)}
           />
           <Text style={styles.text}>Alamat Tujuan</Text>
           <TextInput
             style={[styles.input, styles.forminside]}
             placeholder="Alamat Tujuan"
+            value={form.Alamat_Tujuan}
+            onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
           />
 
           <Text style={styles.text}>Jenis Paket</Text>
           <View>
-            <Text style={[styles.input, styles.forminside]}>
-              {pilihPaketData.Nama_Paket}
-            </Text>
+            <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Nama_Paket}</Text>
             <Text style={styles.text}>Harga</Text>
-            <Text style={[styles.input, styles.forminside]}>
-              {pilihPaketData.Harga_Paket}
-            </Text>
+            <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Harga_Paket}</Text>
           </View>
           <Text style={styles.text}>Kurir</Text>
           <View style={styles.pilihkurir}>
-            <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
-              <View style={styles.logo}>
-                <Image source={require('../../img/SiCepat.png')} style={styles.logo1} />
-              </View>
-            </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
+            <View style={styles.logo}>
+              <Image source={require('../../img/SiCepat.png')} style={styles.logo1} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'J&T')}>
             <View style={styles.logo}>
               <Image source={require('../../img/J&T.png')} style={styles.logo1} />
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'JNE')}>
             <View style={styles.logo}>
               <Image source={require('../../img/JNE.png')} style={styles.logo2} />
             </View>
-            <View style={styles.logo}>
-              <Text>Logo Here</Text>
-            </View>
+          </TouchableOpacity>
+          <View style={styles.logo}>
+            <Text>Logo Here</Text>
+          </View>
           </View>
           <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
-          <View>
-            <Text style={[styles.input, styles.forminside]}>
-              {pilihKurir.nama}
-            </Text>
-          </View>
-
-          <Button title="Submit" onPress={null} color="black" />
+          <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
+             <Button
+            title="Simpan Pilihan Kurir"
+            onPress={() => {
+              handleInputChange('Nama_Kurir', form.Nama_Kurir);
+              alert('Data kurir berhasil disimpan!');
+            }}
+            disabled={!pilihKurir.nama}
+          />
+          <Button title="Submit" onPress={() => {
+            if (form.Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama &&form.Nama_Kurir) {
+              kirimPesanan();
+              alert('Data berhasil dikirim!');
+            } else {
+              alert('Harap lengkapi semua form sebelum submit.');
+            }
+          }} color="black" 
+          
+          />
+          {showMessage && <Text>{showMessage}</Text>}
         </View>
       </View>
     </View>
   );
 }
-
-
 const styles = StyleSheet.create({
   pilihkurir:{
     flexDirection:'row',

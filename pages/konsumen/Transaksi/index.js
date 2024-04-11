@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View, Dimensions,FlatList,TouchableOpacity} fr
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const windowWidth = Dimensions.get('window').width;
 
 export default function Transaksi() {
@@ -38,17 +39,17 @@ export default function Transaksi() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = await AsyncStorage.getItem('token');
         const response = await axios({
           url: 'http://192.168.100.56:8888/api/input_pilihan_paket',
           headers: {
-            Authorization: 'Bearer ' + dataPribadi.token
+            Authorization: `Bearer ${token}` 
           },
           method: "GET"
         });
         data(response.data); 
       } catch (error) {
         console.error(error);
-
       }
     };
     fetchData();
