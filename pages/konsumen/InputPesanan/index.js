@@ -149,7 +149,7 @@ const InputPesanan = ({ route }) => {
               kirimPesanan();
               alert('Data berhasil dikirim!');
             } else {
-              alert('Harap lengkapi semua form sebelum submit.');
+              alert('Harap lengkapi semua form sebelum submit dan jangan lupa simpan pilihan kurir');
             }
           }} color="black" 
           
