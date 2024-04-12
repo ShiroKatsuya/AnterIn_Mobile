@@ -112,9 +112,11 @@ export default function Daftar() {
             placeholder="Alamat"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
             onChangeText={(text) => handleInputChange('nohp', text)}
-          /> */}
+          /> */}  
           {/* Bagian bottom */}
-          <Button title="Daftar" color="#EDA01F" onPress={register} />
+          <Button title="Daftar" color="#EDA01F" onPress={register} 
+    
+          />
           {showMessage && <Text>{showMessage}</Text>}
           <Text style={styles.akun}>
             Jika Memiliki Akun?
