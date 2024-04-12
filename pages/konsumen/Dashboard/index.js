@@ -31,11 +31,11 @@ const Dashboard = () => {
           <Image source={require('../../img/ikon-navigasi/order-history.png')} style={styles.unggulanText1}/>
           {/* <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/> */}
           <Image source={require('../../img/ikon-navigasi/chat.png')} style={styles.unggulanText1}/>
-          <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/>
+          {/* <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/> */}
         </View>
         <View style={styles.unggulanRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-            <Text style={styles.unggulanText}>Checkout</Text>
+            <Text style={styles.unggulanText}>Pesan</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
             <Text style={styles.unggulanText}>Riwayat</Text>
@@ -46,9 +46,9 @@ const Dashboard = () => {
           <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <Text style={styles.unggulanArtikel}>Beberapa Rating atau Komentar</Text>
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
   unggulanCard: {
     backgroundColor: 'white',
     borderRadius: 30,
-    padding: 20,
-    marginTop: 20,
+    padding: 1,
+    marginTop: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -212,7 +212,9 @@ const styles = StyleSheet.create({
   unggulanRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    // marginBottom: 10,
+    marginRight:90,
+    marginLeft:90
   },
   unggulanText: {
     // backgroundColor: 'black',
