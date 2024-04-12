@@ -8,9 +8,9 @@ export default function Riwayat() {
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, data] = useState([]);
 
-  // Fungsi untuk menangani navigasi ke halaman detail produk
+
   const navigateToDetail = (id) => {
-    // Panggil navigation.navigate dengan mengirimkan id produk
+
     navigation.navigate('DetailPesanan', { id: id });
     console.log(id)
 

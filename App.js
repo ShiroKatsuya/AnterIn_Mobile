@@ -92,16 +92,7 @@ function MainTab() {
           title: "Transaksi",
         }}
       />
-      <Tab.Screen
-        name="InputPesanan"
-        component={InputPesanan}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Input Pesanan",
-        }}
-      />
-  
+
   
 
       <Tab.Screen
@@ -140,6 +131,17 @@ function App() {
             title: "Daftar",
           }}
         />
+
+<Tab.Screen
+        name="InputPesanan"
+        component={InputPesanan}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Input Pesanan",
+        }}
+      />
+  
 
         <Tab.Screen
                 name="Kurir"
