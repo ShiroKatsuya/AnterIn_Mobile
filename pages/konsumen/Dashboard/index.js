@@ -29,7 +29,7 @@ const Dashboard = () => {
     
           <Image source={require('../../img/ikon-navigasi/checkout.png')} style={styles.unggulanText1} />
           <Image source={require('../../img/ikon-navigasi/order-history.png')} style={styles.unggulanText1}/>
-          <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/>
+          {/* <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/> */}
           <Image source={require('../../img/ikon-navigasi/chat.png')} style={styles.unggulanText1}/>
           <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/>
         </View>
@@ -40,9 +40,9 @@ const Dashboard = () => {
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
             <Text style={styles.unggulanText}>Riwayat</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
             <Text style={styles.unggulanText}>Detail Pesanan</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>

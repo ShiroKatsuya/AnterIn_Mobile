@@ -6,10 +6,10 @@ export default function Profile() {
   const navigation = useNavigation();
 
   const handleLoginPress = () => {
-    navigation.navigate('Login'); // navigasi ke login
+    navigation.navigate('Login'); 
   };
   const handleAlamat = () => {
-    navigation.navigate('Alamat'); // navigasi ke Alamat
+    navigation.navigate('Alamat'); 
   };
   return (
     <>
