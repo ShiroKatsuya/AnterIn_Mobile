@@ -94,6 +94,7 @@ const Dashboard = () => {
           <Image source={require('../../img/logo.png')} style={styles.logo} />
           <View style={styles.userDetails}>
             <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
+            <Text style={styles.userName}>{ambilDataProfile.alamat}</Text>
             <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
           </View>
         </View>
