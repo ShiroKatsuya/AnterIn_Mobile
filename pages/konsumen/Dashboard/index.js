@@ -9,6 +9,7 @@ const Dashboard = () => {
   const navigation = useNavigation();
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, setAmbilData] = useState([]);
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -47,6 +48,30 @@ const Dashboard = () => {
   }, [dataPribadi.token]);
 
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: 'http://192.168.100.56:8888/api/datauser',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+      //   // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+
   return (
     <>
 
@@ -63,16 +88,17 @@ const Dashboard = () => {
 
 
       {/* Card Info */}
-      <View style={styles.cardInfo}>
+          <View style={styles.cardInfo}>
+      {ambilDataProfile && 
         <View style={styles.cardInfoRow}>
-          
           <Image source={require('../../img/logo.png')} style={styles.logo} />
           <View style={styles.userDetails}>
-            <Text style={styles.userName}>Delia</Text>
-            <Text style={styles.userPhone}>0895335992932</Text>
+            <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
+            <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
           </View>
         </View>
-      </View>
+      }
+</View>
 
       {/* Fitur Unggulan */}
       <Text style={styles.unggulanTitle}>Fitur Unggulan Kami</Text>
