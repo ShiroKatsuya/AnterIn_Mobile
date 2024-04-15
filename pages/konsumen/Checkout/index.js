@@ -1,42 +1,159 @@
-import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Checkout() {
   const { width } = Dimensions.get('window');
+  const navigation = useNavigation();
+  const [Data, setData] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
+  const [ambilData, data] = useState([]);
+  const [showMessage, setShowMessage] = useState(''); 
+  const [pilih, setpilih] = useState(null);
+
+  const [form, setForm] = useState({
+    status: '',});
+
+const handlePilih = (item) => {
+  setpilih(item);
+};
+
+const handleCheckout = async () => {
+  if (pilih) {
+    console.log("Checkout dengan paket:", pilih);
+    try {
+      await tambahStatus();
+      navigation.navigate('Riwayat');
+      console.log("Status Sudah Dibayar");
+    } catch (error) {
+      console.error("Gagal:", error);
+    }
+  } else {
+    console.log("Pilih paket terlebih dahulu!");
+  }
+};
+
+useEffect(() => {
+  // getDataUserLocal();
+}, [dataPribadi.token]);
+
+
+const tambahStatus = async () => {
+  if (!pilih || !pilih.id) {
+    throw new Error("Paket atau ID tidak valid.");
+  }
+
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const data = {
+      status: "Sudah Dibayar",
+    };
+
+    const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${pilih.id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+
+    console.log(response.data);
+    return response.data; // Mengembalikan data yang diperbarui jika perlu
+  } catch (error) {
+    console.error("Gagal memperbarui status:", error);
+    throw error; // Melempar kembali kesalahan untuk penanganan di luar fungsi
+  }
+};
+
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: 'http://192.168.100.56:8888/api/datauser',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setData(response.data["data"]);
+        
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data)
+
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const response = await axios({
+            url: 'http://192.168.100.56:8888/api/riwayatpesanan',
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            method: "GET"
+          });
+          data(response.data);
+          console.log(response.data)
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
+    }, [dataPribadi.token]);
+
+
 
   return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Alamat Pengiriman <Text style={{ fontSize: 30 }}> →</Text> | </Text>
-        <View style={styles.addressBody}>
-          <Text style={styles.addressText}>Delia Putri Andari</Text>
-          <Text style={styles.addressText}>(+62)0895335992932</Text>
-          <Text style={styles.addressText}>
-            Jalan Asoy Geboy Blok Pinggir Jalan RT/RW 01/02 Cibaduyut KAB.Tanggerang Banten
-          </Text>
-        </View>
-      </View>
 
-      <View style={styles.section2}>
-        <View style={styles.subSection}>
-          <Text style={styles.sectionTitle}>Produk Yang Dipesan</Text>
-          <View style={styles.sectionTitle}>
-            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
-          </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonlist}></View>
-          <View style={styles.button}>
-            <View style={styles.iconLimited}>
-              <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
-            </View>
-            <Text style={styles.orderPackText}>PAKET CEPAT</Text>
-          </View>
-          <View style={styles.buttontrash}>
-          <Image source={require('../../img/Trashcan.png')} style={styles.deleteButton} />
-          </View>
+    <View style={styles.container}>
+      {Data && (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Alamat Pengirim : {Data.alamat} <Text style={{ fontSize: 30 }}> →</Text> | </Text>
+        <View style={styles.addressBody}>
+          <Text style={styles.addressText}>Nama : {Data.nama}</Text>
+          <Text style={styles.addressText}>No.hp : {Data.nohp}</Text>
         </View>
       </View>
+           )}
+      <View style={styles.section2}>
+        <FlatList
+          data={ambilData.filter(item => item.status === "Belum Dibayar")}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handlePilih(item)}>
+            <View>
+              <View style={styles.subSection}>
+                <Text style={styles.sectionTitle}>Produk Yang Dipesan</Text>
+                <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
+              </View>
+              <View style={styles.buttonsContainer}>
+                <View style={styles.button}>
+                  <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.iconLimited}/>
+                  <Text style={styles.orderPackText}>{item.Nama_Paket}</Text>
+                </View>
+                <View style={styles.buttontrash}>
+                  <Image source={require('../../img/Trashcan.png')} style={styles.deleteButton} />
+                </View>
+              </View>
+            </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      
 
       <View style={styles.section1}>
         <Text style={styles.paymentMethod}>METODE PEMBAYARAN</Text>
@@ -53,17 +170,22 @@ export default function Checkout() {
 
       <View style={styles.checkoutSection}>
         <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>Jumlah :</Text>
-          <Text style={styles.priceText}>Rp350.000</Text>
+        {pilih && (
+          <Text style={styles.priceText}>Nama Paket : {pilih.Nama_Paket}</Text>
+        )}
+        {pilih && ( 
+          <Text style={styles.priceText}>Harga : {pilih.Harga_Paket}</Text>
+          )}
         </View>
         <View style={styles.checkoutButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleCheckout}>
             <Text style={styles.checkoutButtonText}>Bayar Sekarang</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
+
 }
 
 
@@ -93,10 +215,10 @@ const styles = StyleSheet.create({
   section1: {
     backgroundColor: '#0B111F',
     borderRadius: 10,
-    marginBottom: 80,
+    marginBottom: 50,
     padding: 10,
     marginTop: 5,
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
   },
   sectionTitle: {
@@ -201,6 +323,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
     marginBottom: 10,
+    // flex:1
   },
   priceText: {
     color: '#fff',
@@ -209,7 +332,7 @@ const styles = StyleSheet.create({
   },
   checkoutButton: {
     alignItems: 'flex-end',
-    marginTop: -40,
+    // marginTop: -40,
     marginBottom: 20
   },
   checkoutButtonText: {

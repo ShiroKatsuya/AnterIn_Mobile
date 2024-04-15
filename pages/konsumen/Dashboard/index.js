@@ -149,6 +149,10 @@ const Dashboard = () => {
         <Text style={styles.cardratingteks}>Saran : {item.saran}</Text>
       </View>
     ))}
+
+
+
+
         </View>
       </ScrollView>
     </View>
