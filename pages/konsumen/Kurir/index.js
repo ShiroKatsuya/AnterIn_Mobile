@@ -12,12 +12,13 @@ export default function Kurir() {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://192.168.100.56:8888/api/datauser', {
+        const response = await axios.get('http://192.168.100.56:8888/api/datakurir', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAmbilData(response.data.message);
+        setAmbilData(response.data["data"]);
+        console.log(response.data)
       } catch (error) {
         console.error(error);
       }
