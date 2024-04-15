@@ -44,6 +44,7 @@ export default function DetailPesanan({ route }) {
       </View>
       <View style={styles.form2}>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
+        <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
       </View>
     </View>
