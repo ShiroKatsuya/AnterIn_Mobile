@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -33,6 +33,36 @@ export default function DetailPesanan({ route }) {
       </View>
     );
   }
+
+  const handleTitikPoint = async () => {
+    if (!route.params.id) {
+      throw new Error("Paket tidak valid.");
+    
+    }
+  
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const data = {
+        paket_sekarang: 'dsfsdf',
+        penerimaan_paket: 'sdfsdf',
+      };
+  
+      const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${route.params.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      console.log(response.data);
+      alert('Data Berhasil Di Update'); 
+      return response.data; 
+
+    } catch (error) {
+      console.error("Gagal memperbarui status:", error);
+      throw error; 
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.form1}>
@@ -47,14 +77,51 @@ export default function DetailPesanan({ route }) {
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
       </View>
+      <View style={styles.form1}>
+          <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
+          <Text style={styles.texttop}>👨🏻‍✈️Kurir Telah Menerima Paketan | {pilihPaketData.Nama_Kurir}</Text>
+          <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan | {pilihPaketData.Alamat_Tujuan}</Text>
+          <Text style={styles.texttop}>🔜Paketan Berada Di : {pilihPaketData.paket_sekarang} </Text>
+          <Text style={styles.texttop}>🔚Paketan Telah Sampai dan Telah Diserahkan Kepada Pihak Yang Bersangkutan | {pilihPaketData.penerimaan_paket}</Text>
+          <TouchableOpacity>
+          <View style={styles.selesai}>
+              <Text style={styles.texttop}>
+                Pesanan Selesai !
+              </Text>
+          </View>    
+          </TouchableOpacity>
+
+      </View>
+
+
+      <Button
+        title='TITIK POINT'
+        color='#EDA01F'
+        onPress={handleTitikPoint}
+       
+      />
+        
+
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
+  selesai:{
+    flexDirection:'row',
+    alignSelf:'flex-end',
+
+    padding:5,
+    backgroundColor:'#EDA01F',
+    borderRadius:4
+
+  },
+
   texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
   texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
-  textrow:{fontWeight:'bold',color: 'black',},
+  textrow:{fontWeight:'bold',color: 'white',},
   container: {
     flex: 1,
     backgroundColor: '#EDA01F',
