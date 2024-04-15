@@ -39,7 +39,7 @@ const Dashboard = () => {
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
        //lu cobain dulu dah console.log ada kgk datanya 
-        // console.log(response.data) 
+        console.log(response.data) 
       } catch (error) {
         console.error(error);
       }
@@ -63,7 +63,7 @@ const Dashboard = () => {
       //   console.log(response.data)
 
       //  //lu cobain dulu dah console.log ada kgk datanya 
-      //   // console.log(response.data) 
+        console.log(response.data) 
       } catch (error) {
         console.error(error);
       }

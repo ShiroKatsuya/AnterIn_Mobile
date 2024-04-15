@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios'; // Pastikan Axios sudah terinstal
+import axios from 'axios'; 
+import { useNavigation } from '@react-navigation/native';
 
 export default function Daftar() {
+  
+  const navigation = useNavigation();
   const [form, setForm] = useState({
     nama: '',
     nohp: '',
     email: '',
     password: '',
     role_id: '2', 
-    alamat: '',
   });
+
+
+
+
 
   const [showMessage, setShowMessage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(true);
+
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -26,6 +33,11 @@ export default function Daftar() {
       [name]: value,
     });
   };
+
+
+  const handleLogin = () => {
+    navigation.navigate('Login');
+  }
 
   //disisini logika validasi ya !!
   const register = async () => {
@@ -46,8 +58,10 @@ export default function Daftar() {
                                     //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
     try {                           // jangan lupa /api/... adalah benar untuk routing nya
       const response = await axios.post('http://192.168.100.56:8888/api/register', form); 
-      if (response.data.success) {
+      if (response.data) {
         setShowMessage('Registrasi berhasil');
+        console.log(response.data)
+
       }
     } catch (error) {
       setShowMessage(error.response.data.message || 'Terjadi kesalahan');
@@ -114,16 +128,30 @@ export default function Daftar() {
             onChangeText={(text) => handleInputChange('nohp', text)}
           /> */}  
           {/* Bagian bottom */}
-          <Button title="Daftar" color="#EDA01F" onPress={register} 
-    
+          <Button title="Daftar" color="#EDA01F"
+           onPress={() => {
+               if ( form.nama && form.email && form.password && form.nohp) {
+                   register()
+                   alert('Anda Berhasil Daftar');
+                   navigation.navigate('Login');
+             
+               } else {
+                   alert('Harap lengkapi semua form sebelum submit');
+               }
+           }}
+  
           />
           {showMessage && <Text>{showMessage}</Text>}
+  
           <Text style={styles.akun}>
             Jika Memiliki Akun?
           </Text>
+    
+          {/* <TouchableOpacity onPress={handleLogin}> */}
           <View style={{marginTop:12}}>
-            <Button title='Login' color="#EDA01F"/>
+            <Button title='Login' color="#EDA01F" onPress={handleLogin}/>
           </View>
+          {/* </TouchableOpacity> */}
         </View>
       </View>
     </View>

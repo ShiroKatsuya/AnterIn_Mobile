@@ -180,7 +180,7 @@ const InputPesanan = ({ route }) => {
                             if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
-                                navigation.navigate('Riwayat');
+                                navigation.navigate('Checkout');
                             } else {
                                 alert('Harap lengkapi semua form sebelum submit dan jangan lupa simpan pilihan kurir');
                             }
