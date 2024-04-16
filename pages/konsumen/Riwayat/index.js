@@ -1,80 +1,93 @@
-import { StyleSheet, Text, View,Dimensions,Image} from 'react-native'
-import React from 'react'
-
+import { StyleSheet, Text, View, Dimensions, Image, FlatList, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 export default function Riwayat() {
+  const navigation = useNavigation();
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilData, data] = useState([]);
 
 
+  const navigateToDetail = (id) => {
+
+    navigation.navigate('DetailPesanan', { id: id });
+    console.log(id)
+
+  };
+
+  useEffect(() => {
+    // getDataUserLocal();
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: 'http://192.168.100.56:8888/api/riwayatpesanan',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        data(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
 
   return (
     <>
-    <View style={styles.container}>
+      <View style={styles.container}>
+        <View style={{ marginBottom: 40 }}>
+          <View style={styles.header}>
+            <Text style={styles.text}>Semua</Text>
+            <Text style={styles.text}>Sedang Dikirim</Text>
+            <Text style={styles.text}>Sudah Dikirim</Text>
+            <Text style={styles.text}>Selesai</Text>
+          </View>
+          <View>
+            <View style={styles.search}>
+              <Text style={{ color: 'black' }}>Cari nama produk yang dipesan</Text>
+            </View>
+            <FlatList
+              data={ambilData}
+              renderItem={({ item }) => (
+                <>
+                  <View style={styles.proses}>
+                    <Text style={styles.textproses}>Produk yang Sedang Dipesan</Text>
+                    <View style={styles.jenispaket}>
+                      <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
+                      <Text style={styles.paketcepat}>{item.Nama_Paket}</Text>
+                    </View>
+                    <View style={styles.produkproses}>
+                      <TouchableOpacity
+                        style={styles.textdetailcontainer}
+                        onPress={() => navigateToDetail(item.id)}
+                      >
+                        <Text style={styles.textdetail}>
+                          Cek detail disini
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.mobilcontainer}>
+                      <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil} />
+                      <Text style={styles.infopaket}>
+                        Paket Sedang Diproses
+                      </Text>
+                    </View>
+                  </View>
 
-      {/* <Text>Riwayat</Text> */}
-    <View style={{marginBottom:40}}>
-    </View>
-      <View style={styles.header}>
-        <Text style={styles.text}>
-            Semua
-        </Text>
-        <Text style={styles.text}>
-            Sedang Dikirim
-        </Text>
-        <Text style={styles.text}>
-            Sudah Dikirim
-        </Text>
-        <Text style={styles.text}>
-            Selesai
-        </Text>
-
-      </View>
-        {/* search */}
-      <View style={styles.search}>
-        <Text style={{color:'black'}}>
-                Cari nama produk yang dipesan
-        </Text>
-
-      </View>
-
-      {/* daftarposes */}
-
-      <View style={styles.proses}>
-
-
-        <Text style={styles.textproses}>
-                Produk yang Sedang Dipesan
-        </Text>
-
-        <View style={styles.jenispaket}>
-            <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
-            <Text style={styles.paketcepat}>
-                PAKET CEPAT
-            </Text>
+                </>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
         </View>
-
-        
-        <View style={styles.produkproses}>
-        {/* <Text style={styles.textproses}>
- 
-        </Text> */}
-       
-        <View style={styles.textdetailcontainer}>
-        <Text style={styles.textdetail}>
-             Cek detail disini
-        </Text>
-        </View>
-        </View>
-        <View style={styles.mobilcontainer}>
-       <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil}/> 
-       <Text style={styles.infopaket}>
-        Paket Sedang Diproses
-       </Text>
-       </View>
       </View>
-
-
-
-
-    </View>
     </>
   )
 }

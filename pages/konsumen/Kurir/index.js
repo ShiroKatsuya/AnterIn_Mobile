@@ -1,87 +1,93 @@
-import { StyleSheet, Text, View,Image, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Kurir() {
+  const [ambilData, setAmbilData] = useState([]);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get('http://192.168.100.56:8888/api/datakurir', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAmbilData(response.data["data"]);
+        console.log(response.data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleCheckout = (pkg) => {
+    if (pkg) {
+      console.log("Checkout dengan kurir:", pkg);
+      navigation.navigate('InputPesanan', { pilihkurir: pkg });
+    } else {
+      console.log("Pilih kurir terlebih dahulu!");
+    }
+  };
+
   return (
     <View style={styles.container}>
-            <View style={styles.cardInfo}>
-        <View style={styles.cardInfoRow}>
-          <Image source={require('../../img/logo.png')} style={styles.logo} />
-          <View style={styles.userDetails}>
-            <Text style={styles.userName}>Rizky Sulaeman</Text>
-            <Text style={styles.userPhone}>0895335992932</Text>
-
+  {Array.isArray(ambilData) && ambilData.filter(pkg => pkg.role_id == 3)
+        .map((pkg, index) =>(
+        <View style={styles.cardInfo} key={index}>
+          <View style={styles.cardInfoRow}>
+            <Image source={require('../../img/logo.png')} style={styles.logo} />
+            <View style={styles.userDetails}>
+              <Text style={styles.userName}>Nama : {pkg.nama}</Text>
+              <Text style={styles.userPhone}>Nomor Hp : {pkg.nohp}</Text>
+              <Text style={styles.userPhone}>Role_id : {pkg.role_id}</Text>
+            </View>
+          </View>
+          <View style={styles.bottomRow}>
+            <View style={styles.rating}>
+              {[...Array(5)].map((_, i) => (
+                <Image key={i} source={i < 4 ? require('../../img/rating-star/select-star.png') : require('../../img/rating-star/unselect-star.png')} style={styles.star} />
+              ))}
+            </View>
+            <TouchableOpacity onPress={() => handleCheckout(pkg)}>
+              <View style={styles.Pilih}>
+                <Text style={styles.text}>Pilih Disini</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.Pilih}>
-    
-            <Text style={styles.text}>Pilih Disini</Text>
-            </View>
-            <View style={styles.rating}>
-              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
-              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
-              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
-              <Image source={require('../../img/rating-star/select-star.png')} style={styles.star}/>
-              <Image source={require('../../img/rating-star/unselect-star.png')} style={styles.star}/>
-            </View>
-      </View>
-      
+      ))}
     </View>
-    
-  )
-  
+  );
 }
 
 const styles = StyleSheet.create({
-  rating:{
-    color:'white',
-    // marginTop:1,
-    flexDirection:'row',
-    justifyContent: 'space-between',
-    alignItems:'flex-start',
-    width: 20,
-    height: 20,
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#eda01f',
+    // marginVertical: 0,
 
-  },
-  star:{
-    width: 20,
-    height: 50,
-    borderRadius: 1,
-    marginLeft: 0.1,
-    marginTop: -40
-  },
-  Pilih:{
-    alignSelf:'flex-end',
-    flexDirection:'row',
-    backgroundColor:'#EDA01F',
-    padding:8,
-    borderRadius:8
-  },
-  text:{
-    color:'white',
-    fontWeight:'900',
-
-  },
-  container:{
-    flex:1,
-    backgroundColor:'#EDA01F',
-    padding:10
   },
   cardInfo: {
     backgroundColor: '#0B111F',
     borderRadius: 10,
     padding: 20,
-    marginTop: 20,
+    marginTop: 0,
+    // flexDirection: 'column',
+    marginBottom: 20, 
+    
   },
   cardInfoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    
+
+
   },
   logo: {
     width: 50,
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   userDetails: {
-
+    flex: 1,
   },
   userName: {
     fontWeight: 'bold',
@@ -99,4 +105,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-})
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  star: {
+    width: 30,
+    height: 20,
+    marginRight: 5,
+  },
+  Pilih: {
+    backgroundColor: '#EDA01F',
+    padding: 8,
+    borderRadius: 8,
+  },
+  text: {
+    color: 'white',
+    fontWeight: '900',
+  },
+});

@@ -63,7 +63,7 @@ text:{color: 'white'},
     alignContent: 'flex-start',
     marginTop: 20,
     marginLeft: 20,
-    marginRight: width * 0.30, // Menggunakan persentase dari lebar layar
+    marginRight: width * 0.30, 
   },
   result2: {
     backgroundColor: 'black',
@@ -71,7 +71,7 @@ text:{color: 'white'},
     borderRadius: 10,
     alignItems: 'flex-start',
     alignContent: 'flex-start',
-    marginLeft: width * 0.30, // Menggunakan persentase dari lebar layar
+    marginLeft: width * 0.30, 
     marginRight: 20,
     marginTop: 20,
   },
@@ -84,7 +84,7 @@ text:{color: 'white'},
     justifyContent: 'flex-end',
     marginTop: 20,
     marginLeft: 20,
-    marginRight: width * 0.30, // Menggunakan persentase dari lebar layar
+    marginRight: width * 0.30, 
   },
   logo: {
     width: 50,

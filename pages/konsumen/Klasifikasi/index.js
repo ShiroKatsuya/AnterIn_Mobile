@@ -17,6 +17,9 @@ export default function KlasifikasiObjek() {
         return Math.random().toString(36).substring(2, 15);
     };
 
+
+    
+
     const uploadPhoto = async (fileUri) => {
         try {
             let uniquePictureName = generateUniquePictureName();
@@ -27,7 +30,7 @@ export default function KlasifikasiObjek() {
                 name: uniquePictureName + '.jpg',
             });
 
-            // Ganti URL sesuai dengan URL yang dapat diakses dari perangkat Handhpne
+
             let response = await axios.post(
                 'http://10.0.141.81:8888/api/send-klasifikasi',
                 formData,
@@ -42,7 +45,7 @@ export default function KlasifikasiObjek() {
                 console.log('Upload berhasil:', response.data);
           
                 let responseJson = response.data;
-                SetResult(responseJson.response.Nama);
+                SetResult(responseJson.response.Nama_Barang);
                 SetDeskription(responseJson.response.Deskripsi);
                 SetDedection(responseJson.response.Persentase);
 
@@ -52,6 +55,17 @@ export default function KlasifikasiObjek() {
         } catch (error) {
             console.error('Kesalahan mengunggah file:', error);
         }
+    };
+
+    const navigateToInputPesanan = (result) => {
+        // Pastikan result dikirim sebagai objek dengan properti `response`
+        navigation.navigate('InputPesanan', { 
+            data: { 
+                response: result, 
+                Nama_Barang: result 
+            } 
+        }); 
+        console.log(result); 
     };
 
     const openCamera = () => {
@@ -129,7 +143,7 @@ export default function KlasifikasiObjek() {
                 </View>
             </View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToInputPesanan(Result)}>
                 <View style={styles.button}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Kirim Sekarang !</Text>
                 </View>
