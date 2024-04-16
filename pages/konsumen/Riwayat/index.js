@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, Image, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Image, FlatList, TouchableOpacity ,  ScrollView,  SafeAreaView, } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -41,7 +41,8 @@ export default function Riwayat() {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+      
         <View style={{ marginBottom: 40 }}>
           <View style={styles.header}>
             <Text style={styles.text}>Semua</Text>
@@ -49,11 +50,17 @@ export default function Riwayat() {
             <Text style={styles.text}>Sudah Dikirim</Text>
             <Text style={styles.text}>Selesai</Text>
           </View>
+          <ScrollView style={styles.scrollView}>
           <View>
             <View style={styles.search}>
               <Text style={{ color: 'black' }}>Cari nama produk yang dipesan</Text>
             </View>
+            
+   
+       
             <FlatList
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
               data={ambilData}
               renderItem={({ item }) => (
                 <>
@@ -85,9 +92,15 @@ export default function Riwayat() {
               )}
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+            </View>
+  
+        
+   
+          </ScrollView>
         </View>
-      </View>
+   
+   
+      </SafeAreaView>
     </>
   )
 }
@@ -95,6 +108,10 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   paketcepat:{
     textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold'
+  },
+  scrollView: {
+    // backgroundColor: 'pink',
+    marginHorizontal: 1,
   },
   img:{
     height:40, width: 300, alignSelf: 'center',marginTop: -20
@@ -205,6 +222,7 @@ const styles = StyleSheet.create({
 
         justifyContent:'space-between',
         // marginTop:'20',
+        
 
         
     }   ,

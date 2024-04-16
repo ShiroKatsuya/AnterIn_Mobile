@@ -9,7 +9,7 @@ const InputPesanan = ({ route }) => {
     const [pilihPaket, setPilihPaket] = useState(route.params.pilih || {});
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
-
+    const [inputEnabled, setInputEnabled] = useState(false);
     const [Nama_Barang, setNamaBarang] = useState('');
 
 
@@ -63,6 +63,9 @@ const InputPesanan = ({ route }) => {
                 ...form,
                 [name]: value,
             });
+        }
+        if (name === 'Nama_Barang' && !inputEnabled) {
+            setNamaBarang(value);
         }
     };
 
@@ -120,13 +123,26 @@ const InputPesanan = ({ route }) => {
 
 
                     <Text style={styles.text}>Nama Barang</Text>
-                    <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="Nama Barang"
-                        value={Nama_Barang}
-                        onChangeText={(text) => handleInputChange('Nama_Barang', text)}
-                        editable={false}
-                    />
+                                <TextInput
+                    style={[styles.input, styles.forminside]}
+                    placeholder="Nama Barang"
+                    value={inputEnabled ? form.Nama_Barang : Nama_Barang}
+                    onChangeText={(text) => handleInputChange('Nama_Barang', text)}
+                    editable={inputEnabled}
+                />
+                <Button
+                    title={inputEnabled ? 'Disable Input' : 'Enable Input'}
+                    onPress={() => {
+                        if (!inputEnabled) {
+                            setForm({
+                                ...form,
+                                Nama_Barang: Nama_Barang,
+                            });
+                        }
+                        setInputEnabled(!inputEnabled);
+                    }}
+                />
+
 
 
                     <Text style={styles.text}>Alamat Tujuan</Text>
