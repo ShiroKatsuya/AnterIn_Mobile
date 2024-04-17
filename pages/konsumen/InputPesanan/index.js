@@ -64,7 +64,7 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
-        if (name === 'Nama_Barang' && !inputEnabled) {
+        if (name === 'Nama_Barang') {
             setNamaBarang(value);
         }
     };
