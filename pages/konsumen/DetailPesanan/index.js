@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -64,7 +64,10 @@ export default function DetailPesanan({ route }) {
   };
 
   return (
+
+
     <View style={styles.container}>
+
       <View style={styles.form1}>
         <Text style={styles.texttop}>Nama Barang | {pilihPaketData.Nama_Barang}</Text>
         <Text style={styles.texttop}>Nama User | {pilihPaketData.nama}</Text>
@@ -100,7 +103,7 @@ export default function DetailPesanan({ route }) {
         onPress={handleTitikPoint}
        
       />
-        
+
 
 
     </View>
@@ -108,6 +111,11 @@ export default function DetailPesanan({ route }) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+
+  },
 
   selesai:{
     flexDirection:'row',
