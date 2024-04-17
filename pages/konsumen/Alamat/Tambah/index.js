@@ -7,6 +7,8 @@ import axios from 'axios';
 
 export default function TambahALamat() {
 
+  const [ambilDataAlamat, DataAlamat] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
   const navigation = useNavigation()
   
   const [showMessage, setShowMessage] = useState(''); 
@@ -18,6 +20,10 @@ export default function TambahALamat() {
 
 });
 
+useEffect(() => {
+  // getDataUserLocal();
+}, [dataPribadi.token]);
+
 const handleInputChange = (name, value) => {
     setForm({
         ...form,
@@ -25,6 +31,32 @@ const handleInputChange = (name, value) => {
     });
 }
 
+const handelGetLokasi = () => {
+  fetchData();
+
+  if(fetchData){
+    console.log('berhasil')
+  }else{
+    console.log('gagal')
+  }
+
+}
+
+
+const fetchData = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.get('http://192.168.100.56:8888/api/lokasi', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    DataAlamat(response.data["message"])
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const tambahAlamat = async () => {
   if (!form.alamat) {
@@ -52,6 +84,10 @@ const tambahAlamat = async () => {
 };
 
 
+
+
+
+
   return (
     //container
     <>
@@ -73,11 +109,20 @@ const tambahAlamat = async () => {
       <View style={styles.tempat}>
         <TouchableOpacity>  
         <View style = {styles.rumah}>
+          <TouchableOpacity onPress={ handelGetLokasi}>
         <Text >
-        Rumah (default)
+        Deteksi Alamat Otomatis Disini !
         </Text>
-        </View>
+   
         </TouchableOpacity>
+  
+        </View>
+ 
+        </TouchableOpacity>
+
+
+
+
       {/* <TouchableOpacity>
         <View style = {styles.kantor}>
         <Text>
@@ -86,6 +131,11 @@ const tambahAlamat = async () => {
         </View></TouchableOpacity> */}
         
       </View>
+      <View>
+          <Text>
+        {ambilDataAlamat.Lokasi_Anda}
+          </Text>
+        </View>
 
       <View style= {{ marginTop:25 }}>
       <Button 
