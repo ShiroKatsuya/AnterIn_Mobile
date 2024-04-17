@@ -131,9 +131,13 @@ const tambahAlamat = async () => {
         </View></TouchableOpacity> */}
         
       </View>
-      <View>
+      <View style = {style.textarea}>
           <Text>
-        {ambilDataAlamat.Lokasi_Anda}
+        {/* Update Lokasi Here*/}
+          {ambilDataAlamat.Lokasi_Anda}
+          {ambilDataAlamat.Code_Lokasi_Anda}
+          {ambilDataAlamat.Kota_Anda}
+          {ambilDataAlamat.Zip_Code}
           </Text>
         </View>
 
@@ -165,6 +169,16 @@ const tambahAlamat = async () => {
 }
 
 const styles = StyleSheet.create({
+
+textarea:{
+  padding:10,
+  backgroundcolor:'gray',
+  flexdirection:'row',
+  alignitems:'center'
+  
+},
+
+  
 text:{fontWeight:'bold'},
   container: {
     flex: 1,
