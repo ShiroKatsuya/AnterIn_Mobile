@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dime
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'; 
+import { baseUrl } from '../../baseUrl';
 
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
@@ -94,7 +95,7 @@ const InputPesanan = ({ route }) => {
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
             };
 
-            const response = await axios.post('http://192.168.100.56:8888/api/inputpesanan', data, {
+            const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

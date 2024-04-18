@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
   const [pilihPaketData, setPilihPaketData] = useState(null);
   
@@ -10,12 +10,10 @@ export default function DetailPesanan({ route }) {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios({
-          url: `http://192.168.100.56:8888/api/riwayatpesanan/${route.params.id}`,
+        const response = await axios.get(`${baseUrl.url}/riwayatpesanan/${route.params.id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setPilihPaketData(response.data);
   
@@ -47,7 +45,7 @@ export default function DetailPesanan({ route }) {
         penerimaan_paket: 'sdfsdf',
       };
   
-      const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${route.params.id}`, data, {
+      const response = await axios.put(`${baseUrl.url}/inputpesanan/${route.params.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }

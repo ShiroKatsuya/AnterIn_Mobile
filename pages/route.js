@@ -13,4 +13,5 @@ import Checkout from "./konsumen/Checkout";
 import InputPesanan from "./konsumen/InputPesanan";
 import Kurir from "./konsumen/Kurir";
 import Rating from "./konsumen/Rating";
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating}
+import baseUrl from "./baseUrl";
+export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl}

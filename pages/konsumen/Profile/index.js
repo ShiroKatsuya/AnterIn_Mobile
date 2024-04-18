@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 
 
@@ -18,8 +19,7 @@ useEffect(()=>{
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios({
-          url: 'http://192.168.100.56:8888/api/datauser',
+        const response = await axios(`${baseUrl.url}/datauser`,{
           headers: {
             Authorization: `Bearer ${token}`
           },
