@@ -1,5 +1,5 @@
 import React, {useEffect,useState} from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl,TextInput,Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl,TextInput,Button,COLORS,grey20 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -131,9 +131,36 @@ const tambahAlamat = async () => {
         </View></TouchableOpacity> */}
         
       </View>
+
+<View style = {styles.textAreaContainer}>
+
+    <Text>
+    {ambilDataAlamat.Code_Lokasi_Anda}
+    </Text>
+    <Text>
+    {ambilDataAlamat.Kota_Anda}
+    </Text>
+    <Text>
+    {ambilDataAlamat.Lokasi_Anda}
+    </Text>
+    <Text>
+      {ambilDataAlamat.Zip_Code}
+    </Text>
+
+    <TouchableOpacity>
+      <View style={styles.clipboard}>
+          <Text style={styles.textclibboard}>COPY HERE !</Text>
+      </View>
+    </TouchableOpacity>
+
+
+  </View>
+
+
+
       <View>
           <Text>
-        {ambilDataAlamat.Lokasi_Anda}
+
           </Text>
         </View>
 
@@ -173,6 +200,28 @@ text:{fontWeight:'bold'},
     alignItems: 'center', 
     flexDirection: 'column',
     
+  },
+  clipboard:{
+    alignSelf:'flex-end',
+    padding:4,
+    backgroundColor:'#EDA01F',
+    borderRadius:4
+  },
+textclibboard:{
+  fontSize:12,
+  color:'white',
+  fontWeight:'600',
+  fontStyle:'italic'
+},
+  textAreaContainer: {
+    // borderColor: COLORS.grey20,
+    borderWidth: 1,
+    padding: 5,
+marginTop:10
+  },
+  textArea: {
+    height: 150,
+    justifyContent: "flex-start"
   },
 
   rumah:{
