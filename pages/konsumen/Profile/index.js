@@ -1,31 +1,67 @@
-import { StyleSheet, Text, View,Image,Button,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
+
 
 export default function Profile() {
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
   const navigation = useNavigation();
 
+useEffect(()=>{
+},[dataPribadi.token])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: `http://192.168.161.77:8888/api/datauser`,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
   const handleLoginPress = () => {
-    navigation.navigate('Login'); // navigasi ke login
+    navigation.navigate('Login'); 
   };
   const handleAlamat = () => {
-    navigation.navigate('Alamat'); // navigasi ke Alamat
+    navigation.navigate('Alamat'); 
   };
   return (
     <>
       <View style={{ alignItems: 'center', flexDirection: 'column' , ...StyleSheet.absoluteFillObject, backgroundColor: '#EDA01F' }}>
+        
         <View style={styles.card}>
 
         {/* Profile */}
+
+        {ambilDataProfile && (
         <View style={{ alignItems: 'center', flexDirection: 'column' }}>
           <Image
             source={require('../../img/logo.png')}
             resizeMode="cover"
             style={{ width: 90, height: 90 }}
           />
-          <Text style={{ fontWeight: 'bold' }}>Delia</Text>
-          <Text style={{ fontWeight: 'bold' }}>0895335992932</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nama}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nohp}</Text>
         </View>
+        )}
 
       {/* alamat + Edit Profile */}
         <View style={{alignItems:'center' ,marginBottom:8}}>

@@ -1,24 +1,105 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView } from 'react-native';
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 
 const Dashboard = () => {
   const navigation = useNavigation();
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilData, setAmbilData] = useState([]);
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  
+
+  useEffect(() => {
+    // getDataUserLocal();
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: `http://192.168.161.77:8888/api/data_rating`,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilData(response.data["Data Berhasil Didapatkan"]);
+       //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: `http://192.168.161.77:8888/api/datauser`,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
 
 
   return (
+    <>
+
     <View style={styles.container}>
+    <View style={{flex:1/4}}>
+    <ScrollView
+    contentContainerStyle={styles.scrollView}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
+  </ScrollView>
+  </View>
+
+
+
       {/* Card Info */}
-      <View style={styles.cardInfo}>
+          <View style={styles.cardInfo}>
+      {ambilDataProfile && 
         <View style={styles.cardInfoRow}>
           <Image source={require('../../img/logo.png')} style={styles.logo} />
           <View style={styles.userDetails}>
-            <Text style={styles.userName}>Delia</Text>
-            <Text style={styles.userPhone}>0895335992932</Text>
+            <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
+            <Text style={styles.userName}>{ambilDataProfile.alamat}</Text>
+            <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
           </View>
         </View>
-      </View>
+      }
+</View>
 
       {/* Fitur Unggulan */}
       <Text style={styles.unggulanTitle}>Fitur Unggulan Kami</Text>
@@ -29,26 +110,26 @@ const Dashboard = () => {
     
           <Image source={require('../../img/ikon-navigasi/checkout.png')} style={styles.unggulanText1} />
           <Image source={require('../../img/ikon-navigasi/order-history.png')} style={styles.unggulanText1}/>
-          <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/>
+          {/* <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/> */}
           <Image source={require('../../img/ikon-navigasi/chat.png')} style={styles.unggulanText1}/>
-          <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/>
+          {/* <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/> */}
         </View>
         <View style={styles.unggulanRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-            <Text style={styles.unggulanText}>Checkout</Text>
+            <Text style={styles.unggulanText}>Pesan</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
             <Text style={styles.unggulanText}>Riwayat</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
             <Text style={styles.unggulanText}>Detail Pesanan</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <Text style={styles.unggulanArtikel}>Beberapa Rating atau Komentar</Text>
@@ -61,41 +142,23 @@ const Dashboard = () => {
       <View style={{ }}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.cardrating}>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Dalam proses pengiriman sangat cepat</Text>
-          </View>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Terkadang Pengiriman Ngaret</Text>
-          </View>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Lumayan Lah</Text>
-          </View>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Kok lama ya pengirimannya ?</Text>
-          </View>
-          {/* tambah banyak */}
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Oke Siap Sampai Tujuan</Text>
-          </View>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Mantul</Text>
-          </View>
-          <View style={styles.cardmessage}>
-            <Text style={styles.cardratingteks}>Rizky</Text>
-            <Text style={styles.cardratingteks}>Kurir ramah </Text>
-          </View>
+        {ambilData && Array.isArray(ambilData) && ambilData.map((item, index) => (
+      <View key={index} style={styles.cardmessage}>
+        <Text style={styles.cardratingteks}>Nama : {item.nama}</Text>
+        <Text style={styles.cardratingteks}>Komentar : {item.rating}</Text>
+        <Text style={styles.cardratingteks}>Saran : {item.saran}</Text>
+      </View>
+    ))}
+
+
+
+
         </View>
-        
       </ScrollView>
     </View>
     
     </View>
+    </>
   );
 };
 const { width } = Dimensions.get('window');
@@ -105,6 +168,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDA01F',
     padding: 10,
   },
+  scrollView: {
+    flex: 1,
+    // backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+
   cardratingteks:{
     color:'white',
     marginTop:5,
@@ -118,7 +189,7 @@ const styles = StyleSheet.create({
   },
   cardmessage:{
     backgroundColor: 'black',
-    width: width * 0.2, 
+    width: width * 0.3, 
     height: width * 0.2, 
     borderRadius: 7,
     color: 'white',
@@ -158,7 +229,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B111F',
     borderRadius: 30,
     padding: 20,
-    marginTop: 20,
+    // marginTop: 20,
+    marginTop:-30
   },
   cardInfoRow: {
     flexDirection: 'row',
@@ -200,8 +272,8 @@ const styles = StyleSheet.create({
   unggulanCard: {
     backgroundColor: 'white',
     borderRadius: 30,
-    padding: 20,
-    marginTop: 20,
+    padding: 1,
+    marginTop: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -212,7 +284,9 @@ const styles = StyleSheet.create({
   unggulanRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    // marginBottom: 10,
+    marginRight:90,
+    marginLeft:90
   },
   unggulanText: {
     // backgroundColor: 'black',

@@ -1,8 +1,93 @@
-import { StyleSheet, Text, View,Image,Button,TouchableOpacity,TextInput } from 'react-native'
-import React from 'react'
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl,TextInput,Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
 
 export default function TambahALamat() {
+
+  const [ambilDataAlamat, DataAlamat] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
+  const navigation = useNavigation()
+  
+  const [showMessage, setShowMessage] = useState(''); 
+
+  const [form, setForm] = useState({
+    alamat: '',
+
+
+
+});
+
+useEffect(() => {
+  // getDataUserLocal();
+}, [dataPribadi.token]);
+
+const handleInputChange = (name, value) => {
+    setForm({
+        ...form,
+        [name]: value,
+    });
+}
+
+const handelGetLokasi = () => {
+  fetchData();
+
+  if(fetchData){
+    console.log('berhasil')
+  }else{
+    console.log('gagal')
+  }
+
+}
+
+
+const fetchData = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.get(`http://192.168.161.77:8888/api/lokasi`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    DataAlamat(response.data["message"])
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const tambahAlamat = async () => {
+  if (!form.alamat) {
+      setShowMessage('Masukan Alamat');
+      return;
+  }
+
+  try {
+      const token = await AsyncStorage.getItem('token');
+      const data = {
+          alamat: form.alamat,
+
+      };
+
+      const response = await axios.put(`http://192.168.161.77:8888/api/userupdate`, data, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          }
+      });
+      console.log(response.data);
+
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+
+
+
+
+
   return (
     //container
     <>
@@ -11,51 +96,66 @@ export default function TambahALamat() {
     
 
       <View style={styles.form }>
-      <Text style = {styles.text}>Lokasi Alamat</Text>
-      <TextInput
-          style={[styles.input, styles.form2]}
-          placeholder="Alamat Baru"
-          // placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          
-        //   value={username}
-        //   onChangeText={setUsername}
-        />
+
       
       <Text style={styles.text}>Detail Alamat</Text>
       <TextInput
           style={[styles.input, styles.form2]}
           placeholder="Alamat Lengkap"
-          // placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          
-        //   value={username}
-        //   onChangeText={setUsername}
+          value={form.alamat}
+          onChangeText={(text) => handleInputChange('alamat', text)}
         />
       <Text style = {styles.text}>Simpan Sebagai</Text>
       <View style={styles.tempat}>
         <TouchableOpacity>  
         <View style = {styles.rumah}>
+          <TouchableOpacity onPress={ handelGetLokasi}>
         <Text >
-        Rumah
+        Deteksi Alamat Otomatis Disini !
         </Text>
-        </View>
+   
         </TouchableOpacity>
-      <TouchableOpacity>
+  
+        </View>
+ 
+        </TouchableOpacity>
+
+
+
+
+      {/* <TouchableOpacity>
         <View style = {styles.kantor}>
         <Text>
           Kantor
         </Text>
-        </View></TouchableOpacity>
+        </View></TouchableOpacity> */}
         
       </View>
-      <TouchableOpacity>
+      <View>
+          <Text>
+        {ambilDataAlamat.Lokasi_Anda}
+          </Text>
+        </View>
+
       <View style= {{ marginTop:25 }}>
-      <Button title="Tambah" onPress={null}
-        color="black"
-        borderRadius="8"
-        borderWidth="5"
+      <Button 
+                title="Submit"
+                // style={{marginTop:20}}
+                onPress={() => {
+                    if (form.alamat) {
+                        tambahAlamat()
+                        alert('Data berhasil dikirim!');
+                        navigation.navigate('Alamat');
+                    } else {
+                        alert('Harap lengkapi semua form sebelum submit');
+                    }
+
+                }}
+                color="black" 
         />
         </View>
-        </TouchableOpacity>
+        {showMessage && <Text>{showMessage}</Text>}
+
       
       </View>
 

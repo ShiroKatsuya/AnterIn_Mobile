@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -41,39 +41,29 @@ function MainTab() {
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-    
+        let sizes = 30;
+
         if (route.name === 'Home') {
           iconName = focused
-            ? require('./pages/img/Home.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Home.png'); // Ganti dengan path ke gambar default Anda
+            // ? 'ios-information-circle'
+            // : 'ios-information-circle-outline';
         } else if (route.name === 'Transaksi') {
-          iconName = focused
-            ? require('./pages/img/Transaksi.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Transaksi.png'); // Ganti dengan path ke gambar default Anda
-        } else if (route.name === 'Profile') {
-          iconName = focused
-            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
-        } else if (route.name === 'Profile') {
-          iconName = focused
-            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
-        } else if (route.name === 'Profile') {
-          iconName = focused
-            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
-        } else if (route.name === 'InputPesanan') {
-          iconName = focused
-            ? require('./pages/img/Profil-aktif.png') // Ganti dengan path ke gambar aktif Anda
-            : require('./pages/img/Profil.png'); // Ganti dengan path ke gambar default Anda
-        } 
+          iconName = focused 
+          // ? 'ios-list' : 'ios-list-outline';
+        }else if (route.name=='Profile'){
+                    iconName = focused 
+                    // ? 'ios-list' : 'ios-list-outline';
+        }else if (route.name == 'Rating'){
+          iconName = focused 
+        }
 
-        return <Ionicons name={iconName} size={size} color={color} />;
+        // You can return any component that you like here!
+        return <Ionicons name={iconName} size={sizes} color={color} />;
       },
-      tabBarActiveTintColor: '#eda01f',
-      tabBarInactiveTintColor: '#0b111f',
+      tabBarActiveTintColor: 'tomato',
+      tabBarInactiveTintColor: 'gray',
     })}
-    >
+  >
       <Tab.Screen
         name="Home"
         component={Dashboard}
@@ -83,25 +73,26 @@ function MainTab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
         }}
       />
+           <Tab.Screen
+        name="Rating"
+        component={Rating}
+        options={{
+   
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Rating",
+        }}
+      />
       <Tab.Screen
         name="Transaksi"
         component={Transaksi}
         options={{
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Transaksi",
+          title: "Checkout Sekarang !",
         }}
       />
-      <Tab.Screen
-        name="InputPesanan"
-        component={InputPesanan}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Input Pesanan",
-        }}
-      />
-  
+
   
 
       <Tab.Screen
@@ -140,6 +131,17 @@ function App() {
             title: "Daftar",
           }}
         />
+
+<Tab.Screen
+        name="InputPesanan"
+        component={InputPesanan}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Input Pesanan",
+        }}
+      />
+  
 
         <Tab.Screen
                 name="Kurir"

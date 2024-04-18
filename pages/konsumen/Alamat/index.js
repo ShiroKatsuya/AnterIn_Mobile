@@ -1,8 +1,40 @@
-import { StyleSheet, Text, View,Image,Button,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {baseUrl} from '../../route';
 
 export default function Alamat() {
+
+  const [ambilDataAlamat, setAmbilDataAlamat] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
+
+  
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios({
+          url: `http://192.168.161.77:8888/api/datauser`,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataAlamat(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
 
     const navigation = useNavigation();
     const handleTambahAlamat=()=>{
@@ -15,16 +47,18 @@ export default function Alamat() {
     <TouchableOpacity onPress={handleTambahAlamat}>
       <View style={styles.alamat}>
         <Text style={styles.textalamat}>
-            Tambah Alamat
+            Tambah Alamat / Ubah Alamat Disini
         </Text>
       </View>
       </TouchableOpacity>
       {/* CardForm */}
       <View style={styles.form}>
         <Text style={styles.cardtext}>ALamat Lengkap : </Text>
+        {ambilDataAlamat && (
         <View>
-        <Text style={styles.cardtext}>Jl. Lohbener Lama No.08, Legok, Kec. Lohbener, Kabupaten Indramayu, Jawa Barat 45252</Text>
+        <Text style={styles.cardtext}>{ambilDataAlamat.alamat}</Text>
         </View>
+             ) }
         {/* Button Edit dan Hapus */}
         <View style={styles.button}>
             {/* <View >
