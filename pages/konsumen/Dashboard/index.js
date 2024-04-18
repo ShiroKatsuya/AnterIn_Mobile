@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 
 const Dashboard = () => {
@@ -30,16 +31,13 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios({
-          url: 'http://192.168.100.56:8888/api/data_rating',
+        const response = await axios.get(`${baseUrl.url}/data_rating`, {
           headers: {
             Authorization: `Bearer ${token}`
-          },
-          method: "GET"
+          }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-       //lu cobain dulu dah console.log ada kgk datanya 
-        console.log(response.data) 
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -52,12 +50,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios({
-          url: 'http://192.168.100.56:8888/api/datauser',
+        const response = await axios.get(`${baseUrl.url}/datauser`,{
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setAmbilDataProfile(response.data["data"]);
       //   console.log(response.data)
