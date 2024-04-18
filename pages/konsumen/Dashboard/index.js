@@ -108,6 +108,7 @@ const Dashboard = () => {
           <Image source={require('../../img/ikon-navigasi/order-history.png')} style={styles.unggulanText1}/>
           {/* <Image source={require('../../img/ikon-navigasi/order-detail.png')} style={styles.unggulanText1}/> */}
           <Image source={require('../../img/ikon-navigasi/chat.png')} style={styles.unggulanText1}/>
+          <Image source={require('../../img/ikon-navigasi/maps.png')} style={styles.unggulanText1}/>
           {/* <Image source={require('../../img/ikon-navigasi/scan.png')} style={styles.unggulanText1}/> */}
         </View>
         <View style={styles.unggulanRow}>
@@ -122,6 +123,9 @@ const Dashboard = () => {
           </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Maps')}>
+            <Text style={styles.unggulanText}>Maps</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
