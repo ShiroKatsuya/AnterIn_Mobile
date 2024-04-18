@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from '../../baseUrl';
 
 export default function Login() {
     const navigation = useNavigation();
@@ -36,7 +37,7 @@ export default function Login() {
           formData.append('password', password);
   
           const response = await axios.post(
-              `http://192.168.161.77:8888/api/login`,
+              `${baseUrl.url}/login`,
               formData,
               {
                   headers: {

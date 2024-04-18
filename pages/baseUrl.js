@@ -1,7 +1,7 @@
-const baseUrl = {
-    url: "http://192.168.161.77:8888/api/api",
+export const baseUrl = {
+    url: "http://192.168.137.129:8888/api",
 
 }
 
-export default baseUrl;
+
 
