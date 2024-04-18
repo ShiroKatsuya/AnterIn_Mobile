@@ -29,7 +29,7 @@ export default function KlasifikasiObjek() {
 
             // Ganti URL sesuai dengan URL yang dapat diakses dari perangkat Handhpne
             let response = await axios.post(
-                'http://192.168.100.56:8888/api/send-klasifikasi',
+                'http://10.0.141.81:8888/api/send-klasifikasi',
                 formData,
                 {
                     headers: {
