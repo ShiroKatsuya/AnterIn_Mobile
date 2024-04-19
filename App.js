@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -197,6 +197,16 @@ function App() {
                   ...headerOption,
                   HeaderCustome: (props) => <headerTitle {...props} />, 
                   title: "Riwayat Pesanan",
+                }}
+              />
+              
+              <Tab.Screen
+                name="Maps"
+                component={Maps}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Open Maps",
                 }}
               />
                        <Tab.Screen
