@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions,ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'; 
 import { baseUrl } from '../../baseUrl';
+import RNPickerSelect from 'react-native-picker-select';
 
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
@@ -12,7 +13,18 @@ const InputPesanan = ({ route }) => {
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
     const [Nama_Barang, setNamaBarang] = useState('');
+    const [selectedValue, setSelectedValue] = useState(null);
 
+
+    const placeholder = {
+        label: 'Pilihan Penganggkutan...',
+        value: null,
+      };
+    
+      const options = [
+        { label: 'Opsi 1', value: 'Mobil' },
+        { label: 'Opsi 2', value: 'Motor' },
+      ];
 
     useEffect(() => {
         setPilihPaket(route.params.pilih || {});
@@ -107,7 +119,9 @@ const InputPesanan = ({ route }) => {
     };
 
     return (
+
         <View style={styles.container}>
+                    <ScrollView style={styles.scrollView}>
             <View style={styles.headerinput}>
                 <Text style={styles.text}>
                     Cari Nama Barang, Alamat Tujuan, Jenis Paket, atau Kurir yang Ingin Dicek
@@ -191,6 +205,17 @@ const InputPesanan = ({ route }) => {
                         }}
                         disabled={!pilihKurir.nama}
                     />
+                <View>
+                                {/* <Text>Select an option:</Text> */}
+                    <RNPickerSelect
+                        placeholder={placeholder}
+                        items={options}
+                        onValueChange={(value) => setSelectedValue(value)}
+                        value={selectedValue}
+                    />
+                    {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
+                </View>
+
                     <Button
                         title="Submit"
                         onPress={() => {
@@ -207,8 +232,10 @@ const InputPesanan = ({ route }) => {
                     {showMessage && <Text>{showMessage}</Text>}
                 </View>
             </View>
+            </ScrollView>
         </View>
     );
+
 }
 const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
