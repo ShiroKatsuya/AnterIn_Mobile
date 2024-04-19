@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { isLoading } from 'expo-font';
 
 import { baseUrl } from '../../../baseUrl';
 
@@ -52,6 +53,7 @@ const fetchData = async () => {
         Authorization: `Bearer ${token}`
       }
     });
+  // isLoading (true)
     DataAlamat(response.data["message"])
     console.log(response.data);
   } catch (error) {
