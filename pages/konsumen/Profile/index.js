@@ -214,9 +214,10 @@ const styles = StyleSheet.create({
     height: 40, 
     // padding: 5,
     marginRight: 10,
-    textAlign:'center',
+    // textAlign:'center',
     // justifyContent:'center',
     // alignItems:'center'
     marginTop:1,
+    alignSelf:'center'
   },
 })

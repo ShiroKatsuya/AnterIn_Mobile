@@ -49,11 +49,27 @@ const InputPesanan = ({ route }) => {
   
           AsyncStorage.getItem('Nama_Barang').then((value) => {
               if (value) {
-                  setNamaBarang(value);
+                setNamaBarang(value);
               }
           });
       }
   }, [route.params.data]);
+
+
+
+  useEffect(() => {
+    if (route.params.data && route.params.data.Angkutan) {
+        selectedValue(route.params.data.Angkutan);
+        
+        AsyncStorage.setItem('Angkutan', route.params.data.Angkutan);
+    } else {
+        AsyncStorage.getItem('Angkutan').then((value) => {
+            if (value) {
+                setSelectedValue(value);
+            }
+        });
+    }
+}, [route.params.data]);
 
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang, 
@@ -61,6 +77,7 @@ const InputPesanan = ({ route }) => {
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
+        Angkutan: null,
     });
 
     const [showMessage, setShowMessage] = useState(null);
@@ -79,6 +96,10 @@ const InputPesanan = ({ route }) => {
         }
         if (name === 'Nama_Barang') {
             setNamaBarang(value);
+        }
+
+        if (name == 'Angkutan'){
+            setSelectedValue(value);
         }
     };
 
@@ -101,6 +122,7 @@ const InputPesanan = ({ route }) => {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
+                Angkutan: selectedValue,
                 Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
@@ -134,6 +156,7 @@ const InputPesanan = ({ route }) => {
                     <Text style={styles.txt}>Scan Ulang Disini !</Text>
                 </TouchableOpacity>
                 </View>
+
 
 
 
@@ -208,10 +231,11 @@ const InputPesanan = ({ route }) => {
                 <View>
                                 {/* <Text>Select an option:</Text> */}
                     <RNPickerSelect
-                        placeholder={placeholder}
-                        items={options}
-                        onValueChange={(value) => setSelectedValue(value)}
-                        value={selectedValue}
+                  placeholder={placeholder}
+                  items={options}
+                  onValueChange={(value) => setSelectedValue(value)}
+                  onTextChange={(text) => handleInputChange('Angkutan', text)}
+                  value={selectedValue} 
                     />
                     {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
                 </View>
@@ -219,7 +243,7 @@ const InputPesanan = ({ route }) => {
                     <Button
                         title="Submit"
                         onPress={() => {
-                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
+                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir && selectedValue) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');

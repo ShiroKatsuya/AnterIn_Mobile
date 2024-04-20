@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
-
+import { io } from 'socket.io-client';
 
 const Dashboard = () => {
   const navigation = useNavigation();
