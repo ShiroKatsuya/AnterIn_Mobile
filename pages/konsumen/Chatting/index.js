@@ -40,46 +40,57 @@ export default function Chatting() {
   }, [dataPribadi.token]);
 
   useEffect(() => {
-    socket.on('message', (message) => {
-      setMessages((previousMessages) =>
+    const messageListener = (message) => {
+      setMessages(previousMessages =>
         GiftedChat.append(previousMessages, {
           ...message,
           createdAt: new Date(message.createdAt),
-        }),
+        })
       );
-    });
+    };
+
+    socket.on('message', messageListener);
+
+
     return () => {
-      socket.off('message');
+      socket.off('message', messageListener);
     };
   }, []);
 
-  const onSend = useCallback((newMessages = []) => {
 
+  const onSend = useCallback(async (newMessages = []) => {
     if (ambilDataProfile.nama && newMessages.length > 0) {
       const messageText = newMessages[0].text.trim();
       if (messageText.length > 0) {
         const newMessage = {
-          // _id: Math.random().toString(36).substring(7),
           text: messageText,
           createdAt: new Date(),
-          // user: { _id: 1 },
-          Nama : ambilDataProfile.nama
-
+          Nama: ambilDataProfile.nama
         };
-
-
-        socket.emit('message', newMessage);
-        setMessages(previousMessages => GiftedChat.append(previousMessages, newMessage));
-        AmbilPesanMasuk(newMessage); 
-        console.log('Pesan:', newMessage);
-
+  
         setText('');
+        socket.emit('message', newMessage);
+  
+
+        await new Promise(resolve => {
+          socket.once('messageSent', () => {
+
+            resolve();
+          });
+        });
+
+
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, newMessage)
+        );
       }
+
     }
-  }, []);
+  }, [ambilDataProfile]);
 
   const onChangeText = (inputText) => {
     setText(inputText);
+    // resolve();
   };
 
   return (
@@ -111,23 +122,31 @@ export default function Chatting() {
                  ))}
             </View>
             </ScrollView>
-  
+{/*   
  
-
+            <GiftedChat
+      messages={messages}
+      onSend={(newMessages) =>
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, newMessages),
+        )
+      }
+      user={{ _id: 1 }}
+    /> */}
+    
           <View style={styles.chatbar}>
-            <TextInput
-              style={[styles.text2 , styles.input, styles.form2, {color: 'black'}]}
+                <TextInput
+              style={[styles.text2, styles.input, styles.form2, { color: 'black' }]}
               placeholder="Ketik Pesan"
               multiline={true}
               numberOfLines={4}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               onChangeText={onChangeText}
               value={text}
-      
             />
-            <TouchableOpacity onPress={() => onSend([{text}])} style={styles.buttonsend}>
-              <Image source={require('../../img/Send-Message.png')} style={styles.sendbuttonicon} />
-            </TouchableOpacity>
+       <TouchableOpacity onPress={() => onSend([{ text }])} style={styles.buttonsend}>
+        <Image source={require('../../img/Send-Message.png')} style={styles.sendbuttonicon} />
+      </TouchableOpacity>
    
           </View>
      

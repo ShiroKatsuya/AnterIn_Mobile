@@ -26,6 +26,20 @@ const InputPesanan = ({ route }) => {
         { label: 'Opsi 2', value: 'Motor' },
       ];
 
+
+
+
+
+    //   const province ={
+    //     label: 'Plilihlah Province Anda..',
+    //     value: null,
+    //   }
+
+    //   const Provinceoptions = [
+    //     { label: 'Opsi 1', value: 'Mobil' },
+    //   ];
+      
+
     useEffect(() => {
         setPilihPaket(route.params.pilih || {});
     }, [route.params.pilih]);
@@ -73,11 +87,15 @@ const InputPesanan = ({ route }) => {
 
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang, 
-        Alamat_Tujuan: '',
+        // Alamat_Tujuan: '',
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
         Angkutan: null,
+        city:'',
+        province:'',
+        kode_pos:'',
+
     });
 
     const [showMessage, setShowMessage] = useState(null);
@@ -107,16 +125,23 @@ const InputPesanan = ({ route }) => {
         if (!Nama_Barang) {
             setShowMessage('Masukkan Nama Barang');
             return;
-        } else if (!form.Alamat_Tujuan) {
-            setShowMessage('Masukkan Alamat Tujuan');
-            return;
         } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
             setShowMessage('Pilih Jenis Paket');
             return;
         } else if (!form.Nama_Kurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
+        }else if (!form.city){
+            setShowMessage('Pilih City');
+            return; 
+        }else if (!form.province){
+            setShowMessage('Pilih Province')
+            return;
+        }else if (!form.kode_pos) {
+            setShowMessage('Pilih Kode_Pos')
+            return;
         }
+
 
         try {
             const token = await AsyncStorage.getItem('token');
@@ -127,6 +152,9 @@ const InputPesanan = ({ route }) => {
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
+                city : form.city,
+                province:form.province,
+                kode_pos:form.kode_pos
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -183,13 +211,34 @@ const InputPesanan = ({ route }) => {
 
 
 
-                    <Text style={styles.text}>Alamat Tujuan</Text>
-                    <TextInput
+                    {/* <Text style={styles.text}>Alamat Tujuan</Text> */}
+                    {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="Alamat Tujuan"
                         value={form.Alamat_Tujuan}
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
+                    /> */}
+                     <Text style={styles.text}>Alamat Tujuan</Text>
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="city"
+                        value={form.city}
+                        onChangeText={(text) => handleInputChange('city', text)}
                     />
+                        <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="province"
+                        value={form.province}
+                        onChangeText={(text) => handleInputChange('province', text)}
+                    />
+
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="kode_pos"
+                        value={form.kode_pos}
+                        onChangeText={(text) => handleInputChange('kode_pos', text)}
+                    />
+
 
                     <Text style={styles.text}>Jenis Paket</Text>
                     <View>
@@ -243,7 +292,7 @@ const InputPesanan = ({ route }) => {
                     <Button
                         title="Submit"
                         onPress={() => {
-                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir && selectedValue) {
+                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && form.city && form.province && form.kode_pos) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');
