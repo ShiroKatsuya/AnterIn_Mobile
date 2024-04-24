@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,14 @@ import { baseUrl } from '../../baseUrl';
 export default function RajaOngkir() {
     const [ambilDataAlamat, setAmbilDataAlamat] = useState([]);
     const navigation = useNavigation();
+    const [results, setResults] = useState([]);
+    const [input, setInput] = useState("");
+
+    const handleSearch = (text) => {
+      setInput(text);
+      const filteredResults = ambilDataAlamat.filter(item => item.city_name.toLowerCase().includes(text.toLowerCase()));
+      setResults(filteredResults);
+    }
   
     useEffect(() => {
         const fetchData = async () => {
@@ -22,7 +30,6 @@ export default function RajaOngkir() {
                 const dataCity = response.data.data_city;
                 if (dataCity.rajaongkir) {
                     setAmbilDataAlamat(dataCity.rajaongkir.results);
-                    // console.log(dataCity.rajaongkir.results);
                 } else {
                     console.error("Data tidak ditemukan dalam response json seperti di postman !");
                 }
@@ -34,12 +41,12 @@ export default function RajaOngkir() {
         fetchData();
     }, []);
 
-    if(ambilDataAlamat.length==0){
-      return (
-        <View style={styles.container}>
-            <Text style={{textAlign:'center'}}>Loading...</Text>
-        </View>
-      );
+    if (ambilDataAlamat.length === 0) {
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+        )
     }
 
     const handleCheckout = (pkg) => {
@@ -50,10 +57,18 @@ export default function RajaOngkir() {
         console.log("Pilih kurir terlebih dahulu!");
       }
     };
-  return (
-    <View style= {styles.container}>
-        <ScrollView>
-          {Array.isArray(ambilDataAlamat) && ambilDataAlamat
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.searchBar}>
+                <TextInput
+                    placeholder="Cari Kota"
+                    onChangeText={handleSearch}
+                    value={input}
+                />
+            </View>
+            <ScrollView>
+            {Array.isArray(ambilDataAlamat) && ambilDataAlamat
         .map((pkg, index) =>(
         <View style={styles.cardInfo} key={index}>
           <View style={styles.cardInfoRow}>
@@ -78,13 +93,50 @@ export default function RajaOngkir() {
           </View>
         </View>
       ))}
-          </ScrollView>
-    </View>
-
-  )
+            </ScrollView>
+      <ScrollView>
+                {results.map((pkg, index) => (
+                            <View style={styles.cardInfo} key={index}>
+                            <View style={styles.cardInfoRow}>
+                              <Image source={require('../../img/logo.png')} style={styles.logo} />
+                              <View style={styles.userDetails}>
+                                <Text style={styles.userName}>Nama Kota : {pkg.city_name}</Text>
+                                <Text style={styles.userPhone}>Nama Provinsi : {pkg.province}</Text>
+                                <Text style={styles.userPhone}>Kode Pos : {pkg.postal_code}</Text>
+                              </View>
+                            </View>
+                            <View style={styles.bottomRow}>
+                              <View style={styles.rating}>
+                                {/* {[...Array(5)].map((_, i) => (
+                                  // <Image key={i} source={i < 4 ? require('../../img/rating-star/select-star.png') : require('../../img/rating-star/unselect-star.png')} style={styles.star} />
+                                ))} */}
+                              </View>
+                              <TouchableOpacity onPress={() => handleCheckout(pkg)}>
+                                <View style={styles.Pilih}>
+                                  <Text style={styles.text}>Pilih Disini</Text>
+                                </View>
+                              </TouchableOpacity>
+                            </View>
+                        </View>
+                ))}
+                </ScrollView>
+    
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
+  searchBar: {
+    backgroundColor : 'white',
+    padding:1,
+    borderRadius:10,
+    borderBlockColor:'black',
+  marginBottom:20,
+  flexDirection:'column',
+  justifyContent:'space-between'
+
+
+  },
     container: {
       flex: 1,
       padding: 10,
