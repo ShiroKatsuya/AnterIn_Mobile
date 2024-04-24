@@ -3,6 +3,7 @@ import { Image, Text, TouchableOpacity, View, PermissionsAndroid, Dimensions, St
 import { launchCamera } from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -32,7 +33,7 @@ export default function KlasifikasiObjek() {
 
 
             let response = await axios.post(
-                'http://192.168.100.56:8888/api/send-klasifikasi',
+                `${baseUrl.url}/send-klasifikasi`,
                 formData,
                 {
                     headers: {

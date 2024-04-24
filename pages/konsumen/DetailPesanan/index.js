@@ -2,22 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
+  const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/lokasi`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setAmbilData(response.data.message);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios({
-          url: `http://192.168.100.56:8888/api/riwayatpesanan/${route.params.id}`,
+        const response = await axios.get(`${baseUrl.url}/riwayatpesanan/${route.params.id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setPilihPaketData(response.data);
+        console.log(response.data)
   
       } catch (error) {
         console.error(error);
@@ -39,15 +59,15 @@ export default function DetailPesanan({ route }) {
       throw new Error("Paket tidak valid.");
     
     }
-  
+  if(ambilData.Kota_Anda){
     try {
       const token = await AsyncStorage.getItem('token');
       const data = {
-        paket_sekarang: 'dsfsdf',
-        penerimaan_paket: 'sdfsdf',
+        paket_sekarang: ambilData.Kota_Anda,
+        penerimaan_paket: 'Keluarga!',
       };
   
-      const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${route.params.id}`, data, {
+      const response = await axios.put(`${baseUrl.url}/inputpesanan/${route.params.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -62,6 +82,7 @@ export default function DetailPesanan({ route }) {
       throw error; 
     }
   };
+}
 
   return (
 
@@ -83,7 +104,7 @@ export default function DetailPesanan({ route }) {
       <View style={styles.form1}>
           <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
           <Text style={styles.texttop}>👨🏻‍✈️Kurir Telah Menerima Paketan | {pilihPaketData.Nama_Kurir}</Text>
-          <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan | {pilihPaketData.Alamat_Tujuan}</Text>
+          <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan Ke Alamat Tujuan| {pilihPaketData.Alamat_Tujuan}</Text>
           <Text style={styles.texttop}>🔜Paketan Berada Di : {pilihPaketData.paket_sekarang} </Text>
           <Text style={styles.texttop}>🔚Paketan Telah Sampai dan Telah Diserahkan Kepada Pihak Yang Bersangkutan | {pilihPaketData.penerimaan_paket}</Text>
           <TouchableOpacity>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions,ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'; 
+import { baseUrl } from '../../baseUrl';
+import RNPickerSelect from 'react-native-picker-select';
 
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
@@ -11,7 +13,32 @@ const InputPesanan = ({ route }) => {
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
     const [Nama_Barang, setNamaBarang] = useState('');
+    const [selectedValue, setSelectedValue] = useState(null);
 
+
+    const placeholder = {
+        label: 'Pilihan Penganggkutan...',
+        value: null,
+      };
+    
+      const options = [
+        { label: 'Opsi 1', value: 'Mobil' },
+        { label: 'Opsi 2', value: 'Motor' },
+      ];
+
+
+
+
+
+    //   const province ={
+    //     label: 'Plilihlah Province Anda..',
+    //     value: null,
+    //   }
+
+    //   const Provinceoptions = [
+    //     { label: 'Opsi 1', value: 'Mobil' },
+    //   ];
+      
 
     useEffect(() => {
         setPilihPaket(route.params.pilih || {});
@@ -36,18 +63,39 @@ const InputPesanan = ({ route }) => {
   
           AsyncStorage.getItem('Nama_Barang').then((value) => {
               if (value) {
-                  setNamaBarang(value);
+                setNamaBarang(value);
               }
           });
       }
   }, [route.params.data]);
 
+
+
+  useEffect(() => {
+    if (route.params.data && route.params.data.Angkutan) {
+        selectedValue(route.params.data.Angkutan);
+        
+        AsyncStorage.setItem('Angkutan', route.params.data.Angkutan);
+    } else {
+        AsyncStorage.getItem('Angkutan').then((value) => {
+            if (value) {
+                setSelectedValue(value);
+            }
+        });
+    }
+}, [route.params.data]);
+
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang, 
-        Alamat_Tujuan: '',
+        // Alamat_Tujuan: '',
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
+        Angkutan: null,
+        city:'',
+        province:'',
+        kode_pos:'',
+
     });
 
     const [showMessage, setShowMessage] = useState(null);
@@ -64,8 +112,12 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
-        if (name === 'Nama_Barang' && !inputEnabled) {
+        if (name === 'Nama_Barang') {
             setNamaBarang(value);
+        }
+
+        if (name == 'Angkutan'){
+            setSelectedValue(value);
         }
     };
 
@@ -73,28 +125,39 @@ const InputPesanan = ({ route }) => {
         if (!Nama_Barang) {
             setShowMessage('Masukkan Nama Barang');
             return;
-        } else if (!form.Alamat_Tujuan) {
-            setShowMessage('Masukkan Alamat Tujuan');
-            return;
         } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
             setShowMessage('Pilih Jenis Paket');
             return;
         } else if (!form.Nama_Kurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
+        }else if (!form.city){
+            setShowMessage('Pilih City');
+            return; 
+        }else if (!form.province){
+            setShowMessage('Pilih Province')
+            return;
+        }else if (!form.kode_pos) {
+            setShowMessage('Pilih Kode_Pos')
+            return;
         }
+
 
         try {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
+                Angkutan: selectedValue,
                 Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
+                city : form.city,
+                province:form.province,
+                kode_pos:form.kode_pos
             };
 
-            const response = await axios.post('http://192.168.100.56:8888/api/inputpesanan', data, {
+            const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -106,7 +169,9 @@ const InputPesanan = ({ route }) => {
     };
 
     return (
+
         <View style={styles.container}>
+                    <ScrollView style={styles.scrollView}>
             <View style={styles.headerinput}>
                 <Text style={styles.text}>
                     Cari Nama Barang, Alamat Tujuan, Jenis Paket, atau Kurir yang Ingin Dicek
@@ -119,6 +184,7 @@ const InputPesanan = ({ route }) => {
                     <Text style={styles.txt}>Scan Ulang Disini !</Text>
                 </TouchableOpacity>
                 </View>
+
 
 
 
@@ -145,13 +211,34 @@ const InputPesanan = ({ route }) => {
 
 
 
-                    <Text style={styles.text}>Alamat Tujuan</Text>
-                    <TextInput
+                    {/* <Text style={styles.text}>Alamat Tujuan</Text> */}
+                    {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="Alamat Tujuan"
                         value={form.Alamat_Tujuan}
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
+                    /> */}
+                     <Text style={styles.text}>Alamat Tujuan</Text>
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="city"
+                        value={form.city}
+                        onChangeText={(text) => handleInputChange('city', text)}
                     />
+                        <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="province"
+                        value={form.province}
+                        onChangeText={(text) => handleInputChange('province', text)}
+                    />
+
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="kode_pos"
+                        value={form.kode_pos}
+                        onChangeText={(text) => handleInputChange('kode_pos', text)}
+                    />
+
 
                     <Text style={styles.text}>Jenis Paket</Text>
                     <View>
@@ -190,10 +277,22 @@ const InputPesanan = ({ route }) => {
                         }}
                         disabled={!pilihKurir.nama}
                     />
+                <View>
+                                {/* <Text>Select an option:</Text> */}
+                    <RNPickerSelect
+                  placeholder={placeholder}
+                  items={options}
+                  onValueChange={(value) => setSelectedValue(value)}
+                  onTextChange={(text) => handleInputChange('Angkutan', text)}
+                  value={selectedValue} 
+                    />
+                    {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
+                </View>
+
                     <Button
                         title="Submit"
                         onPress={() => {
-                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
+                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && form.city && form.province && form.kode_pos) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');
@@ -206,8 +305,10 @@ const InputPesanan = ({ route }) => {
                     {showMessage && <Text>{showMessage}</Text>}
                 </View>
             </View>
+            </ScrollView>
         </View>
     );
+
 }
 const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
