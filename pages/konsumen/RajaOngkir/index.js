@@ -34,6 +34,14 @@ export default function RajaOngkir() {
         fetchData();
     }, []);
 
+    if(ambilDataAlamat.length==0){
+      return (
+        <View style={styles.container}>
+            <Text style={{textAlign:'center'}}>Loading...</Text>
+        </View>
+      );
+    }
+
     const handleCheckout = (pkg) => {
       if (pkg) {
         console.log("Checkout dengan alamat:", pkg);
