@@ -9,12 +9,17 @@ import RNPickerSelect from 'react-native-picker-select';
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
     const [pilihPaket, setPilihPaket] = useState(route.params.pilih || {});
+    const [pilihAlamat, setPilihAlamat] = useState(route.params.pilihalamat || {});
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
     const [Nama_Barang, setNamaBarang] = useState('');
     const [selectedValue, setSelectedValue] = useState(null);
 
+
+    handleNavigation = () => {
+        navigation.navigate('RajaOngkir')
+    }
 
     const placeholder = {
         label: 'Pilihan Penganggkutan...',
@@ -49,6 +54,10 @@ const InputPesanan = ({ route }) => {
     }, [route.params.pilihkurir]);
 
     useEffect(() => {
+        setPilihAlamat(route.params.pilihalamat || {});
+    }, [route.params.pilihalamat]);
+
+    useEffect(() => {
         if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
             setPilihPaketData(pilihPaket);
         }
@@ -68,6 +77,7 @@ const InputPesanan = ({ route }) => {
           });
       }
   }, [route.params.data]);
+
 
 
 
@@ -112,6 +122,24 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
+        if(name== 'city'){
+            setForm({
+                ...form,
+                city: pilihAlamat.city_name,
+            });
+        }
+        if(name== 'province'){
+            setForm({
+                ...form,
+                province: pilihAlamat.province,
+            });
+        }
+        if(name== 'kode_pos'){
+            setForm({
+                ...form,
+                kode_pos: pilihAlamat.postal_code,
+            });
+        }
         if (name === 'Nama_Barang') {
             setNamaBarang(value);
         }
@@ -152,9 +180,9 @@ const InputPesanan = ({ route }) => {
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
-                city : form.city,
-                province:form.province,
-                kode_pos:form.kode_pos
+                city : pilihAlamat.city_name,
+                province:pilihAlamat.province,
+                kode_pos:pilihAlamat.postal_code
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -219,7 +247,22 @@ const InputPesanan = ({ route }) => {
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
                     /> */}
                      <Text style={styles.text}>Alamat Tujuan</Text>
-                    <TextInput
+
+                  <Button 
+
+                    onPress={()=>{
+                        handleNavigation()
+                    }}
+                    title="Pilih Alamat Otomatis Disini"
+                  >
+       
+      
+                  </Button>
+
+                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.city_name}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.province}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.postal_code}</Text>
+                    {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="city"
                         value={form.city}
@@ -237,7 +280,7 @@ const InputPesanan = ({ route }) => {
                         placeholder="kode_pos"
                         value={form.kode_pos}
                         onChangeText={(text) => handleInputChange('kode_pos', text)}
-                    />
+                    /> */}
 
 
                     <Text style={styles.text}>Jenis Paket</Text>

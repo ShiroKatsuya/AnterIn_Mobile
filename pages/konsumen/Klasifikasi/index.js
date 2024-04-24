@@ -13,6 +13,7 @@ export default function KlasifikasiObjek() {
     const [Result, SetResult] = useState(null);
     const [Deskription, SetDeskription] = useState(null);
     const [Dedection, SetDedection] = useState(null);
+    const [lebar,Setlebar]=useState(null)
 
     const generateUniquePictureName = () => {
         return Math.random().toString(36).substring(2, 15);
@@ -49,6 +50,8 @@ export default function KlasifikasiObjek() {
                 SetResult(responseJson.response.Nama_Barang);
                 SetDeskription(responseJson.response.Deskripsi);
                 SetDedection(responseJson.response.Persentase);
+                Setlebar(responseJson.response.Lebar_cm)
+                // SetDedection(responseJson.response.Tinggi_cm)
 
             } else {
                 console.error('Upload gagal. Status:', response.status, 'Data:', response.data);
@@ -141,6 +144,8 @@ export default function KlasifikasiObjek() {
                     <Text style={styles.textresul}>Nama : {Result}</Text>
                     <Text style={styles.textresul}>Klasifikasi : {Deskription}</Text>
                     <Text style={styles.textresul}>Percentase Detection Objek  : {Dedection}</Text>
+                    <Text style={styles.textresul}>Lebar_cm  : {lebar}</Text>
+                    {/* <Text style={styles.textresul}>Percentase Detection Objek  : {Dedection}</Text> */}
                 </View>
             </View>
 
