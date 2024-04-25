@@ -67,12 +67,14 @@ export default function KlasifikasiObjek() {
         navigation.navigate('InputPesanan', { 
             data: { 
                 response: result, 
-                Nama_Barang: result 
+                Nama_Barang: result, 
+                Lebar_cm : result,
+                Tinggi_cm:result
             } 
         }); 
         console.log(result); 
     };
-
+    
     const openCamera = () => {
         const options = {
             mediaType: 'photo',
