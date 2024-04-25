@@ -92,9 +92,13 @@ export default function DetailPesanan({ route }) {
       <View style={styles.form1}>
         <Text style={styles.texttop}>Nama Barang | {pilihPaketData.Nama_Barang}</Text>
         <Text style={styles.texttop}>Nama User | {pilihPaketData.nama}</Text>
-        <Text style={styles.texttop}>Alamat Tujuan | {pilihPaketData.Alamat_Tujuan}</Text>
+        <Text style={styles.texttop}>Kota | {pilihPaketData.city_name}</Text>
+        <Text style={styles.texttop}>Province | {pilihPaketData.province}</Text>
+        <Text style={styles.texttop}>Kode_POS | {pilihPaketData.postal_code}</Text>
+        <Text style={styles.texttop}>Detail Alamat | {pilihPaketData.DetailAlamat}</Text>
         <Text style={styles.texttop}>Nama Paket | {pilihPaketData.Nama_Paket}</Text>
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
+        
       </View>
       <View style={styles.form2}>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
