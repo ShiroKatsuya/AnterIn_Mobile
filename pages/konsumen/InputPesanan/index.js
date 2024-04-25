@@ -16,6 +16,7 @@ const InputPesanan = ({ route }) => {
     const [inputEnabled, setInputEnabled] = useState(false);
     const [Nama_Barang, setNamaBarang] = useState('');  
     const [selectedValue, setSelectedValue] = useState(null);
+    // const [DetailAlamat,SetDetailAlamat]=useState('')
 
 
     const handleNavigation = () => {
@@ -108,6 +109,7 @@ const InputPesanan = ({ route }) => {
         city_name:'',
         province:'',
         postal_code:'',
+        DetailAlamat:'',
 
     });
 
@@ -130,7 +132,14 @@ const InputPesanan = ({ route }) => {
                 ...form,
                 city_name: pilihalamat.city_name,
             });
+        // } if (name=='DetailAlamat'){
+        //     setForm({
+        //         ...form,
+           
+        //     });
         }
+
+
         if(name== 'province'){
             setForm({
                 ...form,
@@ -171,6 +180,8 @@ const InputPesanan = ({ route }) => {
         }else if (!pilihalamat.postal_code) {
             setShowMessage('Pilih Kode_Pos')
             return;
+        }else if (!form.DetailAlamat){
+            setShowMessage('Masukan Detail Alamat')
         }
 
 
@@ -179,13 +190,14 @@ const InputPesanan = ({ route }) => {
             const data = {
                 Nama_Barang: Nama_Barang,
                 Angkutan: selectedValue,
-                Alamat_Tujuan: form.Alamat_Tujuan,
+                // Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
                 city_name : pilihalamat.city_name,
                 province:pilihalamat.province,
-                postal_code:pilihalamat.postal_code
+                postal_code:pilihalamat.postal_code,
+                DetailAlamat:form.DetailAlamat,
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -249,6 +261,10 @@ const InputPesanan = ({ route }) => {
                         value={form.Alamat_Tujuan}
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
                     /> */}
+
+
+             
+
                      <Text style={styles.text}>Alamat Tujuan</Text>
 
                   <Button 
@@ -265,6 +281,14 @@ const InputPesanan = ({ route }) => {
                   <Text style={[styles.input, styles.forminside]}>{pilihalamat.city_name}</Text>
                   <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
                   <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
+
+                  <TextInput 
+                        style={[styles.input,styles.forminside]}
+                        placeholder="Masukan Detail Alamat Jalan.Rt/Rw"
+                        value={form.DetailAlamat}
+                        onChangeText={(text)=>handleInputChange('DetailAlamat',text)}
+                    />
+
                     {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="city"
@@ -338,7 +362,7 @@ const InputPesanan = ({ route }) => {
                     <Button
                         title="Submit"
                         onPress={() => {                                                          //tadi typo kenapa harus form.city_name !                    
-                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code) {
+                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');
