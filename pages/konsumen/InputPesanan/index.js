@@ -9,12 +9,18 @@ import RNPickerSelect from 'react-native-picker-select';
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
     const [pilihPaket, setPilihPaket] = useState(route.params.pilih || {});
+    const [PilihanAlamat, setPilihanAlamat] = useState('');
+    const [pilihalamat, setpilihalamat] = useState(route.params.pilihalamat || {});
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
-    const [Nama_Barang, setNamaBarang] = useState('');
+    const [Nama_Barang, setNamaBarang] = useState('');  
     const [selectedValue, setSelectedValue] = useState(null);
 
+
+    const handleNavigation = () => {
+        navigation.navigate('RajaOngkir')
+    }
 
     const placeholder = {
         label: 'Pilihan Penganggkutan...',
@@ -35,6 +41,23 @@ const InputPesanan = ({ route }) => {
     }, [route.params.pilihkurir]);
 
     useEffect(() => {
+        setpilihalamat(route.params.pilihalamat || {});
+    }, [route.params.pilihalamat]);
+
+    useEffect(() => {
+        if (route.params.pilihalamat) {
+          setpilihalamat(route.params.pilihalamat);
+          AsyncStorage.setItem('pilihalamat', JSON.stringify(route.params.pilihalamat));
+        } else {
+          AsyncStorage.getItem('pilihalamat').then((value) => {
+            if (value) {
+              setpilihalamat(JSON.parse(value));
+            }
+          });
+        }
+      }, [route.params.pilihalamat]);
+
+    useEffect(() => {
         if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
             setPilihPaketData(pilihPaket);
         }
@@ -49,18 +72,43 @@ const InputPesanan = ({ route }) => {
   
           AsyncStorage.getItem('Nama_Barang').then((value) => {
               if (value) {
-                  setNamaBarang(value);
+                setNamaBarang(value);
               }
           });
       }
   }, [route.params.data]);
 
+  
+
+
+
+  
+
+  useEffect(() => {
+    if (route.params.data && route.params.data.Angkutan) {
+        selectedValue(route.params.data.Angkutan);
+        
+        AsyncStorage.setItem('Angkutan', route.params.data.Angkutan);
+    } else {
+        AsyncStorage.getItem('Angkutan').then((value) => {
+            if (value) {
+                setSelectedValue(value);
+            }
+        });
+    }
+}, [route.params.data]);
+
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang, 
-        Alamat_Tujuan: '',
+        // Alamat_Tujuan: '',
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
+        Angkutan: null,
+        city_name:'',
+        province:'',
+        postal_code:'',
+
     });
 
     const [showMessage, setShowMessage] = useState(null);
@@ -77,8 +125,30 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
+        if(name== 'city_name'){
+            setForm({
+                ...form,
+                city_name: pilihalamat.city_name,
+            });
+        }
+        if(name== 'province'){
+            setForm({
+                ...form,
+                province: pilihalamat.province,
+            });
+        }
+        if(name== 'postal_code'){
+            setForm({
+                ...form,
+                postal_code: pilihalamat.postal_code,
+            });
+        }
         if (name === 'Nama_Barang') {
             setNamaBarang(value);
+        }
+
+        if (name == 'Angkutan'){
+            setSelectedValue(value);
         }
     };
 
@@ -86,25 +156,36 @@ const InputPesanan = ({ route }) => {
         if (!Nama_Barang) {
             setShowMessage('Masukkan Nama Barang');
             return;
-        } else if (!form.Alamat_Tujuan) {
-            setShowMessage('Masukkan Alamat Tujuan');
-            return;
         } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
             setShowMessage('Pilih Jenis Paket');
             return;
         } else if (!form.Nama_Kurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
+        }else if (!pilihalamat.city_name){
+            setShowMessage('Pilih City');
+            return; 
+        }else if (!pilihalamat.province){
+            setShowMessage('Pilih Province')
+            return;
+        }else if (!pilihalamat.postal_code) {
+            setShowMessage('Pilih Kode_Pos')
+            return;
         }
+
 
         try {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
+                Angkutan: selectedValue,
                 Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
+                city_name : pilihalamat.city_name,
+                province:pilihalamat.province,
+                postal_code:pilihalamat.postal_code
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -137,6 +218,7 @@ const InputPesanan = ({ route }) => {
 
 
 
+
                     <Text style={styles.text}>Nama Barang</Text>
                                 <TextInput
                     style={[styles.input, styles.forminside]}
@@ -160,13 +242,49 @@ const InputPesanan = ({ route }) => {
 
 
 
-                    <Text style={styles.text}>Alamat Tujuan</Text>
-                    <TextInput
+                    {/* <Text style={styles.text}>Alamat Tujuan</Text> */}
+                    {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="Alamat Tujuan"
                         value={form.Alamat_Tujuan}
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
+                    /> */}
+                     <Text style={styles.text}>Alamat Tujuan</Text>
+
+                  <Button 
+
+                    onPress={()=>{
+                        handleNavigation()
+                    }}
+                    title="Pilih Alamat Otomatis Disini"
+                  >
+       
+      
+                  </Button>
+
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.city_name}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
+                    {/* <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="city"
+                        value={form.city}
+                        onChangeText={(text) => handleInputChange('city', text)}
                     />
+                        <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="province"
+                        value={form.province}
+                        onChangeText={(text) => handleInputChange('province', text)}
+                    />
+
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="kode_pos"
+                        value={form.kode_pos}
+                        onChangeText={(text) => handleInputChange('kode_pos', text)}
+                    /> */}
+
 
                     <Text style={styles.text}>Jenis Paket</Text>
                     <View>
@@ -208,18 +326,19 @@ const InputPesanan = ({ route }) => {
                 <View>
                                 {/* <Text>Select an option:</Text> */}
                     <RNPickerSelect
-                        placeholder={placeholder}
-                        items={options}
-                        onValueChange={(value) => setSelectedValue(value)}
-                        value={selectedValue}
+                  placeholder={placeholder}
+                  items={options}
+                  onValueChange={(value) => setSelectedValue(value)}
+                  onTextChange={(text) => handleInputChange('Angkutan', text)}
+                  value={selectedValue} 
                     />
                     {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
                 </View>
 
                     <Button
                         title="Submit"
-                        onPress={() => {
-                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
+                        onPress={() => {                                                          //tadi typo kenapa harus form.city_name !                    
+                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');

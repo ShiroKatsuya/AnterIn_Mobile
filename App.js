@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps } from './pages/route'; 
+import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir } from './pages/route'; 
 
 
 const Stack = createNativeStackNavigator();
@@ -104,7 +104,7 @@ function MainTab() {
           title: "Profile",
         }}
       />
-  
+
     </Tab.Navigator>
   );
 }
@@ -121,6 +121,15 @@ function App() {
             HeaderCustome: (props) => <headerTitle {...props} />, 
             title: "Halaman Login",
           }}
+        />
+                <Stack.Screen
+    name="RajaOngkir"
+    component={RajaOngkir}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Raja Ongkir",
+    }}
         />
         <Stack.Screen
           name="Daftar"

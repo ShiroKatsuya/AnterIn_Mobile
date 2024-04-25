@@ -37,6 +37,7 @@ export default function DetailPesanan({ route }) {
           },
         });
         setPilihPaketData(response.data);
+        console.log(response.data)
   
       } catch (error) {
         console.error(error);

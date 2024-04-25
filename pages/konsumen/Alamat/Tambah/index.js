@@ -135,6 +135,7 @@ const tambahAlamat = async () => {
         
       </View>
 
+
 <View style = {styles.textAreaContainer}>
 
     <Text>
@@ -195,6 +196,16 @@ const tambahAlamat = async () => {
 }
 
 const styles = StyleSheet.create({
+
+textarea:{
+  padding:10,
+  backgroundcolor:'gray',
+  flexdirection:'row',
+  alignitems:'center'
+  
+},
+
+  
 text:{fontWeight:'bold'},
   container: {
     flex: 1,
