@@ -105,16 +105,6 @@ function MainTab() {
         }}
       />
 
-<Tab.Screen
-        name="RajaOngkir"
-        component={RajaOngkir}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Raja Ongkir",
-        }}
-      />
-  
     </Tab.Navigator>
   );
 }
@@ -131,6 +121,15 @@ function App() {
             HeaderCustome: (props) => <headerTitle {...props} />, 
             title: "Halaman Login",
           }}
+        />
+                <Stack.Screen
+    name="RajaOngkir"
+    component={RajaOngkir}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Raja Ongkir",
+    }}
         />
         <Stack.Screen
           name="Daftar"
