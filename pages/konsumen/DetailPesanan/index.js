@@ -104,6 +104,15 @@ export default function DetailPesanan({ route }) {
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
+        <TouchableOpacity>
+
+
+        <View style={styles.buttonpdf}>
+          <Text style={styles.pdf}>
+             CETAK PDF
+          </Text>
+        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.form1}>
           <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
@@ -136,6 +145,18 @@ export default function DetailPesanan({ route }) {
 }
 
 const styles = StyleSheet.create({
+  pdf:{
+    color:'black',
+    fontWeight:'bold',
+    fontSize:11
+  },
+  buttonpdf:{
+    flexDirection:'row',
+    alignSelf:'flex-end',
+    backgroundColor:'#EDA01F',
+    padding:3,
+    borderRadius:3
+  },
   scrollView: {
     backgroundColor: 'pink',
     marginHorizontal: 20,
