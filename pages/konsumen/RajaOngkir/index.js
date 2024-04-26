@@ -11,6 +11,9 @@ export default function RajaOngkir() {
     const [results, setResults] = useState([]);
     const [input, setInput] = useState("");
 
+    const [pilihalamat, setPilihAlamat] = useState([]);
+
+
     const handleSearch = (text) => {
       setInput(text);
       const filteredResults = ambilDataAlamat.filter(item => item.city_name.toLowerCase().includes(text.toLowerCase()));
@@ -49,14 +52,27 @@ export default function RajaOngkir() {
         )
     }
 
+    // const handleCheckout = (pkg) => {
+    //   if (pkg) {
+    //     console.log("Checkout dengan alamat:", pkg);
+    //     navigation.navigate('InputPesanan', { pilihalamat: pkg });
+    //     setPilihAlamat(pkg); //simpan Data Ini
+    //     AsyncStorage.setItem('selectedAddress', JSON.stringify(pkg)); //Pilih Aalamat
+    //   } else {
+    //     console.log("Pilih kurir terlebih dahulu!");
+    //   }
+    // };
+
     const handleCheckout = (pkg) => {
       if (pkg) {
-        console.log("Checkout dengan alamat:", pkg);
+        console.log("pilihalamat:", pkg);
         navigation.navigate('InputPesanan', { pilihalamat: pkg });
+        setAmbilDataAlamat(pkg);
       } else {
         console.log("Pilih kurir terlebih dahulu!");
       }
     };
+
 
     return (
         <View style={styles.container}>
@@ -66,6 +82,11 @@ export default function RajaOngkir() {
                     onChangeText={handleSearch}
                     value={input}
                 />
+        <View style={styles.button}>
+          <Image source={require('../../img/Search.png')} style={{width:50, height:50}}/>
+                </View>
+       
+
             </View>
             <ScrollView>
             {Array.isArray(ambilDataAlamat) && ambilDataAlamat
@@ -126,14 +147,29 @@ export default function RajaOngkir() {
 }
 
 const styles = StyleSheet.create({
+
+  button:{
+    // marginRight:30,
+    // width:50,
+    // height:50
+  },  
+
   searchBar: {
     backgroundColor : 'white',
     padding:1,
     borderRadius:10,
     borderBlockColor:'black',
   marginBottom:20,
-  flexDirection:'column',
-  justifyContent:'space-between'
+
+  // flexDirection:'column',
+  // justifyContent:'space-between'
+
+  flexDirection:'row',
+  justifyContent:'space-between',
+  alignItems:'center',
+// marginRight:100,
+// marginLeft:100
+
 
 
   },

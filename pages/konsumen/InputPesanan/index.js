@@ -9,15 +9,17 @@ import RNPickerSelect from 'react-native-picker-select';
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
     const [pilihPaket, setPilihPaket] = useState(route.params.pilih || {});
-    const [pilihAlamat, setPilihAlamat] = useState(route.params.pilihalamat || {});
+    const [PilihanAlamat, setPilihanAlamat] = useState('');
+    const [pilihalamat, setpilihalamat] = useState(route.params.pilihalamat || {});
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
-    const [Nama_Barang, setNamaBarang] = useState('');
+    const [Nama_Barang, setNamaBarang] = useState('');  
     const [selectedValue, setSelectedValue] = useState(null);
+    // const [DetailAlamat,SetDetailAlamat]=useState('')
 
 
-    handleNavigation = () => {
+    const handleNavigation = () => {
         navigation.navigate('RajaOngkir')
     }
 
@@ -31,20 +33,6 @@ const InputPesanan = ({ route }) => {
         { label: 'Opsi 2', value: 'Motor' },
       ];
 
-
-
-
-
-    //   const province ={
-    //     label: 'Plilihlah Province Anda..',
-    //     value: null,
-    //   }
-
-    //   const Provinceoptions = [
-    //     { label: 'Opsi 1', value: 'Mobil' },
-    //   ];
-      
-
     useEffect(() => {
         setPilihPaket(route.params.pilih || {});
     }, [route.params.pilih]);
@@ -54,8 +42,21 @@ const InputPesanan = ({ route }) => {
     }, [route.params.pilihkurir]);
 
     useEffect(() => {
-        setPilihAlamat(route.params.pilihalamat || {});
+        setpilihalamat(route.params.pilihalamat || {});
     }, [route.params.pilihalamat]);
+
+    useEffect(() => {
+        if (route.params.pilihalamat) {
+          setpilihalamat(route.params.pilihalamat);
+          AsyncStorage.setItem('pilihalamat', JSON.stringify(route.params.pilihalamat));
+        } else {
+          AsyncStorage.getItem('pilihalamat').then((value) => {
+            if (value) {
+              setpilihalamat(JSON.parse(value));
+            }
+          });
+        }
+      }, [route.params.pilihalamat]);
 
     useEffect(() => {
         if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
@@ -78,8 +79,11 @@ const InputPesanan = ({ route }) => {
       }
   }, [route.params.data]);
 
+  
 
 
+
+  
 
   useEffect(() => {
     if (route.params.data && route.params.data.Angkutan) {
@@ -102,9 +106,10 @@ const InputPesanan = ({ route }) => {
         Harga_Paket: '',
         Nama_Kurir: '',
         Angkutan: null,
-        city:'',
+        city_name:'',
         province:'',
-        kode_pos:'',
+        postal_code:'',
+        DetailAlamat:'',
 
     });
 
@@ -122,22 +127,29 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
-        if(name== 'city'){
+        if(name== 'city_name'){
             setForm({
                 ...form,
-                city: pilihAlamat.city_name,
+                city_name: pilihalamat.city_name,
             });
+        // } if (name=='DetailAlamat'){
+        //     setForm({
+        //         ...form,
+           
+        //     });
         }
+
+
         if(name== 'province'){
             setForm({
                 ...form,
-                province: pilihAlamat.province,
+                province: pilihalamat.province,
             });
         }
-        if(name== 'kode_pos'){
+        if(name== 'postal_code'){
             setForm({
                 ...form,
-                kode_pos: pilihAlamat.postal_code,
+                postal_code: pilihalamat.postal_code,
             });
         }
         if (name === 'Nama_Barang') {
@@ -159,15 +171,17 @@ const InputPesanan = ({ route }) => {
         } else if (!form.Nama_Kurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
-        }else if (!form.city){
+        }else if (!pilihalamat.city_name){
             setShowMessage('Pilih City');
             return; 
-        }else if (!form.province){
+        }else if (!pilihalamat.province){
             setShowMessage('Pilih Province')
             return;
-        }else if (!form.kode_pos) {
+        }else if (!pilihalamat.postal_code) {
             setShowMessage('Pilih Kode_Pos')
             return;
+        }else if (!form.DetailAlamat){
+            setShowMessage('Masukan Detail Alamat')
         }
 
 
@@ -176,13 +190,14 @@ const InputPesanan = ({ route }) => {
             const data = {
                 Nama_Barang: Nama_Barang,
                 Angkutan: selectedValue,
-                Alamat_Tujuan: form.Alamat_Tujuan,
+                // Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
-                city : pilihAlamat.city_name,
-                province:pilihAlamat.province,
-                kode_pos:pilihAlamat.postal_code
+                city_name : pilihalamat.city_name,
+                province:pilihalamat.province,
+                postal_code:pilihalamat.postal_code,
+                DetailAlamat:form.DetailAlamat,
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -246,6 +261,10 @@ const InputPesanan = ({ route }) => {
                         value={form.Alamat_Tujuan}
                         onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
                     /> */}
+
+
+             
+
                      <Text style={styles.text}>Alamat Tujuan</Text>
 
                   <Button 
@@ -259,9 +278,17 @@ const InputPesanan = ({ route }) => {
       
                   </Button>
 
-                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.city_name}</Text>
-                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.province}</Text>
-                  <Text style={[styles.input, styles.forminside]}>{pilihAlamat.postal_code}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.city_name}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
+                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
+
+                  <TextInput 
+                        style={[styles.input,styles.forminside]}
+                        placeholder="Masukan Detail Alamat Jalan.Rt/Rw"
+                        value={form.DetailAlamat}
+                        onChangeText={(text)=>handleInputChange('DetailAlamat',text)}
+                    />
+
                     {/* <TextInput
                         style={[styles.input, styles.forminside]}
                         placeholder="city"
@@ -334,8 +361,8 @@ const InputPesanan = ({ route }) => {
 
                     <Button
                         title="Submit"
-                        onPress={() => {
-                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && form.city && form.province && form.kode_pos) {
+                        onPress={() => {                                                          //tadi typo kenapa harus form.city_name !                    
+                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');
