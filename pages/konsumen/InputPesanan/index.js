@@ -18,6 +18,12 @@ const InputPesanan = ({ route }) => {
     const [selectedValue, setSelectedValue] = useState(null);
     // const [DetailAlamat,SetDetailAlamat]=useState('')
 
+    const [Lebar_cm, setLebar_cm]=useState({})
+
+    const [Tinggi_cm, setTinggi_cm]=useState({})
+
+    
+
 
     const handleNavigation = () => {
         navigation.navigate('RajaOngkir')
@@ -65,17 +71,38 @@ const InputPesanan = ({ route }) => {
     }, [pilihPaket]);
 
     useEffect(() => {
-      if (route.params.data && route.params.data.Nama_Barang) {
+      if (route.params.data && route.params.data.Nama_Barang && route.params.data.Lebar_cm && route.params.data.Tinggi_cm) {
           setNamaBarang(route.params.data.Nama_Barang);
+          setLebar_cm(route.params.data.Lebar_cm);
+          setTinggi_cm(route.params.data.Tinggi_cm);
           
           AsyncStorage.setItem('Nama_Barang', route.params.data.Nama_Barang);
+          AsyncStorage.setItem('Lebar_cm', route.params.data.Lebar_cm);
+          AsyncStorage.setItem('Tinggi_cm', route.params.data.Tinggi_cm);
       } else {
-  
-          AsyncStorage.getItem('Nama_Barang').then((value) => {
+
+
+        AsyncStorage.getItem('Nama_Barang'
+        ).then((value) => {
               if (value) {
                 setNamaBarang(value);
+         
               }
           });
+          AsyncStorage.getItem('Lebar_cm'
+          ).then((value) => {
+                if (value) {
+                  setLebar_cm(value);
+           
+                }
+            });
+            AsyncStorage.getItem('Tinggi_cm'
+            ).then((value) => {
+                  if (value) {
+                    setTinggi_cm(value);
+             
+                  }
+              });
       }
   }, [route.params.data]);
 
@@ -100,7 +127,10 @@ const InputPesanan = ({ route }) => {
 }, [route.params.data]);
 
     const [form, setForm] = useState({
-        Nama_Barang: Nama_Barang, 
+        Nama_Barang: Nama_Barang,
+        Lebar_cm : Lebar_cm,
+        Tinggi_cm: Tinggi_cm,
+ 
         // Alamat_Tujuan: '',
         Nama_Paket: '',
         Harga_Paket: '',
@@ -159,10 +189,16 @@ const InputPesanan = ({ route }) => {
         if (name == 'Angkutan'){
             setSelectedValue(value);
         }
+        if (name == 'Lebar_cm'){
+            setLebar_cm(value);
+        }
+        if (name == 'Tinggi_cm'){
+            setTinggi_cm(value);
+        }
     };
 
     const kirimPesanan = async () => {
-        if (!Nama_Barang) {
+        if (!Nama_Barang || !Lebar_cm || !Tinggi_cm) {
             setShowMessage('Masukkan Nama Barang');
             return;
         } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
@@ -189,6 +225,8 @@ const InputPesanan = ({ route }) => {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
+                Lebar_cm:Lebar_cm,
+                Tinggi_cm:Tinggi_cm,
                 Angkutan: selectedValue,
                 // Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
@@ -198,6 +236,7 @@ const InputPesanan = ({ route }) => {
                 province:pilihalamat.province,
                 postal_code:pilihalamat.postal_code,
                 DetailAlamat:form.DetailAlamat,
+        
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -239,6 +278,24 @@ const InputPesanan = ({ route }) => {
                     onChangeText={(text) => handleInputChange('Nama_Barang', text)}
                     editable={inputEnabled}
                 />
+                    <Text style={styles.text}>Lebar_cm</Text>
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="Lebar_cm"
+                        value={Lebar_cm}
+                        onChangeText={(number)=>handleInputChange('Lebar_cm',number)}
+                        keyboardType='numeric'
+                    />
+
+                    <Text style={styles.text}>Tinggi_cm</Text>
+                    <TextInput
+                        style={[styles.input, styles.forminside]}
+                        placeholder="Tinggi_cm"
+                        value={Tinggi_cm}
+                        onChangeText={(number)=>handleInputChange('Tinggi_cm',number)}
+                        keyboardType='numeric'
+                    />
+
                 <Button
                     title={inputEnabled ? 'Disable Input' : 'Enable Input'}
                     onPress={() => {
@@ -246,10 +303,12 @@ const InputPesanan = ({ route }) => {
                             setForm({
                                 ...form,
                                 Nama_Barang: Nama_Barang,
+                                Lebar_cm:Lebar_cm,
+                                Tinggi_cm:Tinggi_cm,
                             });
                         }
                         setInputEnabled(!inputEnabled);
-                    }}
+                    }}S
                 />
 
 
@@ -362,7 +421,7 @@ const InputPesanan = ({ route }) => {
                     <Button
                         title="Submit"
                         onPress={() => {                                                          //tadi typo kenapa harus form.city_name !                    
-                            if (Nama_Barang && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
+                            if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');
