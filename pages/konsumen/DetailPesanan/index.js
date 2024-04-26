@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+ 
+  const cetakPDF = async () => {
+    
+    let options = {
+      html: '<h1>PDF TEST</h1>',
+      fileName: 'test.pdf',
+      directory: 'Download',
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    // alert(file.filePath);
+    console.log(file.filePath);
+
+    if(cetakPDF){
+      console.log('Tombol Ditekan')
+    }
+  }
 
 
   useEffect(() => {
@@ -26,6 +45,11 @@ export default function DetailPesanan({ route }) {
     fetchData();
   }, []);
 
+
+async function createPDF() {
+
+
+}
   
   useEffect(() => {
     const fetchData = async () => {
@@ -104,6 +128,15 @@ export default function DetailPesanan({ route }) {
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
+
+        <TouchableOpacity onPress={cetakPDF}>
+
+        <View style={styles.buttonpdf}>
+          <Text style={styles.pdf}>
+             CETAK PDF
+          </Text>
+        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.form1}>
           <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
@@ -111,15 +144,17 @@ export default function DetailPesanan({ route }) {
           <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan Ke Alamat Tujuan| {pilihPaketData.Alamat_Tujuan}</Text>
           <Text style={styles.texttop}>🔜Paketan Berada Di : {pilihPaketData.paket_sekarang} </Text>
           <Text style={styles.texttop}>🔚Paketan Telah Sampai dan Telah Diserahkan Kepada Pihak Yang Bersangkutan | {pilihPaketData.penerimaan_paket}</Text>
-          <TouchableOpacity>
+      
           <View style={styles.selesai}>
               <Text style={styles.texttop}>
                 Pesanan Selesai !
               </Text>
           </View>    
-          </TouchableOpacity>
+
 
       </View>
+
+
 
 
       <Button
@@ -136,6 +171,18 @@ export default function DetailPesanan({ route }) {
 }
 
 const styles = StyleSheet.create({
+  pdf:{
+    color:'black',
+    fontWeight:'bold',
+    fontSize:11
+  },
+  buttonpdf:{
+    flexDirection:'row',
+    alignSelf:'flex-end',
+    backgroundColor:'#EDA01F',
+    padding:3,
+    borderRadius:3
+  },
   scrollView: {
     backgroundColor: 'pink',
     marginHorizontal: 20,

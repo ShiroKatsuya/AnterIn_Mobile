@@ -14,10 +14,10 @@ export default function KlasifikasiObjek() {
     const [Deskription, SetDeskription] = useState(null);
     const [Dedection, SetDedection] = useState(null);
 
-    const [lebar,Setlebar]=useState(null)
+    // const [lebar,Setlebar]=useState(null)
 
-    const [Lebar,SetLebar]= useState(null);
-    const [Panjang,SetPanjang]= useState(null);
+    const [Lebar_cm,setLebar_cm]= useState(null);
+    const [Tinggi_cm,setTinggi_cm]= useState(null);
 
 
     const generateUniquePictureName = () => {
@@ -59,8 +59,8 @@ export default function KlasifikasiObjek() {
                 Setlebar(responseJson.response.Lebar_cm)
                 // SetDedection(responseJson.response.Tinggi_cm)
 
-                SetLebar(responseJson.response.Lebar_cm);
-                SetPanjang(responseJson.response.Tinggi_cm);
+                setLebar_cm(responseJson.response.Lebar_cm);
+                setTinggi_cm(responseJson.response.Tinggi_cm);
 
 
             } else {
@@ -80,8 +80,17 @@ export default function KlasifikasiObjek() {
                 Lebar_cm : result,
                 Tinggi_cm:result
             } 
+
+
         }); 
-        console.log(result); 
+
+        if (result.data){
+            console.log(result); 
+
+        }else {
+            console.log('data tidak ditemukan')
+        }
+
     };
     
     const openCamera = () => {
@@ -156,16 +165,16 @@ export default function KlasifikasiObjek() {
                     <Text style={styles.textresul}>Nama : {Result}</Text>
                     <Text style={styles.textresul}>Klasifikasi : {Deskription}</Text>
                     <Text style={styles.textresul}>Percentase Detection Objek  : {Dedection}</Text>
-      <Text style={styles.textresul}>Lebar_cm  : {lebar}</Text>
+      {/* <Text style={styles.textresul}>Lebar_cm  : {lebar}</Text> */}
                   {/* <Text style={styles.textresul}>Percentase Detection Objek  : {Dedection}</Text> */}
 
-                    <Text style={styles.textresul}>Lebar : {Lebar} cm</Text>
-                    <Text style={styles.textresul}>Tinggi : {Panjang} cm</Text>
+                    <Text style={styles.textresul}>Lebar : {Lebar_cm} cm</Text>
+                    <Text style={styles.textresul}>Tinggi : {Tinggi_cm} cm</Text>
 
                 </View>
             </View>
 
-            <TouchableOpacity onPress={() => navigateToInputPesanan(Result)}>
+            <TouchableOpacity onPress={() => navigateToInputPesanan(Result,Lebar_cm,Tinggi_cm)}>
                 <View style={styles.button}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Kirim Sekarang !</Text>
                 </View>
