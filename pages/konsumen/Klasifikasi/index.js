@@ -10,13 +10,13 @@ const windowWidth = Dimensions.get('window').width;
 export default function KlasifikasiObjek() {
     const navigation = useNavigation();
     const [cameraData, setCameraData] = useState(null);
-    const [Result, SetResult] = useState(null);
+    const [Nama_Barang, SetNamaBarang] = useState(null);
     const [Deskription, SetDeskription] = useState(null);
     const [Dedection, SetDedection] = useState(null);
 
     // const [lebar,Setlebar]=useState(null)
 
-    const [Lebar_cm,setLebar_cm]= useState(null);
+    const [Lebar_cm, setLebar_cm] = useState(null);
     const [Tinggi_cm,setTinggi_cm]= useState(null);
 
 
@@ -52,11 +52,11 @@ export default function KlasifikasiObjek() {
                 console.log('Upload berhasil:', response.data);
           
                 let responseJson = response.data;
-                SetResult(responseJson.response.Nama_Barang);
+                SetNamaBarang(responseJson.response.Nama_Barang);
                 SetDeskription(responseJson.response.Deskripsi);
                 SetDedection(responseJson.response.Persentase);
 
-                Setlebar(responseJson.response.Lebar_cm)
+                // Setlebar(responseJson.response.Lebar_cm)
                 // SetDedection(responseJson.response.Tinggi_cm)
 
                 setLebar_cm(responseJson.response.Lebar_cm);
@@ -70,29 +70,19 @@ export default function KlasifikasiObjek() {
             console.error('Kesalahan mengunggah file:', error);
         }
     };
-
-    const navigateToInputPesanan = (result) => {
-        // Pastikan result dikirim sebagai objek dengan properti `response`
+    // console.log(Nama_Barang)
+    const navigateToInputPesanan = () => {
+        console.log('Navigating to InputPesanan with Lebar_cm ,Nama_Barang , Tinggi_cm:', Lebar_cm , Nama_Barang , Tinggi_cm);
+        // Ensure Lebar_cm is sent as an object with the property `Lebar_cm`
         navigation.navigate('InputPesanan', { 
             data: { 
-                response: result, 
-                Nama_Barang: result, 
-                Lebar_cm : result,
-                Tinggi_cm:result
+                Lebar_cm: Lebar_cm,
+                Nama_Barang : Nama_Barang,
+                Tinggi_cm: Tinggi_cm,
+               
             } 
-
-
         }); 
-
-        if (result.data){
-            console.log(result); 
-
-        }else {
-            console.log('data tidak ditemukan')
-        }
-
     };
-    
     const openCamera = () => {
         const options = {
             mediaType: 'photo',
@@ -162,7 +152,7 @@ export default function KlasifikasiObjek() {
 
             <View style={styles.resultcontainer}>
                 <View style={styles.result}>
-                    <Text style={styles.textresul}>Nama : {Result}</Text>
+                    <Text style={styles.textresul}>Nama : {Nama_Barang}</Text>
                     <Text style={styles.textresul}>Klasifikasi : {Deskription}</Text>
                     <Text style={styles.textresul}>Percentase Detection Objek  : {Dedection}</Text>
       {/* <Text style={styles.textresul}>Lebar_cm  : {lebar}</Text> */}
@@ -174,7 +164,7 @@ export default function KlasifikasiObjek() {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={() => navigateToInputPesanan(Result,Lebar_cm,Tinggi_cm)}>
+                        <TouchableOpacity onPress={navigateToInputPesanan}>
                 <View style={styles.button}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Kirim Sekarang !</Text>
                 </View>

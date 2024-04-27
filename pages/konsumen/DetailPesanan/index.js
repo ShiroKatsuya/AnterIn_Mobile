@@ -8,23 +8,37 @@ import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+
+  const htmlContent = `
+  <h1>Detail Pesanan Dari Pembelian :  ${pilihPaketData?.Nama_Paket}</h1>
+  <p><strong>Nama Barang:</strong> ${pilihPaketData?.Nama_Barang}</p>
+  <p><strong>Nama Kurir:</strong> ${pilihPaketData?.Nama_Kurir}</p>
+  <p><strong>Detail Alamat Tujuan:</strong> ${pilihPaketData?.DetailAlamat}</p>
+  <p><strong>Kota:</strong> ${pilihPaketData?.city_name}</p>
+  <p><strong>Provinsi:</strong> ${pilihPaketData?.province}</p>
+  <p><strong>Kode Pos:</strong> ${pilihPaketData?.postal_code}</p>
+  <p><strong>Harga Paket:</strong> ${pilihPaketData?.Harga_Paket}</p>
+  <p><strong>Status:</strong> ${pilihPaketData?.status}</p>
+  <p><strong>Tinggi</strong> ${pilihPaketData?.Tinggi_cm}</p>
+  <p><strong>Lebar</strong> ${pilihPaketData?.Lebar_cm}</p>
+`;
  
-  const cetakPDF = async () => {
+const cetakPDF = async () => {
+  const timestamp = Date.now();
+  const options = {
+    html: htmlContent,
+    fileName: `Pesanan_${timestamp}`,
+    directory: 'Documents',
     
-    let options = {
-      html: '<h1>PDF TEST</h1>',
-      fileName: 'test.pdf',
-      directory: 'Download',
-    };
-
-    let file = await RNHTMLtoPDF.convert(options);
-    // alert(file.filePath);
-    console.log(file.filePath);
-
-    if(cetakPDF){
-      console.log('Tombol Ditekan')
-    }
+  };
+  try {
+    const file = await RNHTMLtoPDF.convert(options);
+    console.log('PDF:', file.filePath);
+    alert('pesanan telah di cetak melalui pdf : ' + file.filePath);
+  } catch (error) {
+    console.log('Failed to create PDF');
   }
+}
 
 
   useEffect(() => {
@@ -73,7 +87,7 @@ async function createPDF() {
   if (!pilihPaketData) {
     return (
       <View style={styles.container}>
-        <Text>Data Kosong !</Text>
+        <Text>Loading !</Text>
       </View>
     );
   }
@@ -122,6 +136,8 @@ async function createPDF() {
         <Text style={styles.texttop}>Detail Alamat | {pilihPaketData.DetailAlamat}</Text>
         <Text style={styles.texttop}>Nama Paket | {pilihPaketData.Nama_Paket}</Text>
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
+        <Text style={styles.texttop}>Tinggi | {pilihPaketData.Tinggi_cm} cm</Text>
+        <Text style={styles.texttop}>Lebar | {pilihPaketData.Lebar_cm} cm</Text>
         
       </View>
       <View style={styles.form2}>

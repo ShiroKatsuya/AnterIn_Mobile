@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios'; 
+import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -14,35 +14,44 @@ const InputPesanan = ({ route }) => {
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
     const [inputEnabled, setInputEnabled] = useState(false);
-    const [Nama_Barang, setNamaBarang] = useState('');  
+
     const [selectedValue, setSelectedValue] = useState(null);
-    // const [DetailAlamat,SetDetailAlamat]=useState('')
 
-    const [Lebar_cm, setLebar_cm]=useState({})
+    const [Nama_Barang, setNamaBarang] = useState(null);
+    const [Lebar_cm, setLebar_cm] = useState(null);
+    const [Tinggi_cm, setTinggi_cm] = useState(null);
 
-    const [Tinggi_cm, setTinggi_cm]=useState({})
-
-    
-
+    console.log(Lebar_cm);
+    console.log(Tinggi_cm);
+    console.log(Nama_Barang);
 
     const handleNavigation = () => {
-        navigation.navigate('RajaOngkir')
+        navigation.navigate('RajaOngkir');
     }
 
     const placeholder = {
         label: 'Pilihan Penganggkutan...',
         value: null,
-      };
-    
-      const options = [
+    };
+
+    const options = [
         { label: 'Opsi 1', value: 'Mobil' },
         { label: 'Opsi 2', value: 'Motor' },
-      ];
+    ];
 
     useEffect(() => {
         setPilihPaket(route.params.pilih || {});
     }, [route.params.pilih]);
-    
+
+    useEffect(() => {
+        if (route.params.data) {
+            const { Nama_Barang, Tinggi_cm, Lebar_cm } = route.params.data;
+            setNamaBarang(Nama_Barang);
+            setTinggi_cm(Tinggi_cm);
+            setLebar_cm(Lebar_cm);
+        }
+    }, [route.params.data]);
+
     useEffect(() => {
         setPilihKurir(route.params.pilihkurir || {});
     }, [route.params.pilihkurir]);
@@ -53,16 +62,16 @@ const InputPesanan = ({ route }) => {
 
     useEffect(() => {
         if (route.params.pilihalamat) {
-          setpilihalamat(route.params.pilihalamat);
-          AsyncStorage.setItem('pilihalamat', JSON.stringify(route.params.pilihalamat));
+            setpilihalamat(route.params.pilihalamat);
+            AsyncStorage.setItem('pilihalamat', JSON.stringify(route.params.pilihalamat));
         } else {
-          AsyncStorage.getItem('pilihalamat').then((value) => {
-            if (value) {
-              setpilihalamat(JSON.parse(value));
-            }
-          });
+            AsyncStorage.getItem('pilihalamat').then((value) => {
+                if (value) {
+                    setpilihalamat(JSON.parse(value));
+                }
+            });
         }
-      }, [route.params.pilihalamat]);
+    }, [route.params.pilihalamat]);
 
     useEffect(() => {
         if (pilihPaket && Object.keys(pilihPaket).length !== 0) {
@@ -71,75 +80,31 @@ const InputPesanan = ({ route }) => {
     }, [pilihPaket]);
 
     useEffect(() => {
-      if (route.params.data && route.params.data.Nama_Barang && route.params.data.Lebar_cm && route.params.data.Tinggi_cm) {
-          setNamaBarang(route.params.data.Nama_Barang);
-          setLebar_cm(route.params.data.Lebar_cm);
-          setTinggi_cm(route.params.data.Tinggi_cm);
-          
-          AsyncStorage.setItem('Nama_Barang', route.params.data.Nama_Barang);
-          AsyncStorage.setItem('Lebar_cm', route.params.data.Lebar_cm);
-          AsyncStorage.setItem('Tinggi_cm', route.params.data.Tinggi_cm);
-      } else {
+        if (route.params.data && route.params.data.Angkutan) {
+            selectedValue(route.params.data.Angkutan);
 
-
-        AsyncStorage.getItem('Nama_Barang'
-        ).then((value) => {
-              if (value) {
-                setNamaBarang(value);
-         
-              }
-          });
-          AsyncStorage.getItem('Lebar_cm'
-          ).then((value) => {
+            AsyncStorage.setItem('Angkutan', route.params.data.Angkutan);
+        } else {
+            AsyncStorage.getItem('Angkutan').then((value) => {
                 if (value) {
-                  setLebar_cm(value);
-           
+                    setSelectedValue(value);
                 }
             });
-            AsyncStorage.getItem('Tinggi_cm'
-            ).then((value) => {
-                  if (value) {
-                    setTinggi_cm(value);
-             
-                  }
-              });
-      }
-  }, [route.params.data]);
-
-  
-
-
-
-  
-
-  useEffect(() => {
-    if (route.params.data && route.params.data.Angkutan) {
-        selectedValue(route.params.data.Angkutan);
-        
-        AsyncStorage.setItem('Angkutan', route.params.data.Angkutan);
-    } else {
-        AsyncStorage.getItem('Angkutan').then((value) => {
-            if (value) {
-                setSelectedValue(value);
-            }
-        });
-    }
-}, [route.params.data]);
+        }
+    }, [route.params.data]);
 
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang,
-        Lebar_cm : Lebar_cm,
+        Lebar_cm: Lebar_cm,
         Tinggi_cm: Tinggi_cm,
- 
-        // Alamat_Tujuan: '',
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
         Angkutan: null,
-        city_name:'',
-        province:'',
-        postal_code:'',
-        DetailAlamat:'',
+        city_name: '',
+        province: '',
+        postal_code: '',
+        DetailAlamat: '',
 
     });
 
@@ -149,7 +114,7 @@ const InputPesanan = ({ route }) => {
         if (name === 'Nama_Kurir') {
             setForm({
                 ...form,
-                Nama_Kurir: pilihKurir.nama, 
+                Nama_Kurir: pilihKurir.nama,
             });
         } else {
             setForm({
@@ -157,26 +122,20 @@ const InputPesanan = ({ route }) => {
                 [name]: value,
             });
         }
-        if(name== 'city_name'){
+        if (name == 'city_name') {
             setForm({
                 ...form,
                 city_name: pilihalamat.city_name,
             });
-        // } if (name=='DetailAlamat'){
-        //     setForm({
-        //         ...form,
-           
-        //     });
         }
 
-
-        if(name== 'province'){
+        if (name == 'province') {
             setForm({
                 ...form,
                 province: pilihalamat.province,
             });
         }
-        if(name== 'postal_code'){
+        if (name == 'postal_code') {
             setForm({
                 ...form,
                 postal_code: pilihalamat.postal_code,
@@ -186,13 +145,13 @@ const InputPesanan = ({ route }) => {
             setNamaBarang(value);
         }
 
-        if (name == 'Angkutan'){
+        if (name == 'Angkutan') {
             setSelectedValue(value);
         }
-        if (name == 'Lebar_cm'){
+        if (name == 'Lebar_cm') {
             setLebar_cm(value);
         }
-        if (name == 'Tinggi_cm'){
+        if (name == 'Tinggi_cm') {
             setTinggi_cm(value);
         }
     };
@@ -207,16 +166,16 @@ const InputPesanan = ({ route }) => {
         } else if (!form.Nama_Kurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
-        }else if (!pilihalamat.city_name){
+        } else if (!pilihalamat.city_name) {
             setShowMessage('Pilih City');
-            return; 
-        }else if (!pilihalamat.province){
+            return;
+        } else if (!pilihalamat.province) {
             setShowMessage('Pilih Province')
             return;
-        }else if (!pilihalamat.postal_code) {
+        } else if (!pilihalamat.postal_code) {
             setShowMessage('Pilih Kode_Pos')
             return;
-        }else if (!form.DetailAlamat){
+        } else if (!form.DetailAlamat) {
             setShowMessage('Masukan Detail Alamat')
         }
 
@@ -225,18 +184,17 @@ const InputPesanan = ({ route }) => {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
-                Lebar_cm:Lebar_cm,
-                Tinggi_cm:Tinggi_cm,
+                Lebar_cm: Lebar_cm,
+                Tinggi_cm: Tinggi_cm,
                 Angkutan: selectedValue,
-                // Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
-                Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
-                city_name : pilihalamat.city_name,
-                province:pilihalamat.province,
-                postal_code:pilihalamat.postal_code,
-                DetailAlamat:form.DetailAlamat,
-        
+                Nama_Kurir: form.Nama_Kurir,
+                city_name: pilihalamat.city_name,
+                province: pilihalamat.province,
+                postal_code: pilihalamat.postal_code,
+                DetailAlamat: form.DetailAlamat,
+
             };
 
             const response = await axios.post(`${baseUrl.url}/inputpesanan`, data, {
@@ -253,187 +211,151 @@ const InputPesanan = ({ route }) => {
     return (
 
         <View style={styles.container}>
-                    <ScrollView style={styles.scrollView}>
-            <View style={styles.headerinput}>
-                <Text style={styles.text}>
-                    Cari Nama Barang, Alamat Tujuan, Jenis Paket, atau Kurir yang Ingin Dicek
-                </Text>
-                <View style={styles.form}>
+            <ScrollView style={styles.scrollView}>
+                <View style={styles.headerinput}>
+                    <Text style={styles.text}>
+                        Cari Nama Barang, Alamat Tujuan, Jenis Paket, atau Kurir yang Ingin Dicek
+                    </Text>
+                    <View style={styles.form}>
 
-                  <View style={styles.kamera}>
-                <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
-                <Image source={require('../../img/camera.png')} style={styles.camera} />
-                    <Text style={styles.txt}>Scan Ulang Disini !</Text>
-                </TouchableOpacity>
-                </View>
-
-
-
-
-                    <Text style={styles.text}>Nama Barang</Text>
-                                <TextInput
-                    style={[styles.input, styles.forminside]}
-                    placeholder="Nama Barang"
-                    value={inputEnabled ? form.Nama_Barang : Nama_Barang}
-                    onChangeText={(text) => handleInputChange('Nama_Barang', text)}
-                    editable={inputEnabled}
-                />
-                    <Text style={styles.text}>Lebar_cm</Text>
-                    <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="Lebar_cm"
-                        value={Lebar_cm}
-                        onChangeText={(number)=>handleInputChange('Lebar_cm',number)}
-                        keyboardType='numeric'
-                    />
-
-                    <Text style={styles.text}>Tinggi_cm</Text>
-                    <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="Tinggi_cm"
-                        value={Tinggi_cm}
-                        onChangeText={(number)=>handleInputChange('Tinggi_cm',number)}
-                        keyboardType='numeric'
-                    />
-
-                <Button
-                    title={inputEnabled ? 'Disable Input' : 'Enable Input'}
-                    onPress={() => {
-                        if (!inputEnabled) {
-                            setForm({
-                                ...form,
-                                Nama_Barang: Nama_Barang,
-                                Lebar_cm:Lebar_cm,
-                                Tinggi_cm:Tinggi_cm,
-                            });
-                        }
-                        setInputEnabled(!inputEnabled);
-                    }}S
-                />
-
-
-
-                    {/* <Text style={styles.text}>Alamat Tujuan</Text> */}
-                    {/* <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="Alamat Tujuan"
-                        value={form.Alamat_Tujuan}
-                        onChangeText={(text) => handleInputChange('Alamat_Tujuan', text)}
-                    /> */}
-
-
-             
-
-                     <Text style={styles.text}>Alamat Tujuan</Text>
-
-                  <Button 
-
-                    onPress={()=>{
-                        handleNavigation()
-                    }}
-                    title="Pilih Alamat Otomatis Disini"
-                  >
-       
-      
-                  </Button>
-
-                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.city_name}</Text>
-                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
-                  <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
-
-                  <TextInput 
-                        style={[styles.input,styles.forminside]}
-                        placeholder="Masukan Detail Alamat Jalan.Rt/Rw"
-                        value={form.DetailAlamat}
-                        onChangeText={(text)=>handleInputChange('DetailAlamat',text)}
-                    />
-
-                    {/* <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="city"
-                        value={form.city}
-                        onChangeText={(text) => handleInputChange('city', text)}
-                    />
-                        <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="province"
-                        value={form.province}
-                        onChangeText={(text) => handleInputChange('province', text)}
-                    />
-
-                    <TextInput
-                        style={[styles.input, styles.forminside]}
-                        placeholder="kode_pos"
-                        value={form.kode_pos}
-                        onChangeText={(text) => handleInputChange('kode_pos', text)}
-                    /> */}
-
-
-                    <Text style={styles.text}>Jenis Paket</Text>
-                    <View>
-                        <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Nama_Paket}</Text>
-                        <Text style={styles.text}>Harga</Text>
-                        <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Harga_Paket}</Text>
-                    </View>
-                    <Text style={styles.text}>Kurir</Text>
-                    <View style={styles.pilihkurir}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
-                            <View style={styles.logo}>
-                                <Image source={require('../../img/SiCepat.png')} style={styles.logo1} />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'J&T')}>
-                            <View style={styles.logo}>
-                                <Image source={require('../../img/J&T.png')} style={styles.logo1} />
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'JNE')}>
-                            <View style={styles.logo}>
-                                <Image source={require('../../img/JNE.png')} style={styles.logo2} />
-                            </View>
-                        </TouchableOpacity>
-                        <View style={styles.logo}>
-                            <Text>Logo Here</Text>
+                        <View style={styles.kamera}>
+                            <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
+                                <Image source={require('../../img/camera.png')} style={styles.camera} />
+                                <Text style={styles.txt}>Scan Ulang Disini !</Text>
+                            </TouchableOpacity>
                         </View>
-                    </View>
-                    <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
-                    <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
-                    <Button
-                        title="Simpan Pilihan Kurir"
-                        onPress={() => {
-                            handleInputChange('Nama_Kurir', form.Nama_Kurir);
-                            alert('Data kurir berhasil disimpan!');
-                        }}
-                        disabled={!pilihKurir.nama}
-                    />
-                <View>
-                                {/* <Text>Select an option:</Text> */}
-                    <RNPickerSelect
-                  placeholder={placeholder}
-                  items={options}
-                  onValueChange={(value) => setSelectedValue(value)}
-                  onTextChange={(text) => handleInputChange('Angkutan', text)}
-                  value={selectedValue} 
-                    />
-                    {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
-                </View>
 
-                    <Button
-                        title="Submit"
-                        onPress={() => {                                                          //tadi typo kenapa harus form.city_name !                    
-                            if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
-                                kirimPesanan();
-                                alert('Data berhasil dikirim!');
-                                navigation.navigate('Checkout');
-                            } else {
-                                alert('Harap lengkapi semua form sebelum submit dan jangan lupa simpan pilihan kurir');
-                            }
-                        }}
-                        color="black" 
-                    />
-                    {showMessage && <Text>{showMessage}</Text>}
+                        <Text style={styles.text}>Nama Barang</Text>
+                        <TextInput
+                            style={[styles.input, styles.forminside]}
+                            placeholder="Nama Barang"
+                            value={inputEnabled ? form.Nama_Barang : Nama_Barang}
+                            onChangeText={(text) => handleInputChange('Nama_Barang', text)}
+                            editable={inputEnabled}
+                        />
+                                 <Text style={styles.text}>Lebar Barang</Text>
+                            <TextInput
+                            style={[styles.input, styles.forminside]}
+                            placeholder="Lebar"
+                            value={inputEnabled ? (form.Lebar_cm ? form.Lebar_cm.toString() : '') : (Lebar_cm ? Lebar_cm.toString() : '')}
+                            onChangeText={(text) => handleInputChange('Lebar_cm', text)}
+                            editable={inputEnabled}
+                            keyboardType="numeric"
+                        />
+                                         <Text style={styles.text}>Tinggi Barang</Text>
+                                         <TextInput
+                            style={[styles.input, styles.forminside]}
+                            placeholder="Tingi_cm"
+                            value={inputEnabled ? (form.Tinggi_cm ? form.Tinggi_cm.toString() : '') : (Tinggi_cm ? Tinggi_cm.toString() : '')}
+                            onChangeText={(text) => handleInputChange('Tinggi_cm', text)}
+                            editable={inputEnabled}
+                            keyboardType="numeric"
+                        />
+
+    
+
+                        <Button
+                            title={inputEnabled ? 'Disable Input' : 'Enable Input'}
+                            onPress={() => {
+                                if (!inputEnabled) {
+                                    setForm({
+                                        ...form,
+                                        Nama_Barang: Nama_Barang,
+                                        Lebar_cm: Lebar_cm,
+                                        Tinggi_cm: Tinggi_cm,
+                                    });
+                                }
+                                setInputEnabled(!inputEnabled);
+                            }}
+                        />
+
+                        <Text style={styles.text}>Alamat Tujuan</Text>
+
+                        <Button
+
+                            onPress={() => {
+                                handleNavigation()
+                            }}
+                            title="Pilih Alamat Otomatis Disini"
+                        >
+
+                        </Button>
+
+                        <Text style={[styles.input, styles.forminside]}>{pilihalamat.city_name}</Text>
+                        <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
+                        <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
+
+                        <TextInput
+                            style={[styles.input, styles.forminside]}
+                            placeholder="Masukan Detail Alamat Jalan.Rt/Rw"
+                            value={form.DetailAlamat}
+                            onChangeText={(text) => handleInputChange('DetailAlamat', text)}
+                        />
+
+                        <Text style={styles.text}>Jenis Paket</Text>
+                        <View>
+                            <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Nama_Paket}</Text>
+                            <Text style={styles.text}>Harga</Text>
+                            <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Harga_Paket}</Text>
+                        </View>
+                        <Text style={styles.text}>Kurir</Text>
+                        <View style={styles.pilihkurir}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Kurir')}>
+                                <View style={styles.logo}>
+                                    <Image source={require('../../img/SiCepat.png')} style={styles.logo1} />
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'J&T')}>
+                                <View style={styles.logo}>
+                                    <Image source={require('../../img/J&T.png')} style={styles.logo1} />
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleInputChange('Nama_Kurir', 'JNE')}>
+                                <View style={styles.logo}>
+                                    <Image source={require('../../img/JNE.png')} style={styles.logo2} />
+                                </View>
+                            </TouchableOpacity>
+                            <View style={styles.logo}>
+                                <Text>Logo Here</Text>
+                            </View>
+                        </View>
+                        <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
+                        <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
+                        <Button
+                            title="Simpan Pilihan Kurir"
+                            onPress={() => {
+                                handleInputChange('Nama_Kurir', form.Nama_Kurir);
+                                alert('Data kurir berhasil disimpan!');
+                            }}
+                            disabled={!pilihKurir.nama}
+                        />
+                        <View>
+                            <RNPickerSelect
+                                placeholder={placeholder}
+                                items={options}
+                                onValueChange={(value) => setSelectedValue(value)}
+                                onTextChange={(text) => handleInputChange('Angkutan', text)}
+                                value={selectedValue}
+                            />
+                            {selectedValue && <Text style={[styles.input, styles.forminside]}>Pilihan Penganggutan : {selectedValue}</Text>}
+                        </View>
+
+                        <Button
+                            title="Submit"
+                            onPress={() => {
+                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
+                                    kirimPesanan();
+                                    alert('Data berhasil dikirim!');
+                                    navigation.navigate('Checkout');
+                                } else {
+                                    alert('Harap lengkapi semua form sebelum submit dan jangan lupa simpan pilihan kurir');
+                                }
+                            }}
+                            color="black"
+                        />
+                        {showMessage && <Text>{showMessage}</Text>}
+                    </View>
                 </View>
-            </View>
             </ScrollView>
         </View>
     );
