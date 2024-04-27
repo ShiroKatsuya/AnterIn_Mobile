@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+// import * as FileSystem
+
+
 import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+  const DownloadFile = async () => {
 
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,6 +88,8 @@ export default function DetailPesanan({ route }) {
     }
   };
 }
+
+
 
   return (
 
