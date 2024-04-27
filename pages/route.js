@@ -16,5 +16,7 @@ import Rating from "./konsumen/Rating";
 import baseUrl from "./baseUrl";
 import Maps from "./konsumen/OpenMaps";
 import RajaOngkir from "./konsumen/RajaOngkir";
-export {Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir}
+import DaftarKurir from "./Kurir/DaftarKurir";
+import LoginKurir from "./Kurir/LoginKurir";
+export {LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir}
 
