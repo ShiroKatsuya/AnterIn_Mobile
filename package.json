@@ -23,6 +23,7 @@
     "link": "^2.1.0",
     "react": "18.2.0",
     "react-native": "^0.73.6",
+    "react-native-fs": "^2.20.0",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-html-to-pdf": "^0.12.0",
     "react-native-image-picker": "^7.1.2",
