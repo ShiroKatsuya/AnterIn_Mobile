@@ -147,7 +147,7 @@ function App() {
           options={{
             ...headerOption,
             HeaderCustome: (props) => <headerTitle {...props} />, 
-            title: "DaftarKurir",
+            title: "Daftar Sebagai Kurir",
           }}
         />
 
@@ -157,7 +157,7 @@ function App() {
           options={{
             ...headerOption,
             HeaderCustome: (props) => <headerTitle {...props} />, 
-            title: "DaftarKurir",
+            title: "Login Sebagai Kurir",
           }}
         />
         
