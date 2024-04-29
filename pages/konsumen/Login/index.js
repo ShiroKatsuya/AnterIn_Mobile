@@ -119,9 +119,14 @@ export default function Login() {
                             color="#EDA01F"
                             onPress={handleLoginPress}
                         />
+                        <View style={styles.loginakun}>
                         <TouchableOpacity onPress={() => navigation.navigate('Daftar')}>
                             <Text style={styles.daftar}>Daftar</Text>
                         </TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate('LoginKurir')}>
+                        <Text style={styles.daftar} > Login Sebagai Kurir?</Text>
+                        </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={styles.links}>
                         <Text style={styles.link}>Lupa Password?</Text>
@@ -136,6 +141,10 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+    loginakun:{
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
     foto: {
         justifyContent: 'center',
         alignItems: 'center'
