@@ -4,8 +4,20 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../baseUrl';
+import HomeKurir from '../Home';
 export default function LoginKurir() {
   const navigation = useNavigation();
+  
+  const handleKurirDashboard = () => {
+    
+    navigation.navigate('KurirMaintab');
+    if (handleKurirDashboard){
+        console.log('Tombol Ditekan');
+    }else{
+        console.log('Err')
+    }
+
+  };
   return (
     <>  
 
@@ -55,6 +67,7 @@ export default function LoginKurir() {
                     title="Login"
                     color="#EDA01F"
                     // onPress={handleLoginPress}
+                    onPress={handleKurirDashboard}
                 />
                 <View style={styles.loginakun}>
                 <TouchableOpacity onPress={() => navigation.navigate('DaftarKurir')}>
@@ -70,8 +83,8 @@ export default function LoginKurir() {
             </View>
         </View>
     </View>
-    <Text style={{  backgroundColor: '#0B111F', padding: 10 }}>
-        {/* Login button content */}
+    <Text style={{  backgroundColor: '#0B111F', padding: 10 }} >
+   
     </Text>
 </>
   )
