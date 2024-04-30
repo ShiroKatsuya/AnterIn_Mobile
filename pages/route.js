@@ -18,5 +18,12 @@ import Maps from "./konsumen/OpenMaps";
 import RajaOngkir from "./konsumen/RajaOngkir";
 import DaftarKurir from "./Kurir/DaftarKurir";
 import LoginKurir from "./Kurir/LoginKurir";
-export {LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir}
+import HomeKurir from "./Kurir/Home";
+import Pengumuman from "./Kurir/Pengumuman";
+import MapsKurir from "./Kurir/MapsKurir";
+import RiwayatPemesanan from "./Kurir/Riwayat";
+import Gaji from "./Kurir/Gaji";
+import ChattingKonsumen from "./Kurir/ChattingKonsumen";
+import ProfileKurir from "./Kurir/ProfileKurir";
+export {ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
 
