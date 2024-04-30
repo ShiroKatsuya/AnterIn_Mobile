@@ -187,8 +187,11 @@ const tambahAlamat = async () => {
         </View>
         {showMessage && <Text>{showMessage}</Text>}
 
-      
+
       </View>
+
+    </View>
+    <View style={{ backgroundColor: '#0B111F', padding: 20 }}>
 
     </View>
     </>

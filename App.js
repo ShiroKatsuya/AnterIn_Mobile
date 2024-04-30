@@ -6,9 +6,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, } from './pages/route'; 
-
+import Icon from 'react-native-vector-icons/Ionicons';  
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,39 +38,30 @@ function MainTab() {
 
   return (
     <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        let sizes = 30;
-
-        if (route.name === 'Home') {
-          iconName = focused
-            // ? 'ios-information-circle'
-            // : 'ios-information-circle-outline';
-        } else if (route.name === 'Transaksi') {
-          iconName = focused 
-          // ? 'ios-list' : 'ios-list-outline';
-        }else if (route.name=='Profile'){
-                    iconName = focused 
-                    // ? 'ios-list' : 'ios-list-outline';
-        }else if (route.name == 'Rating'){
-          iconName = focused 
-        }
-
-        // You can return any component that you like here!
-        return <Ionicons name={iconName} size={sizes} color={color} />;
-      },
-      tabBarActiveTintColor: 'tomato',
-      tabBarInactiveTintColor: 'gray',
-    })}
-  >
+      screenOptions={({ route }) => ({
+        // headerShown: false,
+        tabBarStyle: {
+          // height: 90,
+          // paddingHorizontal: 5,
+          paddingTop: 0,
+          backgroundColor: '#0B111F',
+          position: 'absolute',
+          borderTopWidth: 0,
+        },
+      })}
+    >
       <Tab.Screen
+ 
         name="Home"
         component={Dashboard}
         options={{
-   
           ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
+          headerTitle: (props) => <HeaderCustome {...props} />,
+          title : "Home" ,
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
            <Tab.Screen
@@ -80,7 +71,11 @@ function MainTab() {
    
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Rating",
+          title:"Rating",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
+          )
+
         }}
       />
       <Tab.Screen
@@ -88,8 +83,12 @@ function MainTab() {
         component={Transaksi}
         options={{
           ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Checkout Sekarang !",
+          HeaderCustome: (props) => <headerTitle {...props}  />, 
+          title:"Checkout Sekarang !",
+          tabBarLabel: 'Transaksi',
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn/pages/img/Cart.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
 
@@ -102,6 +101,9 @@ function MainTab() {
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
 
