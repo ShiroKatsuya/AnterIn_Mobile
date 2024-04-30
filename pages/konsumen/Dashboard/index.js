@@ -13,7 +13,9 @@ const Dashboard = () => {
   const [ambilData, setAmbilData] = useState([]);
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
   const [currentLocation,setCurrentLocation]=useState(null);
+  const [lokasi,setAddress]=useState('');
 
+  console.log(lokasi)
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -24,9 +26,9 @@ const Dashboard = () => {
     }, 2000);
   }, []);
 
-  const granted = async () => {
+  const Akseslokasi = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
+      const akseslokasi = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
           title: 'Location Access Required',
@@ -36,7 +38,7 @@ const Dashboard = () => {
           buttonPositive: 'OK',
         },
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the location');
         // granted();
       } else {
@@ -48,18 +50,25 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    granted().then(() => {
+    Akseslokasi().then(() => {
       Geolocation.getCurrentPosition(
         position => {
-          const { latitude, longitude ,heading } = position.coords;
+          const { latitude, longitude ,accuracy,altitude } = position.coords;
           setCurrentLocation({ latitude, longitude });
           // console.log(latitude, longitude);
+          const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          fetch(url).then(res=>res.json()).then(data=>{
+            // console.log(data)
+            setAddress(data)
+          })
           console.log('Latitude : ',latitude)
           console.log('Longtitude : ',longitude)
-          // console.log('Longtitude : ',heading)
+          // console.log('Accuracy : ',accuracy)
+          // console.log('Altitude : ',altitude)
+
         },
         error => {
-          console.error('Error obtaining location:', error.message);
+          console.error('Error Lokasi:', error.message);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
       );
@@ -138,13 +147,18 @@ const Dashboard = () => {
 
       {/* Card Info */}
           <View style={styles.cardInfo}>
-      {ambilDataProfile && 
+      {ambilDataProfile && lokasi &&
         <View style={styles.cardInfoRow}>
           <Image source={require('../../img/logo.png')} style={styles.logo} />
           <View style={styles.userDetails}>
             <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
-            <Text style={styles.userName}>{ambilDataProfile.alamat}</Text>
+            {/* <Text style={styles.userName}>{ambilDataProfile.alamat}</Text> */}
             <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
+            {lokasi.address.village && <Text style={styles.userPhone}>{lokasi.address.village}</Text>}
+            {lokasi.address.town && <Text style={styles.userPhone}>{lokasi.address.town}</Text>}
+            {lokasi.address.city && <Text style={styles.userPhone}>{lokasi.address.city}</Text>}
+
+
   
 
           </View>

@@ -83,7 +83,11 @@ export default function DaftarKurir() {
           {/* </TouchableOpacity> */}
         </View>
       </View>
+
     </View>
+    <Text style={{  backgroundColor: '#0B111F', padding: 10 }}>
+        {/* Login button content */}
+    </Text>
     </>
   )
 }
