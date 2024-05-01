@@ -1,12 +1,154 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,Pressable,Image,PermissionsAndroid} from 'react-native'
+// import React from 'react'
+import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from '../../baseUrl';
+import Geolocation from '@react-native-community/geolocation';
 
 export default function MapsKurir() {
+  const [ambilData, setAmbilData] = useState({});
+  const [availableApps, setAvailableApps] = useState([]);
+  const [lokasi,setAddress]=useState('');
+  const [currentLocation,setCurrentLocation]=useState(null);
+  console.log(currentLocation)
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       const response = await axios.get(`${baseUrl.url}/lokasi`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       });
+  //       setAmbilData(response.data.message);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  const Akseslokasi = async () => {
+    try {
+      const akseslokasi = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Access Required',
+          message: 'This app needs to access your location',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        // granted();
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    Akseslokasi().then(() => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude ,accuracy,altitude } = position.coords;
+          // setCurrentLocation({ latitude, longitude });
+          // console.log(latitude, longitude);
+          const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          fetch(url).then(res=>res.json()).then(data=>{
+            // console.log(data)
+            setAddress(data)
+          })
+          setCurrentLocation({latitude,longitude});
+          console.log('Latitude : ',latitude)
+          console.log('Longtitude : ',longitude)
+          // console.log('Accuracy : ',accuracy)
+          // console.log('Altitude : ',altitude)
+
+        },
+        error => {
+          console.error('Error Lokasi:', error.message);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    });
+  }, []);
+
+
+
+  useEffect(() => {
+    if (currentLocation?.latitude && currentLocation?.longitude) {
+      (async () => {
+        try {
+          const result = await getApps({
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+            title: 'Politeknik Negeri Indramayu',
+            googleForceLatLon: true,
+            alwaysIncludeGoogle: true,
+            appsWhiteList: ['google-maps'],
+          });
+          setAvailableApps(result);
+        } catch (error) {
+          console.error(error);
+        }
+      })();
+    }
+  }, [currentLocation]);
+
+
   return (
-    <View>
-      <Text>MapsKurir</Text>
+    <View style={styles.container}>
+      <View style={styles.maps}>
+
+    <React.Fragment>
+      {availableApps.map(({icon, name, id, open}) => (
+        <Pressable key={id} onPress={open}>
+          <Image source={icon} />
+          {/* <Text>{name}</Text> */}
+        </Pressable>
+      ))}
+    </React.Fragment>
+    <Text style={styles.texthead}>
+          OPEN MAPS DISINI !!!
+        </Text>
     </View>
-  )
+    <Text style={{ marginTop: 10, backgroundColor: '#0B111F', padding: 10 }}>
+                {/* Login button content */}
+            </Text>
+    </View>
+         
+  );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  texthead:{
+    marginTop:20,
+    alignSelf:'center',
+    fontWeight:'bold',
+    // animation: 'fade 5s',
+  },
+    maps:{
+      justifyContent:'center',
+      alignSelf:'center',
+      flex:1,
+    },
+    container: {
+        flex: 1,
+        backgroundColor:'#EDA01F'
+    },
+    map:{
+        width: '100%',
+        height: '100%',
+    },
+});
+
+
