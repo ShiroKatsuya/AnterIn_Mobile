@@ -5,16 +5,14 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { baseUrl } from '../../baseUrl';
 
-export default function RiwayatPemesanan() {
-  const navigation = useNavigation();
-  const handlePress = () => {
-    navigation.navigate('DetailPemesanan');
-  };
+export default function DetailPemesanan() {
+  navigataion = useNavigation()
+  const handlePress = ()=>{
+    navigataion.navigate('DetailPemansanByUser')
+  }
   return (
     <>
       <SafeAreaView style={styles.container}>
-
-       
       
         <View style={{ marginBottom: 40 }}>
           <View style={styles.header}>
@@ -24,17 +22,19 @@ export default function RiwayatPemesanan() {
             <Text style={styles.text}>Selesai</Text>
           </View>
           <ScrollView style={styles.scrollView}>
-
           <View>
             <View style={styles.search}>
-              <Text style={{ color: 'black' }}>Cari nama produk yang dikirim</Text>
+              <Text style={{ color: 'black' }}>Cari nama produk yang dipesan</Text>
             </View>
-    
+            
+   
+       
+ 
                   <View style={styles.proses}>
-                    <Text style={styles.textproses}>Produk Yang Sedang Dipesan</Text>
+                    <Text style={styles.textproses}>Produk yang Sedang Dipesan</Text>
                     <View style={styles.jenispaket}>
-                      <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
-                      <Text style={styles.paketcepat}>Indramayu</Text>
+                      <Image source={require('../../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
+                      <Text style={styles.paketcepat}>Paket Ekonomis</Text>
                     </View>
                     <View style={styles.produkproses}>
                       <TouchableOpacity
@@ -47,9 +47,15 @@ export default function RiwayatPemesanan() {
                         </Text>
                       </TouchableOpacity>
                     </View>
-      
+                    <View style={styles.mobilcontainer}>
+                      <Image source={require('../../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil} />
+                      <Text style={styles.infopaket}>
+                        Paket Sedang Diproses
+                      </Text>
+                    </View>
                   </View>
 
+              
             </View>
   
         
@@ -57,9 +63,10 @@ export default function RiwayatPemesanan() {
           </ScrollView>
         </View>
 
+
+   
    
       </SafeAreaView>
-         
       <View style={{  backgroundColor: '#0B111F', padding: 20 }} >
    
    </View>
@@ -69,8 +76,8 @@ export default function RiwayatPemesanan() {
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
- paketcepat:{
-    textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold' , fontSize:18,marginLeft:20
+  paketcepat:{
+    textAlign:'center',color:'white' ,marginTop:20 , fontWeight:'bold'
   },
   scrollView: {
     // backgroundColor: 'pink',
@@ -110,13 +117,11 @@ const styles = StyleSheet.create({
     jenispaket:{
         backgroundColor:'#000000',
         padding:20,
-        
-        // paddingBottom:50,
-        // marginTop:20,
-        // marginLeft:40,
-        borderRadius:10,
+        width:230,
+        paddingBottom:50,
         marginTop:20,
-        padding:100
+        marginLeft:40,
+        borderRadius:30
 
 
     },
@@ -125,8 +130,7 @@ const styles = StyleSheet.create({
         marginTop:20,
         backgroundColor:'#0B111F',
         padding:10,
-      
-        // paddingBottom:30,
+        paddingBottom:30,
         borderColor:'black', // Added border color
         borderWidth:1,
         shadowColor: '#000',
@@ -145,9 +149,8 @@ const styles = StyleSheet.create({
         marginLeft:20,
         marginTop:20,
         // marginRight:40,
-        flexDirection: 'row',
-        fontWeight:'bold' , 
-        fontSize:15
+        flexDirection: 'row'
+        
     },
     textdetail:{
         color:'white',
@@ -162,7 +165,6 @@ const styles = StyleSheet.create({
         textAlign:'center',
         // width:200,
         // height:200,
-        marginTop:-30
 
     },
     

@@ -25,5 +25,9 @@ import RiwayatPemesanan from "./Kurir/Riwayat";
 import Gaji from "./Kurir/Gaji";
 import ChattingKonsumen from "./Kurir/ChattingKonsumen";
 import ProfileKurir from "./Kurir/ProfileKurir";
-export {ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
+import TambahAlamatKurir from "./Kurir/ProfileKurir/Tambah";
+import DetailPemesanan from "./Kurir/Riwayat/DetailPemesanan";
+import DetailPemansanByUser from "./Kurir/Riwayat/DetailPemansanByUser";
+import RincianPendapatan from "./Kurir/Riwayat/RincianPendapatan";
+export {RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
 
