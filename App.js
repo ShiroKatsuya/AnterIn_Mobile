@@ -7,8 +7,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, } from './pages/route'; 
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, } from './pages/route'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,64 +41,57 @@ function KurirMaintab() {
   const navigation = useNavigation(); 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: {
-          backgroundColor: '#0B111F',
-          position: 'absolute',
-          borderTopWidth: 0,
-          // fontWeight:3
-          // fontSize:1,
-
-          
-          
-        },
-      })}
+    screenOptions={({ route }) => ({
+      // headerShown: true,
+      tabBarStyle: {
+        // height: 90,
+        // paddingHorizontal: 5,
+        paddingTop: 0,
+        backgroundColor: '#0B111F',
+        position: 'absolute',
+        borderTopWidth: 0,
+      },
+    })}
     >
-      <MaintabKurir.Screen
-        name="HomeKurir"
-        component={HomeKurir}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props}  />, 
-          title:"Home Kurir",
-          tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 45, height: 45, tintColor: color }} />
-          ),
-
-
-        }}
+      <Tab.Screen
+       
+       name="HomeKurir"
+       component={HomeKurir}
+       options={{
+        ...headerOption,
+        HeaderCustome: (props) => <headerTitle {...props} />, 
+        title: "Home",
+        tabBarIcon: ({ color }) => (
+          <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+        )
+      }}
       />
-            <MaintabKurir.Screen
-        name="ProfileKurir"
-        component={ProfileKurir}
-        options={{
-          ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props}  />, 
-          title:"Profile",
-          tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 45, height: 45, tintColor: color }} />
-          ),
-
-
-        }}
+      <Tab.Screen
+      
+      name="ProfileKurir"
+      component={ProfileKurir}
+      options={{
+        ...headerOption,
+        HeaderCustome: (props) => <headerTitle {...props} />, 
+        title: "Profile",
+        tabBarIcon: ({ color }) => (
+          <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+        )
+      }}
       />
+      <Tab.Screen
 
-
-<MaintabKurir.Screen
         name="Pengumuman"
         component={Pengumuman}
         options={{
-   
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
-          title:"Pengumuman",
+          title: "Pengumuman",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
+            <Image source={require('../AnterIn/pages/img/Rating.png')} style={{ width: 50, height: 50, tintColor: color }} />
           )
-
         }}
       />
-      
     </Tab.Navigator>
   );
 }
@@ -384,6 +378,25 @@ function App() {
                   title: "List Pemesanan Konsumen",
                 }}
               />
+                                    <Tab.Screen
+                name="DetailPemansanByUser"
+                component={DetailPemansanByUser}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemansan By User",
+                }}
+              />
+
+<Tab.Screen
+                name="RincianPendapatan"
+                component={RincianPendapatan}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemansan By User",
+                }}
+              />
                             <Tab.Screen
                 name="MapsKurir"
                 component={MapsKurir}
@@ -393,6 +406,25 @@ function App() {
                   title: "Maps Kurir",
                 }}
               />
+                                  <Tab.Screen
+                name="TambahAlamatKurir"
+                component={TambahAlamatKurir}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Tambah Alamat Kurir",
+                }}
+              />
+                                       <Tab.Screen
+                name="DetailPemesanan"
+                component={DetailPemesanan}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemesanan",
+                }}
+              />
+              
                                         <Tab.Screen
                 name="ChattingKonsumen"
                 component={ChattingKonsumen}

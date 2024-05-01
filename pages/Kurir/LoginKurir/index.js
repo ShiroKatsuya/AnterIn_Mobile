@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../baseUrl';
-import HomeKurir from '../Home';
+
 export default function LoginKurir() {
   const navigation = useNavigation();
   
