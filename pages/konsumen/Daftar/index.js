@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios'; 
 import { useNavigation } from '@react-navigation/native';
+import { baseUrl } from '../../baseUrl';
 
 export default function Daftar() {
   
@@ -57,7 +58,7 @@ export default function Daftar() {
     }
                                     //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
     try {                           // jangan lupa /api/... adalah benar untuk routing nya
-      const response = await axios.post('http://192.168.161.77:8888/api/register', form); 
+      const response = await axios.post('http://192.168.100.56:8888/api/register', form); 
       if (response.data) {
         setShowMessage('Registrasi berhasil');
         console.log(response.data)

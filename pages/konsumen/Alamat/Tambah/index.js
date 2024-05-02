@@ -1,8 +1,11 @@
 import React, {useEffect,useState} from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl,TextInput,Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl,TextInput,Button,COLORS,grey20 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { isLoading } from 'expo-font';
+
+import { baseUrl } from '../../../baseUrl';
 
 
 export default function TambahALamat() {
@@ -42,15 +45,15 @@ const handelGetLokasi = () => {
 
 }
 
-
 const fetchData = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await axios.get('http://192.168.161.77:8888/api/lokasi', {
+    const response = await axios.get('http://192.168.100.56:8888/api/lokasi', {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
+  // isLoading (true)
     DataAlamat(response.data["message"])
     console.log(response.data);
   } catch (error) {
@@ -68,10 +71,10 @@ const tambahAlamat = async () => {
       const token = await AsyncStorage.getItem('token');
       const data = {
           alamat: form.alamat,
-
+        
       };
 
-      const response = await axios.put('http://192.168.161.77:8888/api/userupdate', data, {
+      const response = await axios.put('http://192.168.100.56:8888/api/userupdate', data, {
           headers: {
               Authorization: `Bearer ${token}`,
           }
@@ -131,9 +134,37 @@ const tambahAlamat = async () => {
         </View></TouchableOpacity> */}
         
       </View>
+
+
+<View style = {styles.textAreaContainer}>
+
+    <Text>
+    {ambilDataAlamat.Code_Lokasi_Anda}
+    </Text>
+    <Text>
+    {ambilDataAlamat.Kota_Anda}
+    </Text>
+    <Text>
+    {ambilDataAlamat.Lokasi_Anda}
+    </Text>
+    <Text>
+      {ambilDataAlamat.Zip_Code}
+    </Text>
+
+    <TouchableOpacity>
+      <View style={styles.clipboard}>
+          <Text style={styles.textclibboard}>COPY HERE !</Text>
+      </View>
+    </TouchableOpacity>
+
+
+  </View>
+
+
+
       <View>
           <Text>
-        {ambilDataAlamat.Lokasi_Anda}
+
           </Text>
         </View>
 
@@ -156,8 +187,11 @@ const tambahAlamat = async () => {
         </View>
         {showMessage && <Text>{showMessage}</Text>}
 
-      
+
       </View>
+
+    </View>
+    <View style={{ backgroundColor: '#0B111F', padding: 20 }}>
 
     </View>
     </>
@@ -165,6 +199,16 @@ const tambahAlamat = async () => {
 }
 
 const styles = StyleSheet.create({
+
+textarea:{
+  padding:10,
+  backgroundcolor:'gray',
+  flexdirection:'row',
+  alignitems:'center'
+  
+},
+
+  
 text:{fontWeight:'bold'},
   container: {
     flex: 1,
@@ -173,6 +217,28 @@ text:{fontWeight:'bold'},
     alignItems: 'center', 
     flexDirection: 'column',
     
+  },
+  clipboard:{
+    alignSelf:'flex-end',
+    padding:4,
+    backgroundColor:'#EDA01F',
+    borderRadius:4
+  },
+textclibboard:{
+  fontSize:12,
+  color:'white',
+  fontWeight:'600',
+  fontStyle:'italic'
+},
+  textAreaContainer: {
+    // borderColor: COLORS.grey20,
+    borderWidth: 1,
+    padding: 5,
+marginTop:10
+  },
+  textArea: {
+    height: 150,
+    justifyContent: "flex-start"
   },
 
   rumah:{

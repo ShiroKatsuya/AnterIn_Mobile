@@ -1,59 +1,172 @@
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
-import React from 'react';
-import { Dimensions } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import socket from '../../socket';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 const { width } = Dimensions.get('window');
 
 export default function Chatting() {
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState('');
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+
+  const [dataPribadi,setDataPribadi]=useState({});
+
+  const [AmbilPesan,AmbilPesanMasuk]= useState ([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios(`${baseUrl.url}/datauser`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const messageListener = (message) => {
+      setMessages(previousMessages =>
+        GiftedChat.append(previousMessages, {
+          ...message,
+          createdAt: new Date(message.createdAt),
+        })
+      );
+    };
+
+    socket.on('message', messageListener);
+
+
+    return () => {
+      socket.off('message', messageListener);
+    };
+  }, []);
+
+
+  const onSend = useCallback(async (newMessages = []) => {
+    if (ambilDataProfile.nama && newMessages.length > 0) {
+      const messageText = newMessages[0].text.trim();
+      if (messageText.length > 0) {
+        const newMessage = {
+          text: messageText,
+          createdAt: new Date(),
+          Nama: ambilDataProfile.nama
+        };
+  
+        setText('');
+        socket.emit('message', newMessage);
+  
+
+        await new Promise(resolve => {
+          socket.once('messageSent', () => {
+
+            resolve();
+          });
+        });
+
+
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, newMessage)
+        );
+      }
+
+    }
+  }, [ambilDataProfile]);
+
+  const onChangeText = (inputText) => {
+    setText(inputText);
+    // resolve();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.main}>
+        { ambilDataProfile && (
           <View style={styles.cardInfo}>
             <View style={styles.cardInfoRow}>
               <Image source={require('../../img/logo.png')} style={styles.logo} />
               <View style={{ flex: 1 }}>
-                <Text style={styles.text}>Delia</Text>
-                <Text style={styles.text}>Hidup Seperti Lerry</Text>
+                <Text style={styles.text}>{ambilDataProfile.nama}</Text>
+                <Text style={styles.text}>{ambilDataProfile.alamat}</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={{ color: '#EDA01F' }}>0812121313131</Text>
+                <Text style={{ color: '#EDA01F' }}>{ambilDataProfile.nohp}</Text>
               </View>
             </View>
           </View>
+              ) }
+ 
+          <ScrollView>
           <View style={styles.resultcontainer}>
-            <View style={styles.result1}>
-              <Text style={styles.text}>Halo, maaf mengganggu Pekerjaan anda</Text>
+          {messages.map((message, index) => (
+              <View key={index} style = {styles.result1}>
+                <Text style = {styles.text}>{message.Nama}</Text>
+                <Text style = {styles.text}>{message.text}</Text>
+              </View>
+                 ))}
             </View>
-            <View style={styles.result2}>
-              <Text style={styles.text}>Iya, ada apa kawanku?</Text>
-            </View>
-            <View style={styles.result3}>
-              <Text style={styles.text}>Paketmu sudah sampai kocak, sini keluar</Text>
-            </View>
-          </View>
+            </ScrollView>
+{/*   
+ 
+            <GiftedChat
+      messages={messages}
+      onSend={(newMessages) =>
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, newMessages),
+        )
+      }
+      user={{ _id: 1 }}
+    /> */}
+    
           <View style={styles.chatbar}>
-            <TextInput
-              style={[styles.input, styles.form2]}
+                <TextInput
+              style={[styles.text2, styles.input, styles.form2, { color: 'black' }]}
               placeholder="Ketik Pesan"
               multiline={true}
               numberOfLines={4}
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"/>
-            <View style={styles.buttonsend}>
-              <Image source={require('../../img/Send-Message.png')} style={styles.sendbuttonicon}/>
-            </View>
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              onChangeText={onChangeText}
+              value={text}
+            />
+       <TouchableOpacity onPress={() => onSend([{ text }])} style={styles.buttonsend}>
+        <Image source={require('../../img/Send-Message.png')} style={styles.sendbuttonicon} />
+      </TouchableOpacity>
+   
           </View>
+     
         </View>
       </View>
+
     </View>
+
   );
 }
-
 const styles = StyleSheet.create({
 text:{color: 'white'},
   resultcontainer: {
     flexDirection: 'column',
     marginTop: 40,
+  },
+  text2:{
+    color:'black',
+    fontWeight:'bold'
+
   },
   result1: {
     backgroundColor: 'black',
@@ -121,8 +234,7 @@ text:{color: 'white'},
   chatbar: {
     marginRight: 20,
     marginLeft: 20,
-    flex:1,
-    marginTop:300,
+    // marginTop:300,
     flexDirection: "row",
   },
   input: {
@@ -133,6 +245,8 @@ text:{color: 'white'},
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+    
+
   },
   form2: {
     backgroundColor:'#d9d9d9',

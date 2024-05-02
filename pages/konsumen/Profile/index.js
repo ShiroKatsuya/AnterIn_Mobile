@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 
 
@@ -19,7 +20,7 @@ useEffect(()=>{
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.161.77:8888/api/datauser',
+          url: 'http://192.168.100.56:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -214,9 +215,10 @@ const styles = StyleSheet.create({
     height: 40, 
     // padding: 5,
     marginRight: 10,
-    textAlign:'center',
+    // textAlign:'center',
     // justifyContent:'center',
     // alignItems:'center'
     marginTop:1,
+    alignSelf:'center'
   },
 })

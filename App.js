@@ -6,12 +6,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import { Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating } from './pages/route'; 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, } from './pages/route'; 
+import Icon from 'react-native-vector-icons/Ionicons';  
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const MaintabKurir = createBottomTabNavigator();
 
 
 const headerOption = {
@@ -33,46 +35,125 @@ function HeaderCustome(props) {
   );
 }
 
+
+
+function KurirMaintab() {
+  const navigation = useNavigation(); 
+  return (
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      // headerShown: true,
+      tabBarStyle: {
+        // height: 90,
+        // paddingHorizontal: 5,
+        paddingTop: 0,
+        backgroundColor: '#0B111F',
+        position: 'absolute',
+        borderTopWidth: 0,
+      },
+    })}
+    >
+      <Tab.Screen
+       
+       name="HomeKurir"
+       component={HomeKurir}
+       options={{
+        ...headerOption,
+        HeaderCustome: (props) => <headerTitle {...props} />, 
+        title: "Home",
+        tabBarIcon: ({ color }) => (
+          <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+        )
+      }}
+      />
+      <Tab.Screen
+      
+      name="ProfileKurir"
+      component={ProfileKurir}
+      options={{
+        ...headerOption,
+        HeaderCustome: (props) => <headerTitle {...props} />, 
+        title: "Profile",
+        tabBarIcon: ({ color }) => (
+          <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+        )
+      }}
+      />
+      <Tab.Screen
+
+        name="Pengumuman"
+        component={Pengumuman}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "Pengumuman",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 50, height: 50, tintColor: color }} />
+          )
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+
+{/* <Stack.Screen>
+    KurirMaintab()
+</Stack.Screen>
+ */}
+
+
+
+
 function MainTab() {
   const navigation = useNavigation(); 
 
   return (
     <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        let sizes = 30;
-
-        if (route.name === 'Home') {
-          iconName = focused
-            // ? 'ios-information-circle'
-            // : 'ios-information-circle-outline';
-        } else if (route.name === 'Transaksi') {
-          iconName = focused 
-          // ? 'ios-list' : 'ios-list-outline';
-        }else if (route.name=='Profile'){
-                    iconName = focused 
-                    // ? 'ios-list' : 'ios-list-outline';
-        }else if (route.name == 'Rating'){
-          iconName = focused 
-        }
-
-        // You can return any component that you like here!
-        return <Ionicons name={iconName} size={sizes} color={color} />;
-      },
-      tabBarActiveTintColor: 'tomato',
-      tabBarInactiveTintColor: 'gray',
-    })}
-  >
+      screenOptions={({ route }) => ({
+        // headerShown: false,
+        tabBarStyle: {
+          // height: 90,
+          // paddingHorizontal: 5,
+          paddingTop: 0,
+          backgroundColor: '#0B111F',
+          position: 'absolute',
+          borderTopWidth: 0,
+        },
+      })}
+    >
       <Tab.Screen
+ 
         name="Home"
         component={Dashboard}
         options={{
-   
           ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
+          headerTitle: (props) => <HeaderCustome {...props} />,
+          title : "Home" ,
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
+{/* 
+<Tab.Screen
+ 
+ name="HomeKurir"
+ component={HomeKurir}
+ headerShown={true}
+ options={{
+   ...headerOption,
+   headerTitle: (props) => <HeaderCustome {...props} />,
+   title : "Home" ,
+   tabBarLabel: 'Home',
+   tabBarIcon: ({ color }) => (
+     <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+   )
+ }}
+/> */}
+
+
            <Tab.Screen
         name="Rating"
         component={Rating}
@@ -80,7 +161,11 @@ function MainTab() {
    
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Rating",
+          title:"Rating",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
+          )
+
         }}
       />
       <Tab.Screen
@@ -88,8 +173,12 @@ function MainTab() {
         component={Transaksi}
         options={{
           ...headerOption,
-          HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Checkout Sekarang !",
+          HeaderCustome: (props) => <headerTitle {...props}  />, 
+          title:"Checkout Sekarang !",
+          tabBarLabel: 'Transaksi',
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn_Mobile/pages/img/Cart.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
 
@@ -102,9 +191,14 @@ function MainTab() {
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
         }}
       />
-  
+
+
+
     </Tab.Navigator>
   );
 }
@@ -122,6 +216,15 @@ function App() {
             title: "Halaman Login",
           }}
         />
+                <Stack.Screen
+    name="RajaOngkir"
+    component={RajaOngkir}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Raja Ongkir",
+    }}
+        />
         <Stack.Screen
           name="Daftar"
           component={Daftar}
@@ -132,6 +235,36 @@ function App() {
           }}
         />
 
+<Stack.Screen
+          name="DaftarKurir"
+          component={DaftarKurir}
+          options={{
+            ...headerOption,
+            HeaderCustome: (props) => <headerTitle {...props} />, 
+            title: "Daftar Sebagai Kurir",
+          }}
+        />
+
+{/* <Stack.Screen
+          name="HomeKurir"
+          component={HomeKurir}
+          options={{
+            ...headerOption,
+            HeaderCustome: (props) => <headerTitle {...props} />, 
+            title: "Home Kurir",
+          }}
+        />  */}
+
+<Stack.Screen
+          name="LoginKurir"
+          component={LoginKurir}
+          options={{
+            ...headerOption,
+            HeaderCustome: (props) => <headerTitle {...props} />, 
+            title: "Login Sebagai Kurir",
+          }}
+        />
+        
 <Tab.Screen
         name="InputPesanan"
         component={InputPesanan}
@@ -199,6 +332,16 @@ function App() {
                   title: "Riwayat Pesanan",
                 }}
               />
+              
+              <Tab.Screen
+                name="Maps"
+                component={Maps}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Open Maps",
+                }}
+              />
                        <Tab.Screen
                 name="DetailPesanan"
                 component={DetailPesanan}
@@ -217,12 +360,93 @@ function App() {
                   title: "Checkout Pesanan",
                 }}
               />
+                            <Tab.Screen
+                name="Gaji"
+                component={Gaji}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Gaji",
+                }}
+              />
+                <Tab.Screen
+                name="RiwayatPemesanan"
+                component={RiwayatPemesanan}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "List Pemesanan Konsumen",
+                }}
+              />
+                                    <Tab.Screen
+                name="DetailPemansanByUser"
+                component={DetailPemansanByUser}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemansan By User",
+                }}
+              />
+
+<Tab.Screen
+                name="RincianPendapatan"
+                component={RincianPendapatan}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemansan By User",
+                }}
+              />
+                            <Tab.Screen
+                name="MapsKurir"
+                component={MapsKurir}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Maps Kurir",
+                }}
+              />
+                                  <Tab.Screen
+                name="TambahAlamatKurir"
+                component={TambahAlamatKurir}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Tambah Alamat Kurir",
+                }}
+              />
+                                       <Tab.Screen
+                name="DetailPemesanan"
+                component={DetailPemesanan}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail Pemesanan",
+                }}
+              />
+              
+                                        <Tab.Screen
+                name="ChattingKonsumen"
+                component={ChattingKonsumen}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Message",
+                }}
+              />
+                <Stack.Screen
+          name="KurirMaintab"
+          component={KurirMaintab}
+          options={{ headerShown: false }} 
+        />
 
         <Stack.Screen
           name="MainTab"
           component={MainTab}
           options={{ headerShown: false }} 
         />
+
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

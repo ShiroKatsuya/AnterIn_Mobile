@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { baseUrl } from '../../baseUrl';
 
 export default function Kurir() {
   const [ambilData, setAmbilData] = useState([]);
@@ -12,7 +13,7 @@ export default function Kurir() {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://192.168.161.77:8888/api/datakurir', {
+        const response = await axios.get('http://192.168.100.56:8888/api/datakurir', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

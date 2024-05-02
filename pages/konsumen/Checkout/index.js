@@ -1,8 +1,9 @@
 import React, {useEffect,useState} from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 export default function Checkout() {
   const { width } = Dimensions.get('window');
@@ -27,11 +28,13 @@ const handleCheckout = async () => {
       await tambahStatus();
       navigation.navigate('Riwayat');
       console.log("Status Sudah Dibayar");
+      alert("Pembayaran Berhasil , Refresh Halaman Checkout !");
     } catch (error) {
       console.error("Gagal:", error);
     }
   } else {
     console.log("Pilih paket terlebih dahulu!");
+    alert("Pilih paket terlebih dahulu!");
   }
 };
 
@@ -51,7 +54,7 @@ const tambahStatus = async () => {
       status: "Sudah Dibayar",
     };
 
-    const response = await axios.put(`http://192.168.161.77:8888/api/inputpesanan/${pilih.id}`, data, {
+    const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${pilih.id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -73,11 +76,10 @@ const tambahStatus = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.161.77:8888/api/datauser',
+          url: 'http://192.168.100.56:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setData(response.data["data"]);
         
@@ -99,11 +101,10 @@ const tambahStatus = async () => {
         try {
           const token = await AsyncStorage.getItem('token');
           const response = await axios({
-            url: 'http://192.168.161.77:8888/api/riwayatpesanan',
+            url: 'http://192.168.100.56:8888/api/riwayatpesanan',
             headers: {
               Authorization: `Bearer ${token}`
             },
-            method: "GET"
           });
           data(response.data);
           console.log(response.data)
@@ -128,8 +129,11 @@ const tambahStatus = async () => {
         </View>
       </View>
            )}
+          <ScrollView style={styles.scrollView}>
       <View style={styles.section2}>
         <FlatList
+                    nestedScrollEnabled={true}
+                    scrollEnabled={false}
           data={ambilData.filter(item => item.status === "Belum Dibayar")}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePilih(item)}>
@@ -153,6 +157,7 @@ const tambahStatus = async () => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
+      </ScrollView>
       
 
       <View style={styles.section1}>
@@ -203,6 +208,10 @@ const styles = StyleSheet.create({
     padding: 10,
 
 
+  },
+    scrollView: {
+    // backgroundColor: 'pink',
+    marginHorizontal: 1,
   },
   section2: {
     backgroundColor: '#0B111F',

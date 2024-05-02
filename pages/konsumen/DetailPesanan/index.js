@@ -1,23 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
+import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
+  const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+
+  const htmlContent = `
+  <h1>Detail Pesanan Dari Pembelian :  ${pilihPaketData?.Nama_Paket}</h1>
+  <p><strong>Nama Barang:</strong> ${pilihPaketData?.Nama_Barang}</p>
+  <p><strong>Nama Kurir:</strong> ${pilihPaketData?.Nama_Kurir}</p>
+  <p><strong>Detail Alamat Tujuan:</strong> ${pilihPaketData?.DetailAlamat}</p>
+  <p><strong>Kota:</strong> ${pilihPaketData?.city_name}</p>
+  <p><strong>Provinsi:</strong> ${pilihPaketData?.province}</p>
+  <p><strong>Kode Pos:</strong> ${pilihPaketData?.postal_code}</p>
+  <p><strong>Harga Paket:</strong> ${pilihPaketData?.Harga_Paket}</p>
+  <p><strong>Status:</strong> ${pilihPaketData?.status}</p>
+  <p><strong>Tinggi</strong> ${pilihPaketData?.Tinggi_cm}</p>
+  <p><strong>Lebar</strong> ${pilihPaketData?.Lebar_cm}</p>
+`;
+ 
+const cetakPDF = async () => {
+  const timestamp = Date.now();
+  const options = {
+    html: htmlContent,
+    fileName: `Pesanan_${timestamp}`,
+    directory: 'Documents',
+    
+  };
+  try {
+    const file = await RNHTMLtoPDF.convert(options);
+    console.log('PDF:', file.filePath);
+    alert('pesanan telah di cetak melalui pdf : ' + file.filePath);
+  } catch (error) {
+    console.log('Failed to create PDF');
+  }
+}
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/lokasi`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setAmbilData(response.data.message);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+
+async function createPDF() {
+
+
+}
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: `http://192.168.161.7777:8888/api/riwayatpesanan/${route.params.id}`,
+          url: `http://192.168.100.56:8888/api/riwayatpesanan/${route.params.id}`,
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setPilihPaketData(response.data);
+        console.log(response.data)
   
       } catch (error) {
         console.error(error);
@@ -29,7 +88,7 @@ export default function DetailPesanan({ route }) {
   if (!pilihPaketData) {
     return (
       <View style={styles.container}>
-        <Text>Data Kosong !</Text>
+        <Text>Loading !</Text>
       </View>
     );
   }
@@ -39,15 +98,15 @@ export default function DetailPesanan({ route }) {
       throw new Error("Paket tidak valid.");
     
     }
-  
+  if(ambilData.Kota_Anda){
     try {
       const token = await AsyncStorage.getItem('token');
       const data = {
-        paket_sekarang: 'dsfsdf',
-        penerimaan_paket: 'sdfsdf',
+        paket_sekarang: ambilData.Kota_Anda,
+        penerimaan_paket: 'Keluarga!',
       };
   
-      const response = await axios.put(`http://192.168.161.77:8888/api/inputpesanan/${route.params.id}`, data, {
+      const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${route.params.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -62,6 +121,7 @@ export default function DetailPesanan({ route }) {
       throw error; 
     }
   };
+}
 
   return (
 
@@ -71,30 +131,47 @@ export default function DetailPesanan({ route }) {
       <View style={styles.form1}>
         <Text style={styles.texttop}>Nama Barang | {pilihPaketData.Nama_Barang}</Text>
         <Text style={styles.texttop}>Nama User | {pilihPaketData.nama}</Text>
-        <Text style={styles.texttop}>Alamat Tujuan | {pilihPaketData.Alamat_Tujuan}</Text>
+        <Text style={styles.texttop}>Kota | {pilihPaketData.city_name}</Text>
+        <Text style={styles.texttop}>Province | {pilihPaketData.province}</Text>
+        <Text style={styles.texttop}>Kode_POS | {pilihPaketData.postal_code}</Text>
+        <Text style={styles.texttop}>Detail Alamat | {pilihPaketData.DetailAlamat}</Text>
         <Text style={styles.texttop}>Nama Paket | {pilihPaketData.Nama_Paket}</Text>
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
+        <Text style={styles.texttop}>Tinggi | {pilihPaketData.Tinggi_cm} cm</Text>
+        <Text style={styles.texttop}>Lebar | {pilihPaketData.Lebar_cm} cm</Text>
+        
       </View>
       <View style={styles.form2}>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
+
+        <TouchableOpacity onPress={cetakPDF}>
+
+        <View style={styles.buttonpdf}>
+          <Text style={styles.pdf}>
+             CETAK PDF
+          </Text>
+        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.form1}>
           <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
           <Text style={styles.texttop}>👨🏻‍✈️Kurir Telah Menerima Paketan | {pilihPaketData.Nama_Kurir}</Text>
-          <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan | {pilihPaketData.Alamat_Tujuan}</Text>
+          <Text style={styles.texttop}>🔝Paketan Yang Dipilih Sedang Dalam Perjalanan Ke Alamat Tujuan| {pilihPaketData.Alamat_Tujuan}</Text>
           <Text style={styles.texttop}>🔜Paketan Berada Di : {pilihPaketData.paket_sekarang} </Text>
           <Text style={styles.texttop}>🔚Paketan Telah Sampai dan Telah Diserahkan Kepada Pihak Yang Bersangkutan | {pilihPaketData.penerimaan_paket}</Text>
-          <TouchableOpacity>
+      
           <View style={styles.selesai}>
               <Text style={styles.texttop}>
                 Pesanan Selesai !
               </Text>
           </View>    
-          </TouchableOpacity>
+
 
       </View>
+
+
 
 
       <Button
@@ -111,6 +188,18 @@ export default function DetailPesanan({ route }) {
 }
 
 const styles = StyleSheet.create({
+  pdf:{
+    color:'black',
+    fontWeight:'bold',
+    fontSize:11
+  },
+  buttonpdf:{
+    flexDirection:'row',
+    alignSelf:'flex-end',
+    backgroundColor:'#EDA01F',
+    padding:3,
+    borderRadius:3
+  },
   scrollView: {
     backgroundColor: 'pink',
     marginHorizontal: 20,

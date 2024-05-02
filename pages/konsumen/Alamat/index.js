@@ -3,11 +3,14 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 
 export default function Alamat() {
 
   const [ambilDataAlamat, setAmbilDataAlamat] = useState([]);
   const [dataPribadi,setDataPribadi]=useState({});
+
+  
 
 
   useEffect(() => {
@@ -15,11 +18,10 @@ export default function Alamat() {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.161.777777777777777777:8888/api/datauser',
+          url: 'http://192.168.100.56:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
         });
         setAmbilDataAlamat(response.data["data"]);
       //   console.log(response.data)
@@ -39,52 +41,42 @@ export default function Alamat() {
     }
     
   return (
-    // Container
-    <View style={styles.container}>
-    <TouchableOpacity onPress={handleTambahAlamat}>
-      <View style={styles.alamat}>
-        <Text style={styles.textalamat}>
-            Tambah Alamat / Ubah Alamat Disini
-        </Text>
-      </View>
-      </TouchableOpacity>
-      {/* CardForm */}
-      <View style={styles.form}>
-        <Text style={styles.cardtext}>ALamat Lengkap : </Text>
-        {ambilDataAlamat && (
-        <View>
-        <Text style={styles.cardtext}>{ambilDataAlamat.alamat}</Text>
-        </View>
-             ) }
-        {/* Button Edit dan Hapus */}
-        <View style={styles.button}>
-            {/* <View >
-                    <Text style={{color:'black'}}>
-                        Hapus
-                    </Text>
-            </View> */}
-            <View style={styles.button}>
+    <>
+      {/* Container */}
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleTambahAlamat}>
+          <View style={styles.alamat}>
+            <Text style={styles.textalamat}>
+                Tambah Alamat / Ubah Alamat Disini
+            </Text>
+          </View>
+        </TouchableOpacity>
+        {/* CardForm */}
+        <View style={styles.form}>
+          <Text style={styles.cardtext}>Alamat Lengkap : </Text>
+          {ambilDataAlamat && (
+            <View>
+              <Text style={styles.cardtext}>{ambilDataAlamat.alamat}</Text>
+            </View>
+          )}
+          {/* Button Edit dan Hapus */}
+          <View style={styles.button}>
             <View style={styles.button2}>
-                <Text style={{color:'white'}}>
-                    Edit
-                </Text>
-                </View>
-                
-    
-        </View>
-        <View style={styles.button}>
+              <Text style={{color:'white'}}>
+                  Edit
+              </Text>
+            </View>
             <View style={styles.button1}>
-                <Text style={{color:'white'}}>
-                    Hapus
-                </Text>
-                </View>
-                
-    
+              <Text style={{color:'white'}}>
+                  Hapus
+              </Text>
+            </View>
+          </View>
         </View>
-        </View>
-        
       </View>
-    </View>
+      <View style={{  backgroundColor: '#0B111F', padding: 20 }}>
+      </View>
+    </>
   )
 }
 
@@ -103,6 +95,8 @@ const styles = StyleSheet.create({
         borderRadius:5,
         paddingLeft:40,
         paddingRight:40,
+
+        marginRight:20
  
 
       },
@@ -122,10 +116,11 @@ const styles = StyleSheet.create({
         flexDirection:'row-reverse',
         alignContent:'flex-end',
         // justifyContent:'space-around'
-        paddingLeft:20,
+        // paddingLeft:20,
         marginTop:20,
         alignItems:'center',
-        marginRight:1
+        // marginRight:1
+        
     
       },
       cardtext:{

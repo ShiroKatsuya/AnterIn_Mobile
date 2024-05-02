@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { baseUrl } from '../../baseUrl';
 export default function Riwayat() {
   const navigation = useNavigation();
   const [dataPribadi, setDataPribadi] = useState({});
@@ -16,6 +17,8 @@ export default function Riwayat() {
 
   };
 
+  
+
   useEffect(() => {
     // getDataUserLocal();
   }, [dataPribadi.token]);
@@ -25,11 +28,11 @@ export default function Riwayat() {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.161.77:8888/api/riwayatpesanan',
+          url: 'http://192.168.100.56:8888/api/riwayatpesanan',
           headers: {
             Authorization: `Bearer ${token}`
           },
-          method: "GET"
+
         });
         data(response.data);
       } catch (error) {
