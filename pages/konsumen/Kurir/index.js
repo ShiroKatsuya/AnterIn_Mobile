@@ -12,7 +12,7 @@ export default function Kurir() {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://192.168.100.56:8888/api/datakurir', {
+        const response = await axios.get('http://192.168.161.77:8888/api/datakurir', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

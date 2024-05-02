@@ -19,7 +19,7 @@ useEffect(()=>{
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.100.56:8888/api/datauser',
+          url: 'http://192.168.161.77:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },

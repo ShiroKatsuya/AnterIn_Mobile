@@ -41,7 +41,7 @@ export default function Rating() {
                 saran: form.saran,
             };
 
-            const response = await axios.post('http://192.168.100.56:8888/api/rating', data, {
+            const response = await axios.post('http://192.168.161.77:8888/api/rating', data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }

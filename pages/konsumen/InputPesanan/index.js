@@ -88,13 +88,14 @@ const InputPesanan = ({ route }) => {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 Nama_Barang: Nama_Barang,
+                Nama_Barang:form.Nama_Barang,
                 Alamat_Tujuan: form.Alamat_Tujuan,
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir, // Perubahan di sini
             };
 
-            const response = await axios.post('http://192.168.100.56:8888/api/inputpesanan', data, {
+            const response = await axios.post('http://192.168.161.77:8888/api/inputpesanan', data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -126,7 +127,7 @@ const InputPesanan = ({ route }) => {
                                 <TextInput
                     style={[styles.input, styles.forminside]}
                     placeholder="Nama Barang"
-                    value={inputEnabled ? form.Nama_Barang : Nama_Barang}
+                    value={form.Nama_Barang}
                     onChangeText={(text) => handleInputChange('Nama_Barang', text)}
                     editable={inputEnabled}
                 />
@@ -136,7 +137,7 @@ const InputPesanan = ({ route }) => {
                         if (!inputEnabled) {
                             setForm({
                                 ...form,
-                                Nama_Barang: Nama_Barang,
+                                Nama_Barang: form.Nama_Barang,
                             });
                         }
                         setInputEnabled(!inputEnabled);
@@ -193,7 +194,7 @@ const InputPesanan = ({ route }) => {
                     <Button
                         title="Submit"
                         onPress={() => {
-                            if (Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
+                            if (form.Nama_Barang && form.Alamat_Tujuan && pilihKurir.nama && form.Nama_Kurir) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Checkout');

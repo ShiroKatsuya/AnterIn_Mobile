@@ -46,7 +46,7 @@ const handelGetLokasi = () => {
 const fetchData = async () => {
   try {
     const token = await AsyncStorage.getItem('token');
-    const response = await axios.get('http://192.168.100.56:8888/api/lokasi', {
+    const response = await axios.get('http://192.168.161.77:8888/api/lokasi', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -71,7 +71,7 @@ const tambahAlamat = async () => {
 
       };
 
-      const response = await axios.put('http://192.168.100.56:8888/api/userupdate', data, {
+      const response = await axios.put('http://192.168.161.77:8888/api/userupdate', data, {
           headers: {
               Authorization: `Bearer ${token}`,
           }

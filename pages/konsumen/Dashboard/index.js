@@ -31,7 +31,7 @@ const Dashboard = () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.100.56:8888/api/data_rating',
+          url: 'http://192.168.161.7777777777:8888/api/data_rating',
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -53,7 +53,7 @@ const Dashboard = () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.100.56:8888/api/datauser',
+          url: 'http://192.168.161.77:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },

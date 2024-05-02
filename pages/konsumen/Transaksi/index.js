@@ -41,7 +41,7 @@ export default function Transaksi() {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.100.56:8888/api/input_pilihan_paket',
+          url: 'http://192.168.161.77:8888/api/input_pilihan_paket',
           headers: {
             Authorization: `Bearer ${token}` 
           },

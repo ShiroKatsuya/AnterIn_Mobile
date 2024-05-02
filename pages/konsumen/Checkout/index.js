@@ -51,7 +51,7 @@ const tambahStatus = async () => {
       status: "Sudah Dibayar",
     };
 
-    const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${pilih.id}`, data, {
+    const response = await axios.put(`http://192.168.161.77:8888/api/inputpesanan/${pilih.id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -73,7 +73,7 @@ const tambahStatus = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: 'http://192.168.100.56:8888/api/datauser',
+          url: 'http://192.168.161.77:8888/api/datauser',
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -99,7 +99,7 @@ const tambahStatus = async () => {
         try {
           const token = await AsyncStorage.getItem('token');
           const response = await axios({
-            url: 'http://192.168.100.56:8888/api/riwayatpesanan',
+            url: 'http://192.168.161.77:8888/api/riwayatpesanan',
             headers: {
               Authorization: `Bearer ${token}`
             },

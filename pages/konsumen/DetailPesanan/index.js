@@ -11,7 +11,7 @@ export default function DetailPesanan({ route }) {
       try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios({
-          url: `http://192.168.100.56:8888/api/riwayatpesanan/${route.params.id}`,
+          url: `http://192.168.161.7777:8888/api/riwayatpesanan/${route.params.id}`,
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -47,7 +47,7 @@ export default function DetailPesanan({ route }) {
         penerimaan_paket: 'sdfsdf',
       };
   
-      const response = await axios.put(`http://192.168.100.56:8888/api/inputpesanan/${route.params.id}`, data, {
+      const response = await axios.put(`http://192.168.161.77:8888/api/inputpesanan/${route.params.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
