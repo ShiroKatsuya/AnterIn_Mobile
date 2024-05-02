@@ -14,6 +14,9 @@ const Dashboard = () => {
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
   const [currentLocation,setCurrentLocation]=useState(null);
   const [lokasi,setAddress]=useState('');
+  const handleTopup = () =>{
+    navigation.navigate('TopUp')
+  }
 
   console.log(lokasi)
 
@@ -231,6 +234,11 @@ const Dashboard = () => {
             <Text style={styles.userPhone}>
              Rp. 737373
             </Text>
+            <TouchableOpacity onPress={handleTopup}>
+            <Text style={styles.TopUp}>
+             Isi Saldo !
+            </Text>
+            </TouchableOpacity>
           </View>
 
     </View>
@@ -303,6 +311,16 @@ const Dashboard = () => {
 };
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  TopUp:{
+    color:'white',
+    fontWeight:'bold',
+    textAlign:'center',
+    // marginRight:15,
+    marginTop:5,
+    backgroundColor:'#EDA01F',
+    padding:5,
+    borderRadius:4
+  },
   boxsaldo:{
     flexDirection :'column',
     // justifyContent:'flex-end',
