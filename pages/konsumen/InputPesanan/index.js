@@ -213,9 +213,9 @@ const InputPesanan = ({ route }) => {
         <View style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.headerinput}>
-                    <Text style={styles.text}>
+                    {/* <Text style={styles.text}>
                         Cari Nama Barang, Alamat Tujuan, Jenis Paket, atau Kurir yang Ingin Dicek
-                    </Text>
+                    </Text> */}
                     <View style={styles.form}>
 
                         <View style={styles.kamera}>
@@ -224,8 +224,13 @@ const InputPesanan = ({ route }) => {
                                 <Text style={styles.txt}>Scan Ulang Disini !</Text>
                             </TouchableOpacity>
                         </View>
-
+                        </View>
+                        
+                    <View style={styles.form}>
+                       
                         <Text style={styles.text}>Nama Barang</Text>
+                        
+                        
                         <TextInput
                             style={[styles.input, styles.forminside]}
                             placeholder="Nama Barang"
@@ -268,7 +273,9 @@ const InputPesanan = ({ route }) => {
                                 setInputEnabled(!inputEnabled);
                             }}
                         />
-
+                        </View>
+                    
+                    <View style={styles.form}>
                         <Text style={styles.text}>Alamat Tujuan</Text>
 
                         <Button
@@ -291,7 +298,8 @@ const InputPesanan = ({ route }) => {
                             value={form.DetailAlamat}
                             onChangeText={(text) => handleInputChange('DetailAlamat', text)}
                         />
-
+                    </View>
+                    <View style={styles.form}>
                         <Text style={styles.text}>Jenis Paket</Text>
                         <View>
                             <Text style={[styles.input, styles.forminside]}>{pilihPaketData.Nama_Paket}</Text>
@@ -406,22 +414,34 @@ kamera:{
   text: {
     fontWeight: 'bold',
     fontSize: 15,
-    color: 'black',
+    color: 'white',
     marginBottom: 5,
+    backgroundColor: '#eda01f',
+    padding: 10,
+    textAlign: 'center',
   },
   container: {
     flex: 1,
-    backgroundColor: '#EDA01F',
-    paddingHorizontal: '5%', 
+    backgroundColor: '#f5f5f5',
+    // paddingHorizontal: 20 , 
   },
   headerinput: {
-    backgroundColor: 'white',
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 4,
+    backgroundColor: '#0b111f',
+    //padding: 10,
+    //borderRadius: 5, 
   },
   form: {
     paddingHorizontal: '5%', 
+    marginBottom: 20,
+    backgroundColor: 'white',
+    //borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 3,
   },
   forminside: {
     backgroundColor: 'white',
@@ -429,6 +449,11 @@ kamera:{
     marginTop: 10,
     marginBottom: 10,
     width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 3,
   },
   input: {
     height: 40,
@@ -438,7 +463,7 @@ kamera:{
     padding: 10,
     marginBottom: 10,
     color: 'black',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   logo1:{
     width:50,
