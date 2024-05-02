@@ -1,80 +1,68 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { Button, TextInput } from 'react-native-paper'
+import CheckBox from '@react-native-community/checkbox';
 
 export default function TopUp() {
     const [number, onChangeNumber] = React.useState('');
-  return (
-    <View style={styles.container}>
-        <View style={styles.amountcontainer}>
-            
-        <TextInput
-            placeholder='Input Amount Here'
-            style={styles.input}
-           />
+    const [checkboxs, SetCheckbox] = useState({
+        BRI: false,
+        BNI: false,
+        BCA: false,
+        CIMB: false
+    });
 
-   
+    const handleCheckboxChange = (bank) => {
+        const updatedCheckboxes = { ...checkboxs };
+        Object.keys(updatedCheckboxes).forEach((key) => {
+            updatedCheckboxes[key] = key === bank;
+        });
+        SetCheckbox(updatedCheckboxes);
+    };
 
-        </View>
-        <View style={styles.bankcontainer}>
-            <View style={styles.boxbank}>
-                <Text style={styles.banktext}>
-                BRI
-          
-                </Text>
-                <View style = {styles.checkbutton}>
-                    
+    return (
+        <View style={styles.container}>
+            <View style={styles.amountcontainer}>
+                <TextInput
+                    placeholder='Input Amount Here'
+                    style={styles.input}
+                />
+            </View>
+            <View style={styles.bankcontainer}>
+                {Object.keys(checkboxs).map((bank) => (
+                    <View key={bank} style={styles.boxbank}>
+                        <Text style={styles.banktext}>
+                            {bank}
+                        </Text>
+                        <View style={styles.checkbutton}>
+                            <CheckBox
+                                disabled={false}
+                                value={checkboxs[bank]}
+                                onValueChange={() => handleCheckboxChange(bank)}
+                            />
+                        </View>
                     </View>
+                ))}
             </View>
-
-            <View style={styles.boxbank}>
-                <Text style={styles.banktext}>
-              BNI
-                </Text>
-            </View>
-            <View style={styles.boxbank}>
-                <Text style={styles.banktext}>
-             BCA
-                </Text>
-            </View>
-            <View style={styles.boxbank}>
-                <Text style={styles.banktext}>
-              CIMB
-                </Text>
-            </View>
-            
-            
-            
-            
-
-
+            <Button
+                style={styles.button}
+            >
+                <Text style={styles.buttontext}>TopUp Now !</Text>
+            </Button>
         </View>
-        <Button
-            // mode='contained'
-            // onPress={() => console.log('TopUp Now!')}
-            style={styles.button}
-        >
-           <Text style={styles.buttontext}>TopUp Now !</Text> 
-            
-        </Button>
-      
-
-
-
-     
-    </View>
-  )
+    )
 }
 
 const styles = StyleSheet.create({
     checkbutton:{
         // padding:5,
-        backgroundColor:'black',
+        // backgroundColor:'black',
         flexDirection:'row',
         justifyContent:'flex-end',
         alignSelf:'flex-end',
-        width:30,
-        height:30
+        // width:30,
+        // height:30
+        marginTop:-24
     },
     buttontext:{
         color:'white'
