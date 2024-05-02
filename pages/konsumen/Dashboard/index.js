@@ -159,10 +159,10 @@ const Dashboard = () => {
             {lokasi.address.city && <Text style={styles.userPhone}>{lokasi.address.city}</Text>}
 
 
-  
+
 
           </View>
-
+      
         </View>
 
       }
@@ -224,6 +224,15 @@ const Dashboard = () => {
           </>
         )} */}
           </View>
+          <View style={styles.boxsaldo}>
+            <Text style={styles.userPhone}>
+              Saldo Anda 
+            </Text>
+            <Text style={styles.userPhone}>
+             Rp. 737373
+            </Text>
+          </View>
+
     </View>
 
 </View>
@@ -294,6 +303,13 @@ const Dashboard = () => {
 };
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  boxsaldo:{
+    flexDirection :'column',
+    // justifyContent:'flex-end',
+    alignItems:'flex-end',
+    marginTop:-55,
+    marginRight:50
+  },
   alamat:{
     backgroundColor:'blue',
     padding:10,

@@ -14,7 +14,7 @@ export default function ProfileKurir() {
   };
 
   const handleAlamat = () => {
-    navigation.navigate('TambahAlamatKurir')
+    navigation.navigate('AlamatKurir')
   };
 
 
