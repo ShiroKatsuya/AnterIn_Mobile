@@ -32,5 +32,7 @@ import RincianPendapatan from "./Kurir/Riwayat/RincianPendapatan";
 import AlamatKurir from "./Kurir/AlamatKurir";
 import TambahAlamatLengkapKurir from "./Kurir/AlamatKurir/Tambah";
 import TopUp from "./konsumen/TopUp";
-export {TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
+import DetailTopUp from "./konsumen/TopUp/DetailTopUp";
+import RiwayatTopUp from "./konsumen/TopUp/Riwayat";
+export {RiwayatTopUp,DetailTopUp,TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
 

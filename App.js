@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, } from './pages/route'; 
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, } from './pages/route'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
 
 
@@ -171,6 +171,18 @@ function MainTab() {
           )
         }}
       />
+            <Tab.Screen
+        name="RiwayatTopUp"
+        component={RiwayatTopUp}
+        options={{
+          ...headerOption,
+          HeaderCustome: (props) => <headerTitle {...props} />, 
+          title: "RiwayatTopUp",
+          tabBarIcon: ({ color }) => (
+            <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          )
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -188,6 +200,8 @@ function App() {
             title: "Halaman Login",
           }}
         />
+
+        
                 <Stack.Screen
     name="RajaOngkir"
     component={RajaOngkir}
@@ -407,6 +421,25 @@ function App() {
                 }}
               />
               
+              <Tab.Screen
+                name="DetailTopUp"
+                component={DetailTopUp}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail TopUp",
+                }}
+              />
+
+{/* <Tab.Screen
+                name="RiwayatTopUp"
+                component={RiwayatTopUp}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Riwayat TopUp",
+                }}
+              /> */}
                                                      <Tab.Screen
                 name="TambahAlamatLengkapKurir"
                 component={TambahAlamatLengkapKurir}

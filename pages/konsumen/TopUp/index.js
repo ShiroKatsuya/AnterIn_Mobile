@@ -1,17 +1,21 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View,Alert } from 'react-native'
+import React, { useState,useEffect } from 'react'
 import { Button, TextInput } from 'react-native-paper'
 import CheckBox from '@react-native-community/checkbox';
-
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../baseUrl';
 export default function TopUp() {
     const [number, onChangeNumber] = React.useState('');
     const [checkboxs, SetCheckbox] = useState({
-        BRI: false,
-        BNI: false,
-        BCA: false,
-        CIMB: false
+        bri: false,
+        bni: false,
+        bca: false,
+        cimb: false
     });
 
+    const [showMessage, setShowMessage] = useState(null);
     const handleCheckboxChange = (bank) => {
         const updatedCheckboxes = { ...checkboxs };
         Object.keys(updatedCheckboxes).forEach((key) => {
@@ -20,19 +24,73 @@ export default function TopUp() {
         SetCheckbox(updatedCheckboxes);
     };
 
+    const navigation = useNavigation();
+
+    const [form, setForm] = useState({
+        amount: '',
+        bank: checkboxs,
+    });
+
+    useEffect(() => {
+        setForm(prevForm => ({
+            ...prevForm,
+            bank: checkboxs
+        }));
+    }, [checkboxs]);
+
+    const kirimtopup = async () => {
+        if (!form.amount) {
+            setShowMessage('Masukan Jumlah Topup');
+            return;
+        }
+
+        let selectedBank = Object.keys(checkboxs).find(key => checkboxs[key]);
+        if (!selectedBank) {
+            setShowMessage('Pilih Bank');
+            return;
+        }
+
+
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const data = {
+                amount: form.amount,
+                bank: selectedBank,
+            };
+
+            const response = await axios.post(`${baseUrl.url}/topup`, data, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            console.log(response.data);
+            
+        if(form.amount && selectedBank){
+            Alert.alert('TopUp Berhasil,Harap Lanjutkan Pembayaran')
+            navigation.navigate('RiwayatTopUp')
+            return;
+        }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.amountcontainer}>
                 <TextInput
                     placeholder='Input Amount Here'
                     style={styles.input}
+                    value={form.amount}
+                    onChangeText={(text) => setForm({ ...form, amount: text })}
                 />
             </View>
             <View style={styles.bankcontainer}>
                 {Object.keys(checkboxs).map((bank) => (
                     <View key={bank} style={styles.boxbank}>
                         <Text style={styles.banktext}>
-                            {bank}
+                            {bank.toUpperCase()}
                         </Text>
                         <View style={styles.checkbutton}>
                             <CheckBox
@@ -46,14 +104,22 @@ export default function TopUp() {
             </View>
             <Button
                 style={styles.button}
+                onPress={kirimtopup}
             >
                 <Text style={styles.buttontext}>TopUp Now !</Text>
             </Button>
+
+            <View style={styles.alertmessage}>
+            {showMessage && <Text>{showMessage}</Text>}
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    alertmessage:{
+        alignSelf:'center'
+    },
     checkbutton:{
         // padding:5,
         // backgroundColor:'black',
