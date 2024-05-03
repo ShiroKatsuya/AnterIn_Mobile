@@ -17,8 +17,9 @@ export default function RiwayatTopUp() {
 
 
   const navigation = useNavigation();
-  const handleDetail = () => {
-    navigation.navigate('DetailTopUp')
+  const handleDetail = (id) => {
+    navigation.navigate('DetailTopUp',{ id: id })
+    console.log(id)
   }
 
   
@@ -42,6 +43,8 @@ export default function RiwayatTopUp() {
     };
     fetchData();
   }, [dataPribadi.token]);
+
+  // console.log(ambilData.transaction_status)
 
   
 
@@ -80,13 +83,16 @@ export default function RiwayatTopUp() {
                             Midtrans.Sistem
                           </Text>
                           <Text style={styles.info}>
-                           {item.created_at}
+                           {item.transaction_time}
                           </Text>
                           <Text style={styles.info}>
                             Harap segara lakukan pembayaran jika 
                           </Text>
                           <Text style={styles.info}>
                             belum melakukan pembayaran expired : 
+                          </Text >
+                          <Text style={styles.info}>
+                          {item.expiry_time}
                           </Text>
                         </View>
                       </View>
@@ -100,7 +106,7 @@ export default function RiwayatTopUp() {
                         </View>
                       </View>
                     </View>
-                    <TouchableOpacity style={styles.info2} onPress={handleDetail}>
+                    <TouchableOpacity style={styles.info2} onPress={() => handleDetail(item.id)}>
                       <Text style={styles.info}>
                         Lihat Detail
                       </Text>
