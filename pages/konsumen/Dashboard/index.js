@@ -14,11 +14,12 @@ const Dashboard = () => {
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
   const [currentLocation,setCurrentLocation]=useState(null);
   const [lokasi,setAddress]=useState('');
+  const [detailtopup, setdetailtopup] = useState(null);
   const handleTopup = () =>{
     navigation.navigate('TopUp')
   }
 
-  console.log(lokasi)
+  // console.log(lokasi)
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -64,8 +65,8 @@ const Dashboard = () => {
             // console.log(data)
             setAddress(data)
           })
-          console.log('Latitude : ',latitude)
-          console.log('Longtitude : ',longitude)
+          // console.log('Latitude : ',latitude)
+          // console.log('Longtitude : ',longitude)
           // console.log('Accuracy : ',accuracy)
           // console.log('Altitude : ',altitude)
 
@@ -102,12 +103,14 @@ const Dashboard = () => {
           }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
+    // fetchData()
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, [dataPribadi.token]);
 
 
@@ -124,7 +127,7 @@ const Dashboard = () => {
       //   console.log(response.data)
 
       //  //lu cobain dulu dah console.log ada kgk datanya 
-        console.log(response.data) 
+        // console.log(response.data) 
       } catch (error) {
         console.error(error);
       }
@@ -132,6 +135,29 @@ const Dashboard = () => {
     fetchData();
   }, [dataPribadi.token]);
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpembayaranbysaldo`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setdetailtopup(response.data["data"]);
+        console.log(response.data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    // fetchData();
+    const interval = setInterval(fetchData,5000)
+    return()=>clearInterval(interval)
+
+  }, []);
 
   return (
     <>
@@ -227,19 +253,24 @@ const Dashboard = () => {
           </>
         )} */}
           </View>
+          {detailtopup &&
+          <>
           <View style={styles.boxsaldo}>
             <Text style={styles.userPhone}>
               Saldo Anda 
             </Text>
             <Text style={styles.userPhone}>
-             Rp. 737373
+           Rp.{detailtopup.gross_amount}
             </Text>
             <TouchableOpacity onPress={handleTopup}>
             <Text style={styles.TopUp}>
              Isi Saldo !
             </Text>
             </TouchableOpacity>
+     
           </View>
+          </>
+          }
 
     </View>
 

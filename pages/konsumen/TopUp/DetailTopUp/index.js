@@ -30,9 +30,12 @@ console.log(copiedText)
   const copyToClipboard = () => {
     Clipboard.setString(copiedText);
   };
-
-  const fetchCopiedText = () => {
-    setCopiedText(detailtopup[0].va_number);
+  const fetchCopiedText = async () => {
+    const text = detailtopup[0].va_number;
+    if (text) {
+      setCopiedText(text);
+      Clipboard.setString(text);
+    }
   };
   
   useEffect(() => {
@@ -112,6 +115,9 @@ console.log(copiedText)
                   </Text>
                   <Text style={styles.text}>
                     5. Kembali Ke Aplikasi
+                  </Text>
+                  <Text style={styles.text}>
+                    5. Jika Status Masih Pending Refresh Ulang Aplikasi
                   </Text>
 
             </View> 

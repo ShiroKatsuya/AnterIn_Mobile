@@ -13,6 +13,7 @@ export default function Checkout() {
   const [ambilData, data] = useState([]);
   const [showMessage, setShowMessage] = useState(''); 
   const [pilih, setpilih] = useState(null);
+  const [detailtopup, setdetailtopup] = useState(null);
 
   const [form, setForm] = useState({
     status: '',});
@@ -20,6 +21,29 @@ export default function Checkout() {
 const handlePilih = (item) => {
   setpilih(item);
 };
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(`${baseUrl.url}/riwayatpembayaranbysaldo`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+      setdetailtopup(response.data["data"]);
+      // console.log(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // fetchData();
+  const interval = setInterval(fetchData,5000)
+  return()=>clearInterval(interval)
+
+}, []);
 
 const handleCheckout = async () => {
   if (pilih) {
@@ -117,12 +141,13 @@ const tambahStatus = async () => {
   return (
 
     <View style={styles.container}>
-      {Data && (
+      {Data && detailtopup && (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Alamat Pengirim : {Data.alamat} <Text style={{ fontSize: 30 }}> →</Text> | </Text>
         <View style={styles.addressBody}>
           <Text style={styles.addressText}>Nama : {Data.nama}</Text>
           <Text style={styles.addressText}>No.hp : {Data.nohp}</Text>
+          <Text style={styles.addressText}>Saldo Anda Saat Ini :   Rp.{detailtopup.gross_amount} </Text>
         </View>
       </View>
            )}
