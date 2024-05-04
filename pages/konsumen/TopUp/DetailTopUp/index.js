@@ -1,12 +1,21 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Linking, Alert  } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 // import {Clipboard} from 'react-native';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-export default function DetailTopUp() {
+import axios from 'axios';
+import { baseUrl } from '../../../baseUrl';
+
+export default function DetailTopUp({ route }) {
   const [linkClick, setClick] = useState('');
   const [copiedText, setCopiedText] = useState('');
-  
+  const [detailtopup, setdetailtopup] = useState(null);
+
+// console.log(detailtopup)
+
+  // console.log(detailtopup.nama)
 
   const handleLinkMidtrans = () => {
     console.log('Button was clicked');
@@ -21,33 +30,62 @@ console.log(copiedText)
   const copyToClipboard = () => {
     Clipboard.setString(copiedText);
   };
-
   const fetchCopiedText = async () => {
-    const text = await Clipboard.getString();
-    setCopiedText(text);
-    console.log(text);
-    Alert.alert("Copied: " + text);
+    const text = detailtopup[0].va_number;
+    if (text) {
+      setCopiedText(text);
+      Clipboard.setString(text);
+    }
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpembayaran/${route.params.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setdetailtopup(response.data["data"]);
+        console.log(response.data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    fetchData();
+  }, [route.params.id]);
+  
+
   
   return (
     <View style={styles.container}>
 <ScrollView>
-        {/* <View  style={styles.content}><Text>status_code: 201</Text></View> */}
-        <View  style={styles.content}><Text>status_message: Success, Bank Transfer transaction is created</Text></View>
-        <View  style={styles.content}><Text>transaction_id: cd12b5a3-2cf8-4c59-99c2-25db20c7eb81</Text></View>
-        <View  style={styles.content}><Text>order_id: 6634615f4d64c</Text></View>
-        <View  style={styles.content}><Text>merchant_id: G051038053</Text></View>
-        <View  style={styles.content}><Text>gross_amount: Rp.200000.00</Text></View>
-        {/* <View  style={styles.content}><Text>currency: IDR</Text></View> */}
-        <View  style={styles.content}><Text>payment_type: bank_transfer</Text></View>
-        <View  style={styles.content}><Text>transaction_time: 2024-05-03 11:00:31</Text></View>
-        <View  style={styles.content}><Text>transaction_status: pending</Text></View>
+   
+
+{detailtopup &&
+        <>
+        <View  style={styles.content}><Text>transaction_id: {detailtopup[0].transaction_id}</Text></View>
+        <View  style={styles.content}><Text>order_id: {detailtopup[0].order_id}</Text></View>
+        <View  style={styles.content}><Text>merchant_id: {detailtopup[0].merchant_id}</Text></View>
+        <View  style={styles.content}><Text>gross_amount: Rp.{detailtopup[0].gross_amount}.00</Text></View>
+
+        <View  style={styles.content}><Text>payment_type: {detailtopup[0].payment_type}</Text></View>
+        <View  style={styles.content}><Text>transaction_time: {detailtopup[0].transaction_time}</Text></View>
+        <View  style={styles.content}><Text>transaction_status: {detailtopup[0].transaction_status}</Text></View>
         <View  style={styles.content}><Text>fraud_status: accept</Text></View>
-        <View  style={styles.content}><Text>va_numbers: bank: bri, va_number: 380532046187953300</Text></View>
-        <View  style={styles.content}><Text>expiry_time: 2024-05-04 11:00:31</Text></View>
-        <View  style={styles.content}><Text>nama: sule</Text></View>
-        <View  style={styles.content}><Text>userss_id: 1</Text></View>
+        <View  style={styles.content}><Text>Bank: {detailtopup[0].bank.toUpperCase()}</Text></View>
+        <View  style={styles.content}><Text>va_number: {detailtopup[0].va_number}</Text></View>
+        <View  style={styles.content}><Text>expiry_time: {detailtopup[0].expiry_time}</Text></View>
+        <View  style={styles.content}><Text>nama: {detailtopup[0].nama}</Text></View>
+        {/* <View  style={styles.content}><Text>userss_id: {detailtopup[0].userss_id}</Text></View> */}
+        </>
+      }
+
         {/* <TouchableOpacity> */}
+        {detailtopup &&
             <View style={styles.buttonkirim}>
             <Text style={styles.text}>
             Langkah - Langkah Pembayaran
@@ -59,7 +97,7 @@ console.log(copiedText)
           <Text>Data Yang Di Copy :  {copiedText}</Text>
  
         <TouchableOpacity onPress={fetchCopiedText}>
-          <Text>380532046187953300</Text>
+          <Text>{detailtopup[0].va_number}</Text>
         </TouchableOpacity>
    
    
@@ -70,7 +108,7 @@ console.log(copiedText)
                   </TouchableOpacity>
                   
                   <Text style={styles.text}>
-                  3. Cari Bank BRI 
+                  3. Cari Bank {detailtopup[0].bank.toUpperCase()}
                   </Text>
                   <Text style={styles.text}>
                   4. Paid 
@@ -78,8 +116,12 @@ console.log(copiedText)
                   <Text style={styles.text}>
                     5. Kembali Ke Aplikasi
                   </Text>
+                  <Text style={styles.text}>
+                    5. Jika Status Masih Pending Refresh Ulang Aplikasi
+                  </Text>
 
             </View> 
+              }
         {/* </TouchableOpacity> */}
         </ScrollView>
     </View>

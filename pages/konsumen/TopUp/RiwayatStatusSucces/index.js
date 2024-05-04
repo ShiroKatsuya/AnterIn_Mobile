@@ -7,9 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../../baseUrl';
-
-export default function RiwayatTopUp() {
-
+const RiwayatStatusSucces = () => {
+  
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, data] = useState([]);
 
@@ -44,21 +43,26 @@ export default function RiwayatTopUp() {
       }
     };
 
-    const interval = setInterval(fetchData, 5000); 
+    fetchData()
 
-    return () => clearInterval(interval); 
+    // const interval = setInterval(fetchData, 5000); 
+
+
+
+    // return () => clearInterval(interval); 
   }, [dataPribadi.token]);
 
   // console.log(ambilData.transaction_status)
 
-  if (ambilData.length===0){
+  if (ambilData.length==0){
     return(
-      <View style={styles.container}>
-          <Text>
-            Loading ...
-          </Text>
-      </View>
-    )
+
+  
+    <View style={styles.container}>
+      <Text>Loading...</Text>
+
+    </View>
+      )
   }
 
   
@@ -86,7 +90,7 @@ export default function RiwayatTopUp() {
             <FlatList
               nestedScrollEnabled={true}
               scrollEnabled={false}
-              data={ambilData.filter(item => item.transaction_status === "pending")}
+              data={ambilData.filter(item => item.transaction_status === "Sukses")}
               renderItem={({ item }) => (
                 <View>
                   <View style={styles.boxmessage}>
@@ -138,8 +142,11 @@ export default function RiwayatTopUp() {
       </SafeAreaView>
       <View style={{ backgroundColor: '#0B111F', padding: 20 }} />
     </>
+  
   )
-              }
+}
+
+export default RiwayatStatusSucces
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
