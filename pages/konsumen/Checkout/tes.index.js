@@ -4,23 +4,25 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
-
 export default function Checkout() {
   const { width } = Dimensions.get('window');
   const navigation = useNavigation();
   const [Data, setData] = useState([]);
-  const [dataPribadi,setDataPribadi]=useState({});
-  const [ambilData, setAmbilData] = useState([]);
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilData, setAmbilData] = useState([]); // Corrected the useState hook to use setAmbilData for consistency
   const [showMessage, setShowMessage] = useState(''); 
   const [pilih, setPilih] = useState(null);
-  const [detailtopup, setDetailTopUp] = useState(null);
-  const [saldo,CheckSaldo]=useState('');
+  const [detailtopup, setDetailTopup] = useState(null);
+  const [saldo, setSaldo] = useState(''); // Corrected the useState hook to use setSaldo for consistency
 
   const [form, setForm] = useState({
     status: '',
-    gross_amount: ''
-    
-    });
+    Harga_Paket: ''
+  });
+
+  const handlePilih = (item) => {
+    setPilih(item);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ export default function Checkout() {
             Authorization: `Bearer ${token}`
           },
         });
-        setDetailTopUp(response.data["data"]);
+        setDetailTopup(response.data["data"]);
       } catch (error) {
         console.error(error);
       }
@@ -40,15 +42,11 @@ export default function Checkout() {
     fetchData();
   }, []);
 
-  const handlePilih = (item) => {
-    setPilih(item);
-  };
-
   const handleCheckout = async () => {
     if (!pilih) {
       console.log("Pilih paket terlebih dahulu!");
       alert("Pilih paket terlebih dahulu!");
-      return;
+      return; // Early return if no package is selected
     }
 
     console.log("Checkout dengan paket:", pilih);
@@ -65,42 +63,59 @@ export default function Checkout() {
     }
   };
 
+  useEffect(() => {
+  }, [dataPribadi.token]);
+
   const tambahStatus = async () => {
     if (!pilih || !pilih.id) {
       throw new Error("Paket atau ID tidak valid.");
     }
-  
+
+    const token = await AsyncStorage.getItem('token');
+    const data = {
+      status: "Sudah Dibayar",
+    };
+
+    if (pilih.Harga_Paket > detailtopup.gross_amount) {
+
+      return false;
+    }
+
     try {
-      const token = await AsyncStorage.getItem('token');
-      const data = {
-        status: "Sudah Dibayar",
-      };
-  
-      if (pilih.Harga_Paket > detailtopup.gross_amount) {
-        alert('Saldo Anda tidak cukup untuk melakukan pembayaran ini');
-        return false;
-      }
-  
       const response = await axios.put(`${baseUrl.url}/inputpesanan/${pilih.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
-  
+
       const updatedGrossAmount = detailtopup.gross_amount - pilih.Harga_Paket;
-      setDetailTopUp({...detailtopup, gross_amount: updatedGrossAmount}); // Update local state
-  
-      const saldoResponse = await axios.put(`${baseUrl.url}/udpdatesaldo`, { gross_amount: pilih.Harga_Paket }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-  
-      console.log(saldoResponse.data);
-      return response.data;
+      if (updatedGrossAmount >= 0) {
+        const responses = await axios.put(`${baseUrl.url}/udpdatesaldo`, {
+          gross_amount: updatedGrossAmount
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+
+        console.log(responses.data)
+
+        setDetailTopup(prevState => ({
+          ...prevState,
+          gross_amount: updatedGrossAmount
+        }));
+        
+        console.log("Updated gross amount:", updatedGrossAmount);
+      } else {
+        console.log("Saldo tidak mencukupi setelah transaksi.");
+        alert("Saldo tidak mencukupi setelah transaksi.");
+        return false; // Return false to indicate insufficient funds after transaction
+      }
+
+      return true; // Return true to indicate successful status update
     } catch (error) {
       console.error("Gagal memperbarui status:", error);
-      throw error;
+      throw error; // Rethrow the error for handling outside the function
     }
   };
 
@@ -114,11 +129,6 @@ export default function Checkout() {
           },
         });
         setData(response.data["data"]);
-        
-      //  //lu cobain dulu dah console.log ada kgk datanya 
-        // console.log(response.data)
-
-
       } catch (error) {
         console.error(error);
       }
@@ -126,30 +136,23 @@ export default function Checkout() {
     fetchData();
   }, [dataPribadi.token]);
 
-
-
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const token = await AsyncStorage.getItem('token');
-          const response = await axios.get(`${baseUrl.url}/riwayatpesanan`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
-          setAmbilData(response.data);
-          // console.log(response.data)
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData();
-    }, [dataPribadi.token]);
-
-
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpesanan`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setAmbilData(response.data); // Corrected to use setAmbilData
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
   return (
-
     <View style={styles.container}>
       {Data && detailtopup && (
       <View style={styles.section}>
