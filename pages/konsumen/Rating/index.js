@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'; 
 import { baseUrl } from '../../baseUrl';
-
-export default function Rating() {
+import { Rating, AirbnbRating } from 'react-native-ratings';
+export default function BerikanRating() {
 
     const [showMessage, setShowMessage] = useState(''); 
     const navigation = useNavigation();
@@ -14,7 +14,7 @@ export default function Rating() {
 
     const [form, setForm] = useState({
         rating: '',
-        saran: '',
+        // saran: '',
 
 
     });
@@ -28,10 +28,7 @@ export default function Rating() {
 
     const kirimPesanan = async () => {
         if (!form.rating) {
-            setShowMessage('Masukan Komentar');
-            return;
-        } else if (!form.saran) {
-            setShowMessage('Masukkan Saran');
+            setShowMessage('Jumlah Rating');
             return;
         }
 
@@ -39,7 +36,7 @@ export default function Rating() {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 rating: form.rating,
-                saran: form.saran,
+   
             };
 
             const response = await axios.post(`${baseUrl.url}/rating`, data, {
@@ -64,6 +61,15 @@ export default function Rating() {
                 BERIKAN RATING ANDA
             </Text> 
 
+            <Rating
+            ratingCount={7}
+            startingValue={0}
+            showRating
+            onFinishRating={this.ratingCompleted}
+  style={{ paddingVertical: 10 }}
+/>
+
+
             <View style= {styles.inputform}>
                     <TextInput
                         style={{ backgroundColor:'#EDA01F', color:'white', marginBottom:20 , height:50 , fontSize:20 , borderRadius:10}}
@@ -72,17 +78,7 @@ export default function Rating() {
                         value={form.rating}
                         onChangeText={(text) => handleInputChange('rating', text)}
                     />
-                            <Text style = {styles.text}>
-                BERIKAN SARAN ANDA
-            </Text> 
-                           <TextInput
-                        style={{ backgroundColor:'#EDA01F' , color :'white' , marginTop:20 , fontSize:15 , borderRadius:10 }}
-                        multiline
-                        numberOfLines={4}
-                        value={form.saran}
-                        onChangeText={(text) => handleInputChange('saran', text)}
-                    />
-                    <View style={{marginTop:10}}>
+                   
 
        
                       <Button
@@ -107,7 +103,6 @@ export default function Rating() {
 
         </View>
 
-    </View>
   )
 }
 
