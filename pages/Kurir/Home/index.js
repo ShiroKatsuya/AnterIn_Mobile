@@ -1,12 +1,49 @@
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error,Dimensions,ScrollView,RefreshControl,refreshing,onRefresh } from 'react-native';
-import React, { useState } from 'react';
+import React, {useEffect,useState} from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl, Button,PermissionsAndroid,Linking,onRefresh,refreshing } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
+import { io } from 'socket.io-client';
+import Geolocation from '@react-native-community/geolocation';
+
 
 export default function HomeKurir() {
     const navigation = useNavigation()
+    const [ambilData, setAmbilData] = useState([]);
+    const [dataPribadi, setDataPribadi] = useState({});
+    
+  const [refreshing, setRefreshing] = React.useState(false);
+  
+  const handleRating = (rating) => {
+    return rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : '';
+  }
+
+  useEffect(()=>{
+
+  }),[dataPribadi.token]
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/data_rating`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setAmbilData(response.data["Data Berhasil Didapatkan"]);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetchData()
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, [dataPribadi.token]);
+
+  
   return (
     <>
 
@@ -91,21 +128,24 @@ export default function HomeKurir() {
      
       </View>
 
+
       <View style={{ }}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.cardrating}>
-        
+        {ambilData && Array.isArray(ambilData) && ambilData.map((item, index) => (
       <View style={styles.cardmessage}>
-        <Text style={styles.cardratingteks}>Nama : Lumayan </Text>
-        <Text style={styles.cardratingteks}>Komentar : Lumayan </Text>
-        <Text style={styles.cardratingteks}>Saran : Lumayan </Text>
+        <Text style={styles.cardratingteks}>Nama : {ambilData.nama} </Text>
+        <Text style={styles.cardratingteks}>Komentar : {ambilData.rating} </Text>
+        <Text style={styles.cardratingteks}>Saran : {ambilData.saran} </Text>
       </View>
+         ))}
+ 
 
 
         </View>
       </ScrollView>
     </View>
-    
+  
     </View>
     </>
   )
