@@ -21,7 +21,14 @@ const Dashboard = () => {
 
   // console.log(lokasi)
 
+
+
+
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const handleRating = (rating) => {
+    return rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : '';
+  }
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -103,7 +110,7 @@ const Dashboard = () => {
           }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-        // console.log(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -324,8 +331,8 @@ const Dashboard = () => {
         {ambilData && Array.isArray(ambilData) && ambilData.map((item, index) => (
       <View key={index} style={styles.cardmessage}>
         <Text style={styles.cardratingteks}>Nama : {item.nama}</Text>
-        <Text style={styles.cardratingteks}>Komentar : {item.rating}</Text>
-        <Text style={styles.cardratingteks}>Saran : {item.saran}</Text>
+        <Text style={styles.cardratingteks}>Rating: {handleRating(item.rating)}</Text>
+        <Text style={styles.cardratingteks}>Saran : {item.komentar}</Text>
       </View>
     ))}
 

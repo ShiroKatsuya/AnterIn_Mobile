@@ -88,7 +88,7 @@ export default function Checkout() {
       });
   
       const updatedGrossAmount = detailtopup.gross_amount - pilih.Harga_Paket;
-      setDetailTopUp({...detailtopup, gross_amount: updatedGrossAmount}); // Update local state
+      setDetailTopUp({...detailtopup, gross_amount: updatedGrossAmount}); 
   
       const saldoResponse = await axios.put(`${baseUrl.url}/udpdatesaldo`, { gross_amount: pilih.Harga_Paket }, {
         headers: {

@@ -12,7 +12,7 @@ import DetailPesanan from "./konsumen/DetailPesanan";
 import Checkout from "./konsumen/Checkout";
 import InputPesanan from "./konsumen/InputPesanan";
 import Kurir from "./konsumen/Kurir";
-import Rating from "./konsumen/Rating";
+import BerikanRating from "./konsumen/Rating";
 import baseUrl from "./baseUrl";
 import Maps from "./konsumen/OpenMaps";
 import RajaOngkir from "./konsumen/RajaOngkir";
@@ -35,5 +35,5 @@ import TopUp from "./konsumen/TopUp";
 import DetailTopUp from "./konsumen/TopUp/DetailTopUp";
 import RiwayatTopUp from "./konsumen/TopUp/Riwayat";
 import RiwayatStatusSucces from "./konsumen/TopUp/RiwayatStatusSucces";
-export {RiwayatStatusSucces,RiwayatTopUp,DetailTopUp,TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,Rating,baseUrl,Maps,RajaOngkir,HomeKurir}
+export {RiwayatStatusSucces,RiwayatTopUp,DetailTopUp,TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,BerikanRating,baseUrl,Maps,RajaOngkir,HomeKurir}
 
