@@ -38,6 +38,9 @@ export default function Checkout() {
     };
 
     fetchData();
+
+
+
   }, []);
 
   const handlePilih = (item) => {
@@ -143,7 +146,9 @@ export default function Checkout() {
           console.error(error);
         }
       };
-      fetchData();
+      // fetchData();
+      const interval = setInterval(fetchData, 5000);
+      return () => clearInterval(interval);
     }, [dataPribadi.token]);
 
 

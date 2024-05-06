@@ -1,5 +1,5 @@
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,16 +7,58 @@ import { baseUrl } from '../../baseUrl';
 
 export default function LoginKurir() {
   const navigation = useNavigation();
-  
-  const handleKurirDashboard = () => {
-    
-    navigation.navigate('KurirMaintab');
-    if (handleKurirDashboard){
-        console.log('Tombol Ditekan');
-    }else{
-        console.log('Err')
-    }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
 
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    if (value === '') {
+      setError('Password Tidak Boleh Kosong');
+    } else {
+      setError('');
+    }
+  }
+
+
+  const handleEmailChange = (value) => {
+    setEmail(value);
+    if (value === '') {
+      setError('Email Tidak Boleh Kosong');
+    } else {
+      setError('');
+    }
+  }
+  
+  const handleKurirDashboard = async() => {
+    try {
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('role_id', 3); 
+
+        const response = await axios.post(
+            `${baseUrl.url}/login`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
+
+        console.log(response.data);
+
+        if (response.data.success && response.data.data.role_id === 3) {
+            await AsyncStorage.setItem('token', response.data.data.token);
+            navigation.navigate('KurirMaintab');
+        } else {
+            setError('Username/Password Salah !');
+        }
+    } catch (error) {
+        console.log('Username/Password Salah !');
+        setError('Username/Password Salah !');
+    }
   };
   return (
     <>  
@@ -51,16 +93,16 @@ export default function LoginKurir() {
                     style={[styles.input, styles.form2]}
                     placeholder="Nama atau Email"
                     placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                    // value={email}
-                    // onChangeText={handleEmailChange}
+                    value={email}
+                    onChangeText={handleEmailChange}
                     // secureTextEntry={true}
                 />
                 <TextInput
                     style={[styles.input, styles.form2]}
                     placeholder="Password"
                     placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                    // value={password}
-                    // onChangeText={handlePasswordChange}
+                    value={password}
+                    onChangeText={handlePasswordChange}
                     secureTextEntry={true}
                 />
                 <Button

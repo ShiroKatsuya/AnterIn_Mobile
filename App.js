@@ -62,7 +62,7 @@ function KurirMaintab() {
         HeaderCustome: (props) => <headerTitle {...props} />, 
         title: "Home",
         tabBarIcon: ({ color }) => (
-          <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
         )
       }}
       />
@@ -75,7 +75,7 @@ function KurirMaintab() {
         HeaderCustome: (props) => <headerTitle {...props} />, 
         title: "Profile",
         tabBarIcon: ({ color }) => (
-          <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+          <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
         )
       }}
       />
@@ -88,7 +88,7 @@ function KurirMaintab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Pemberitaahuan",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Rating.png')} style={{ width: 50, height: 50, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 50, height: 50, tintColor: color }} />
           )
         }}
       />
@@ -128,7 +128,7 @@ function MainTab() {
           title : "Home" ,
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
           )
         }}
       />
@@ -143,7 +143,7 @@ function MainTab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title:"Rating",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
           )
         }}
       />
@@ -158,7 +158,7 @@ function MainTab() {
           title:"Checkout Sekarang !",
           tabBarLabel: 'Transaksi',
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Cart.png')} style={{ width: 60, height: 60, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Cart.png')} style={{ width: 60, height: 60, tintColor: color }} />
           )
         }}
       />
@@ -171,7 +171,7 @@ function MainTab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Profile",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
           )
         }}
       />
@@ -183,7 +183,7 @@ function MainTab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "RiwayatTopUp",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+            <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
           )
         }}
       />
