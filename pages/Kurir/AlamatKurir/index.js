@@ -6,6 +6,8 @@ import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 
 export default function AlamatKurir() {
+  const [ambilDataAlamat, setAmbilDataAlamat] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
 
   const navigation = useNavigation();
 
@@ -14,6 +16,33 @@ export default function AlamatKurir() {
     navigation.navigate('TambahAlamatLengkapKurir')
 
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/datauser`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setAmbilDataAlamat(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [dataPribadi.token]);
+
+
 
   return (
     <>
@@ -27,11 +56,14 @@ export default function AlamatKurir() {
         </View>
       </TouchableOpacity>
       {/* CardForm */}
+      {ambilDataAlamat && (
       <View style={styles.form}>
         <Text style={styles.cardtext}>Alamat Lengkap : </Text>
           <View>
-            <Text style={styles.cardtext}>NULL</Text>
+            <Text style={styles.cardtext}>{ambilDataAlamat.alamat}</Text>
+            {/* <Text style={styles.cardtext}>{ambilDataAlamat.updated_at.slice(0,10)}</Text> */}
           </View>
+   
         {/* Button Edit dan Hapus */}
         <View style={styles.button}>
           <View style={styles.button2}>
@@ -46,6 +78,7 @@ export default function AlamatKurir() {
           </View>
         </View>
       </View>
+             )}
     </View>
     <View style={{  backgroundColor: '#0B111F', padding: 20 }}>
     </View>

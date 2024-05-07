@@ -1,10 +1,52 @@
-import { StyleSheet, Text, View,Image } from 'react-native'
-import React from 'react'
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error,ScrollView,FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from '../../baseUrl';
 
 export default function Pengumuman() {
+
+  const [ambilDataPengumuman, setAmbilDataPengumuman] = useState({});
+  // const [dataPribadi,setDataPribadi]=useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/infopengumuman`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setAmbilDataPengumuman(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+
   return (
     <View style={styles.container}>
 
+      <ScrollView>
+
+ 
+    <FlatList 
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
+    data = {ambilDataPengumuman}
+    renderItem = {({item}) => (
       <View style={styles.boxmessage}>
         <View style={styles.information}>
             <View style = {styles.foto}>
@@ -18,13 +60,13 @@ export default function Pengumuman() {
            Pemberitahuan
                 </Text>
                 <Text style={styles.info}>
-          By.Admin
+            {item.nama}
                 </Text>
                 <Text style={styles.info}>
-                5-2-2024
+                {item.created_at.slice(0,10)}
                 </Text>
                 <Text style={styles.info}>
-                Migrasi server aplication to point 1.1...
+                {item.deskripsi}
                 </Text>
                 </View>
             </View>
@@ -38,72 +80,11 @@ export default function Pengumuman() {
         </View>
         
       </View>
-      <View style={styles.boxmessage}>
-        <View style={styles.information}>
-            <View style = {styles.foto}>
-            <Image
-                    source={require('../../img/Pemberithuan.png')}
-                    resizeMode="cover"
-                    style={styles.img}
-                />
-                <View>
-                <Text style={styles.info}>
-           Pemberitahuan
-                </Text>
-                <Text style={styles.info}>
-          By.Admin
-                </Text>
-                <Text style={styles.info}>
-                5-2-2024
-                </Text>
-                <Text style={styles.info}>
-                Migrasi server aplication to point 1.1...
-                </Text>
-                </View>
-            </View>
-            <View>
-            <Text style={styles.info}>
-              Selengkapnya
-          </Text>
-            </View>
+    )}
+    />
+     </ScrollView>
 
-       
-        </View>
-        
-      </View>
-      <View style={styles.boxmessage}>
-        <View style={styles.information}>
-            <View style = {styles.foto}>
-            <Image
-                    source={require('../../img/Pemberithuan.png')}
-                    resizeMode="cover"
-                    style={styles.img}
-                />
-                <View>
-                <Text style={styles.info}>
-           Pemberitahuan
-                </Text>
-                <Text style={styles.info}>
-          By.Admin
-                </Text>
-                <Text style={styles.info}>
-                5-2-2024
-                </Text>
-                <Text style={styles.info}>
-                Migrasi server aplication to point 1.1...
-                </Text>
-                </View>
-            </View>
-            <View>
-            <Text style={styles.info}>
-              Selengkapnya
-          </Text>
-            </View>
-
-       
-        </View>
-        
-      </View>
+ 
       
 
     </View>
