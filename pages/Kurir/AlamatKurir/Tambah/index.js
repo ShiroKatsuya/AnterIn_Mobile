@@ -3,8 +3,49 @@ import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { baseUrl } from '../../baseUrl';
+import { baseUrl } from '../../../baseUrl';
 export default function TambahAlamatLengkapKurir() {
+  // const [ambilDataAlamat, DataAlamat] = useState([]);
+  // const [dataPribadi,setDataPribadi]=useState({});
+
+  const navigation = useNavigation();
+
+  const handleInputChange = (name, value) => {
+    setForm({
+        ...form,
+        [name]: value,
+    });
+  };
+  const [showMessage, setShowMessage] = useState(''); 
+
+  const [form, setForm] = useState({
+    alamat: '',
+});
+
+  const tambahAlamat = async () => {
+    if (!form.alamat) {
+        setShowMessage('Masukan Alamat');
+        return;
+    }
+  
+    try {
+        const token = await AsyncStorage.getItem('token');
+        const data = {
+            alamat: form.alamat,
+  
+        };
+  
+        const response = await axios.put(`${baseUrl.url}/userupdate`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        console.log(response.data);
+  
+    } catch (error) {
+        console.error(error);
+    }
+  };
   return (
     <>
     <View style={styles.container}> 
@@ -18,8 +59,8 @@ export default function TambahAlamatLengkapKurir() {
       <TextInput
           style={[styles.input, styles.form2]}
           placeholder="Alamat Lengkap"
-          // value={form.alamat}
-          // onChangeText={(text) => handleInputChange('alamat', text)}
+          value={form.alamat}
+          onChangeText={(text) => handleInputChange('alamat', text)}
         />
       <Text style = {styles.text}>Simpan Sebagai</Text>
       <View style={styles.tempat}>
@@ -84,18 +125,18 @@ export default function TambahAlamatLengkapKurir() {
       <View style= {{ marginTop:25 }}>
       <Button 
                 title="Submit"
-                // style={{marginTop:20}}
-                // onPress={() => {
-                //     if (form.alamat) {
-                //         tambahAlamat()
-                //         alert('Data berhasil dikirim!');
-                //         navigation.navigate('Alamat');
-                //     } else {
-                //         alert('Harap lengkapi semua form sebelum submit');
-                //     }
+                style={{marginTop:20}}
+                onPress={() => {
+                    if (form.alamat) {
+                        tambahAlamat()
+                        alert('Data berhasil dikirim!');
+                        navigation.navigate('AlamatKurir');
+                    } else {
+                        alert('Harap lengkapi semua form sebelum submit');
+                    }
 
-                // }}
-                // color="black" 
+                }}
+                color="black" 
         />
         </View>
         {/* {showMessage && <Text>{showMessage}</Text>} */}

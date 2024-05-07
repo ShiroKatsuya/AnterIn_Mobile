@@ -10,14 +10,92 @@ import Geolocation from '@react-native-community/geolocation';
 
 export default function HomeKurir() {
     const navigation = useNavigation()
-    const [ambilData, setAmbilData] = useState([]);
+    const [ambilData, setAmbilData] = useState(null);
     const [dataPribadi, setDataPribadi] = useState({});
+    const [ambilDataProfile, setAmbilDataProfile] = useState(null);
+    const [lokasi,setAddress]=useState('');
+    const [currentLocation,setCurrentLocation]=useState(null);
+
+
     
   const [refreshing, setRefreshing] = React.useState(false);
+
+  // console.log(ambilData)
   
   const handleRating = (rating) => {
     return rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : '';
   }
+
+  const Akseslokasi = async () => {
+    try {
+      const akseslokasi = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Access Required',
+          message: 'This app needs to access your location',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        // granted();
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    Akseslokasi().then(() => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude ,accuracy,altitude } = position.coords;
+          setCurrentLocation({ latitude, longitude });
+          // console.log(latitude, longitude);
+          const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          fetch(url).then(res=>res.json()).then(data=>{
+            // console.log(data)
+            setAddress(data)
+          })
+          // console.log('Latitude : ',latitude)
+          // console.log('Longtitude : ',longitude)
+          // console.log('Accuracy : ',accuracy)
+          // console.log('Altitude : ',altitude)
+
+        },
+        error => {
+          console.error('Error Lokasi:', error.message);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/datauser`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setAmbilDataProfile(response.data["data"]);
+        console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
 
   useEffect(()=>{
 
@@ -33,7 +111,7 @@ export default function HomeKurir() {
           }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -61,19 +139,19 @@ export default function HomeKurir() {
 
       {/* Card Info */}
           <View style={styles.cardInfo}>
-     
+     {ambilDataProfile && lokasi && 
         <View style={styles.cardInfoRow}>
           <Image source={require('../../img/logo.png')} style={styles.logo} />
           <View style={styles.userDetails}>
-            <Text style={styles.userName}>Sule</Text>
+            <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
             {/* <Text style={styles.userName}>{ambilDataProfile.alamat}</Text> */}
-            <Text style={styles.userPhone}>0895806770203</Text>
-             <Text style={styles.userPhone}>Sindangkerta</Text>
-          <Text style={styles.userPhone}>Indramayu</Text>
-
+            <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
+             <Text style={styles.userPhone}>{lokasi.address.town}</Text>
+          <Text style={styles.userPhone}>{lokasi.address.city}</Text>
           </View>
 
         </View>
+        }
 
       
 
@@ -133,10 +211,10 @@ export default function HomeKurir() {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.cardrating}>
         {ambilData && Array.isArray(ambilData) && ambilData.map((item, index) => (
-      <View style={styles.cardmessage}>
-        <Text style={styles.cardratingteks}>Nama : {ambilData.nama} </Text>
-        <Text style={styles.cardratingteks}>Komentar : {ambilData.rating} </Text>
-        <Text style={styles.cardratingteks}>Saran : {ambilData.saran} </Text>
+      <View key={index} style={styles.cardmessage}>
+        <Text style={styles.cardratingteks}>Nama : {item.nama} </Text>
+        <Text style={styles.cardratingteks}>Komentar : { handleRating(item.rating)} </Text>
+        <Text style={styles.cardratingteks}>Saran : {item.komentar} </Text>
       </View>
          ))}
  
@@ -248,6 +326,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 10,
+    marginTop:-20
   },
   logo1: {
     width: 50,
