@@ -97,6 +97,7 @@ const InputPesanan = ({ route }) => {
         Nama_Barang: Nama_Barang,
         Lebar_cm: Lebar_cm,
         Tinggi_cm: Tinggi_cm,
+        Berat_kg: '',
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
@@ -177,6 +178,8 @@ const InputPesanan = ({ route }) => {
             return;
         } else if (!form.DetailAlamat) {
             setShowMessage('Masukan Detail Alamat')
+        }else if (!form.Berat_kg) {
+            setShowMessage('Masukan Berat_kg')
         }
 
 
@@ -194,6 +197,7 @@ const InputPesanan = ({ route }) => {
                 province: pilihalamat.province,
                 postal_code: pilihalamat.postal_code,
                 DetailAlamat: form.DetailAlamat,
+                Berat_kg: form.Berat_kg,
 
             };
 
@@ -257,6 +261,7 @@ const InputPesanan = ({ route }) => {
                             keyboardType="numeric"
                         />
 
+
     
 
                         <Button
@@ -273,6 +278,13 @@ const InputPesanan = ({ route }) => {
                                 setInputEnabled(!inputEnabled);
                             }}
                         />
+                <TextInput
+                placeholder='Masukan Berat_kg'
+                value={form.Berat_kg}
+                // onChangeText={(text) => handleInputChange('Berat_kg', text)}
+                />
+
+
                         </View>
                     
                     <View style={styles.form}>
@@ -351,7 +363,7 @@ const InputPesanan = ({ route }) => {
                         <Button
                             title="Submit"
                             onPress={() => {
-                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat) {
+                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && form.Berat_kg) {
                                     kirimPesanan();
                                     alert('Data berhasil dikirim!');
                                     navigation.navigate('Checkout');
