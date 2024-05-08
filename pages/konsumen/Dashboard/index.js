@@ -110,7 +110,7 @@ const Dashboard = () => {
           }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -153,14 +153,14 @@ const Dashboard = () => {
           },
         });
         setdetailtopup(response.data["data"]);
-        console.log(response.data);
+        // console.log(response.data);
 
       } catch (error) {
         console.error(error);
       }
     };
   
-    fetchData();
+    // fetchData();
     const interval = setInterval(fetchData,5000)
     return()=>clearInterval(interval)
 

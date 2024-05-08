@@ -26,7 +26,7 @@ export default function Pengumuman() {
       //   console.log(response.data)
 
       //  //lu cobain dulu dah console.log ada kgk datanya 
-        console.log(response.data) 
+        // console.log(response.data) 
       } catch (error) {
         console.error(error);
       }
