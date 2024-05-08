@@ -4,6 +4,66 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { baseUrl } from '../../baseUrl';
 export default function DaftarKurir() {
+  
+  const [showMessage, setShowMessage] = useState(null);
+
+  const [showPassword, setShowPassword] = useState(true);
+
+  const navigation = useNavigation();
+  const [form, setForm] = useState({
+    nama: '',
+    nohp: '',
+    email: '',
+    password: '',
+    role_id: '3', 
+  });
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (name, value) => {
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+
+  const handleLogin = () => {
+    navigation.navigate('LoginKurir');
+  }
+
+  //disisini logika validasi ya !!
+  const register = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.nama) {
+      setShowMessage('Masukkan Nama');
+      return;
+    } else if (!form.email || !emailRegex.test(form.email)) {
+      setShowMessage('Masukkan Email Yang Valid');
+      return;
+    } else if (!form.password) {
+      setShowMessage('Masukkan Password');
+      return;
+    } else if (!form.nohp) {
+      setShowMessage('Masukkan No.Hp');
+      return;
+    }
+                                    //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
+    try {                           // jangan lupa /api/... adalah benar untuk routing nya
+      const response = await axios.post(`${baseUrl.url}/register`, form); 
+      if (response.data) {
+        setShowMessage('Registrasi berhasil');
+        console.log(response.data)
+
+      }
+    } catch (error) {
+      setShowMessage(error.response.data.message || 'Terjadi kesalahan');
+    }
+  };
+
+
   return (
     <>
     <View style={styles.flexheader}>
@@ -26,13 +86,13 @@ export default function DaftarKurir() {
             style={[styles.input, styles.form2]}
             placeholder="Nama"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
-            // onChangeText={(text) => handleInputChange('nama', text)}
+            onChangeText={(text) => handleInputChange('nama', text)}
           />
           <TextInput
             style={[styles.input, styles.form2]}
             placeholder="Email"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
-            // onChangeText={(text) => handleInputChange('email', text)}
+            onChangeText={(text) => handleInputChange('email', text)}
           />
 
           <View>
@@ -40,13 +100,13 @@ export default function DaftarKurir() {
               style={[styles.input, styles.form2]}
               placeholder="Password"
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              // onChangeText={(text) => handleInputChange('password', text)}
-              // secureTextEntry={showPassword}
+              onChangeText={(text) => handleInputChange('password', text)}
+              secureTextEntry={showPassword}
             />
-            <TouchableOpacity >
-              {/* <Text style={{ backgroundColor: 'red', padding: 7, borderRadius: 10, alignSelf: 'flex-end', textAlign: 'center', color: 'white', fontSize: 10, marginTop: -6, marginBottom: 3 }}>
+            <TouchableOpacity onPress={toggleShowPassword}>
+              <Text style={{ backgroundColor: 'red', padding: 7, borderRadius: 10, alignSelf: 'flex-end', textAlign: 'center', color: 'white', fontSize: 10, marginTop: -6, marginBottom: 3 }}>
                 {showPassword ? 'Show Password' : 'Hide Password'}
-              </Text> */}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -54,23 +114,30 @@ export default function DaftarKurir() {
             style={[styles.input, styles.form2]}
             placeholder="No.Hp"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
-            // onChangeText={(text) => handleInputChange('nohp', text)}
+            onChangeText={(text) => handleInputChange('nohp', text)}
           />
 
+        {/* <TextInput
+            style={[styles.input, styles.form2]}
+            placeholder="Alamat"
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            onChangeText={(text) => handleInputChange('nohp', text)}
+          /> */}  
+          {/* Bagian bottom */}
           <Button title="Daftar" color="#EDA01F"
-          //  onPress={() => {
-          //      if ( form.nama && form.email && form.password && form.nohp) {
-          //          register()
-          //          alert('Anda Berhasil Daftar');
-          //          navigation.navigate('Login');
+           onPress={() => {
+               if ( form.nama && form.email && form.password && form.nohp) {
+                   register()
+                   alert('Anda Berhasil Daftar');
+                   navigation.navigate('LoginKurir');
              
-          //      } else {
-          //          alert('Harap lengkapi semua form sebelum submit');
-          //      }
-          //  }}
+               } else {
+                   alert('Harap lengkapi semua form sebelum submit');
+               }
+           }}
   
           />
-          {/* {showMessage && <Text>{showMessage}</Text>} */}
+          {showMessage && <Text>{showMessage}</Text>}
   
           <Text style={styles.akun}>
             Jika Memiliki Akun?
@@ -78,7 +145,7 @@ export default function DaftarKurir() {
     
           {/* <TouchableOpacity onPress={handleLogin}> */}
           <View style={{marginTop:12}}>
-            <Button title='Login' color="#EDA01F"/>
+            <Button title='Login' color="#EDA01F" onPress={handleLogin}/>
           </View>
           {/* </TouchableOpacity> */}
         </View>

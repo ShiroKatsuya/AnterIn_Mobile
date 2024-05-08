@@ -1,5 +1,5 @@
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,16 +7,46 @@ import { baseUrl } from '../../baseUrl';
 
 export default function ProfileKurir() {
 
-  navigation = useNavigation()
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+  const [dataPribadi,setDataPribadi]=useState({});
+  const navigation = useNavigation();
+
+
 
   const handleLogout = () => {
     navigation.navigate('LoginKurir')
   };
 
   const handleAlamat = () => {
-    navigation.navigate('TambahAlamatKurir')
+    navigation.navigate('AlamatKurir')
   };
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios(`${baseUrl.url}/datauser`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetchData();
+
+    const interval = setInterval(fetchData,5000)
+    return () => clearInterval(interval)
+
+  }, [dataPribadi.token]);
 
   return (
 <>
@@ -26,16 +56,18 @@ export default function ProfileKurir() {
 
         {/* Profile */}
 
-  
+    {ambilDataProfile && (
         <View style={{ alignItems: 'center', flexDirection: 'column' }}>
           <Image
             source={require('../../img/logo.png')}
             resizeMode="cover"
             style={{ width: 90, height: 90 }}
           />
-          <Text style={{ fontWeight: 'bold' }}>Riski</Text>
-          <Text style={{ fontWeight: 'bold' }}>081234567890</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nama}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nohp}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.alamat}</Text>
         </View>
+    )}
 
 
       {/* alamat + Edit Profile */}

@@ -35,6 +35,9 @@ export default function Login() {
           const formData = new FormData();
           formData.append('email', email);
           formData.append('password', password);
+          formData.append('role_id', 2);
+
+
   
           const response = await axios.post(
               'http://192.168.100.56:8888/api/login',
@@ -46,11 +49,12 @@ export default function Login() {
               }
           );
   
-          console.log(response.data);
+
   
-          if (response.data.success) {
+          if (response.data.success && response.data.data.role_id === 2) {
               await AsyncStorage.setItem('token', response.data.data.token);
               navigation.navigate('MainTab');
+              console.log(response.data);
 
           } else {
               setError('Username/Password Salah !');

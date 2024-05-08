@@ -14,10 +14,21 @@ const Dashboard = () => {
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
   const [currentLocation,setCurrentLocation]=useState(null);
   const [lokasi,setAddress]=useState('');
+  const [detailtopup, setdetailtopup] = useState(null);
+  const handleTopup = () =>{
+    navigation.navigate('TopUp')
+  }
 
-  console.log(lokasi)
+  // console.log(lokasi)
+
+
+
 
   const [refreshing, setRefreshing] = React.useState(false);
+
+  const handleRating = (rating) => {
+    return rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : '';
+  }
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -61,8 +72,8 @@ const Dashboard = () => {
             // console.log(data)
             setAddress(data)
           })
-          console.log('Latitude : ',latitude)
-          console.log('Longtitude : ',longitude)
+          // console.log('Latitude : ',latitude)
+          // console.log('Longtitude : ',longitude)
           // console.log('Accuracy : ',accuracy)
           // console.log('Altitude : ',altitude)
 
@@ -100,12 +111,14 @@ const Dashboard = () => {
           }
         });
         setAmbilData(response.data["Data Berhasil Didapatkan"]);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
+    // fetchData()
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, [dataPribadi.token]);
 
 
@@ -123,7 +136,7 @@ const Dashboard = () => {
       //   console.log(response.data)
 
       //  //lu cobain dulu dah console.log ada kgk datanya 
-        console.log(response.data) 
+        // console.log(response.data) 
       } catch (error) {
         console.error(error);
       }
@@ -131,6 +144,29 @@ const Dashboard = () => {
     fetchData();
   }, [dataPribadi.token]);
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpembayaranbysaldo`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setdetailtopup(response.data["data"]);
+        // console.log(response.data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    // fetchData();
+    const interval = setInterval(fetchData,5000)
+    return()=>clearInterval(interval)
+
+  }, []);
 
   return (
     <>
@@ -161,10 +197,10 @@ const Dashboard = () => {
             {lokasi.address.city && <Text style={styles.userPhone}>{lokasi.address.city}</Text>}
 
 
-  
+
 
           </View>
-
+      
         </View>
 
       }
@@ -226,6 +262,25 @@ const Dashboard = () => {
           </>
         )} */}
           </View>
+          {detailtopup &&
+          <>
+          <View style={styles.boxsaldo}>
+            <Text style={styles.userPhone}>
+              Saldo Anda 
+            </Text>
+            <Text style={styles.userPhone}>
+           Rp.{detailtopup.gross_amount}
+            </Text>
+            <TouchableOpacity onPress={handleTopup}>
+            <Text style={styles.TopUp}>
+             Isi Saldo !
+            </Text>
+            </TouchableOpacity>
+     
+          </View>
+          </>
+          }
+
     </View>
 
 </View>
@@ -278,8 +333,8 @@ const Dashboard = () => {
         {ambilData && Array.isArray(ambilData) && ambilData.map((item, index) => (
       <View key={index} style={styles.cardmessage}>
         <Text style={styles.cardratingteks}>Nama : {item.nama}</Text>
-        <Text style={styles.cardratingteks}>Komentar : {item.rating}</Text>
-        <Text style={styles.cardratingteks}>Saran : {item.saran}</Text>
+        <Text style={styles.cardratingteks}>Rating: {handleRating(item.rating)}</Text>
+        <Text style={styles.cardratingteks}>Saran : {item.komentar}</Text>
       </View>
     ))}
 
@@ -296,6 +351,23 @@ const Dashboard = () => {
 };
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  TopUp:{
+    color:'white',
+    fontWeight:'bold',
+    textAlign:'center',
+    // marginRight:15,
+    marginTop:5,
+    backgroundColor:'#EDA01F',
+    padding:5,
+    borderRadius:4
+  },
+  boxsaldo:{
+    flexDirection :'column',
+    // justifyContent:'flex-end',
+    alignItems:'flex-end',
+    marginTop:-55,
+    marginRight:50
+  },
   alamat:{
     backgroundColor:'blue',
     padding:10,

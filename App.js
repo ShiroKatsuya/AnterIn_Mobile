@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, } from './pages/route'; 
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, RiwayatStatusSucces, BerikanRating, } from './pages/route'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
 
 
@@ -81,12 +81,12 @@ function KurirMaintab() {
       />
       <Tab.Screen
 
-        name="Pengumuman"
+        name="Pemberitahuan"
         component={Pengumuman}
         options={{
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
-          title: "Pengumuman",
+          title: "Pemberitaahuan",
           tabBarIcon: ({ color }) => (
             <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 50, height: 50, tintColor: color }} />
           )
@@ -111,10 +111,7 @@ function MainTab() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        // headerShown: false,
         tabBarStyle: {
-          // height: 90,
-          // paddingHorizontal: 5,
           paddingTop: 0,
           backgroundColor: '#0B111F',
           position: 'absolute',
@@ -123,7 +120,6 @@ function MainTab() {
       })}
     >
       <Tab.Screen
- 
         name="Home"
         component={Dashboard}
         options={{
@@ -148,26 +144,26 @@ function MainTab() {
    title : "Home" ,
    tabBarLabel: 'Home',
    tabBarIcon: ({ color }) => (
-     <Image source={require('../AnterIn_Mobile/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
+     <Image source={require('../AnterIn/pages/img/Home.png')} style={{ width: 60, height: 60, tintColor: color }} />
    )
  }}
 /> */}
 
 
-           <Tab.Screen
-        name="Rating"
-        component={Rating}
+      <Tab.Screen
+        name="BerikanRating"
+        component={BerikanRating}
         options={{
-   
           ...headerOption,
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title:"Rating",
           tabBarIcon: ({ color }) => (
             <Image source={require('../AnterIn_Mobile/pages/img/Rating.png')} style={{ width: 45, height: 45, tintColor: color }} />
           )
-
         }}
       />
+
+
       <Tab.Screen
         name="Transaksi"
         component={Transaksi}
@@ -182,8 +178,6 @@ function MainTab() {
         }}
       />
 
-  
-
       <Tab.Screen
         name="Profile"
         component={Profile}
@@ -192,13 +186,10 @@ function MainTab() {
           HeaderCustome: (props) => <headerTitle {...props} />, 
           title: "Profile",
           tabBarIcon: ({ color }) => (
-            <Image source={require('../AnterIn_Mobile/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
+            <Image source={require('../AnterIn/pages/img/Profil.png')} style={{ width: 60, height: 60, tintColor: color }} />
           )
         }}
       />
-
-
-
     </Tab.Navigator>
   );
 }
@@ -216,6 +207,8 @@ function App() {
             title: "Halaman Login",
           }}
         />
+
+        
                 <Stack.Screen
     name="RajaOngkir"
     component={RajaOngkir}
@@ -351,6 +344,16 @@ function App() {
                   title: "Detail Pesanan",
                 }}
               />
+
+<Tab.Screen
+                name="RiwayatStatusSucces"
+                component={RiwayatStatusSucces}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Selesai",
+                }}
+              />
                       <Tab.Screen
                 name="Checkout"
                 component={Checkout}
@@ -394,7 +397,7 @@ function App() {
                 options={{
                   ...headerOption,
                   HeaderCustome: (props) => <headerTitle {...props} />, 
-                  title: "Detail Pemansan By User",
+                  title: "Rincian Pendapatan",
                 }}
               />
                             <Tab.Screen
@@ -422,6 +425,54 @@ function App() {
                   ...headerOption,
                   HeaderCustome: (props) => <headerTitle {...props} />, 
                   title: "Detail Pemesanan",
+                }}
+              />
+
+<Tab.Screen
+                name="TopUp"
+                component={TopUp}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "TopUp",
+                }}
+              />
+              
+              <Tab.Screen
+                name="DetailTopUp"
+                component={DetailTopUp}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Detail TopUp",
+                }}
+              />
+
+{/* <Tab.Screen
+                name="RiwayatTopUp"
+                component={RiwayatTopUp}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Riwayat TopUp",
+                }}
+              /> */}
+                                                     <Tab.Screen
+                name="TambahAlamatLengkapKurir"
+                component={TambahAlamatLengkapKurir}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Tambah Alamat Lengkap Kurirr",
+                }}
+              />
+                                                     <Tab.Screen
+                name="AlamatKurir"
+                component={AlamatKurir}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Alamat Kurir",
                 }}
               />
               

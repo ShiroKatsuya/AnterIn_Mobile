@@ -18,9 +18,6 @@ export default function TambahALamat() {
 
   const [form, setForm] = useState({
     alamat: '',
-
-
-
 });
 
 useEffect(() => {

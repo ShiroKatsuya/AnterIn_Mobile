@@ -32,9 +32,11 @@ export default function Gaji() {
               style={styles.img2}
             />
           <View style={styles.submitbutton}>
+            <TouchableOpacity>
             <Text style={styles.text3}>
               TARIK SEKARANG !
             </Text>
+            </TouchableOpacity>
           </View>
         </View>
 

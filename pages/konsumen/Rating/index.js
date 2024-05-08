@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions, } from 'react-native';
+=======
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions, ViewComponent } from 'react-native';
+>>>>>>> cfd6be47fc7dd74ff2bea804477e6d0216d3a230
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import StarRating from 'react-native-star-rating'; 
 import { baseUrl } from '../../baseUrl';
-
-export default function Rating() {
+import { Rating, AirbnbRating } from 'react-native-ratings';
+export default function BerikanRating() {
 
     const [showMessage, setShowMessage] = useState(''); 
     const navigation = useNavigation();
@@ -15,7 +19,7 @@ export default function Rating() {
 
     const [form, setForm] = useState({
         rating: '',
-        saran: '',
+        // saran: '',
 
 
     });
@@ -29,10 +33,7 @@ export default function Rating() {
 
     const kirimPesanan = async () => {
         if (!form.rating) {
-            setShowMessage('Masukan Komentar');
-            return;
-        } else if (!form.saran) {
-            setShowMessage('Masukkan Saran');
+            setShowMessage('Jumlah Rating');
             return;
         }
 
@@ -40,7 +41,7 @@ export default function Rating() {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 rating: form.rating,
-                saran: form.saran,
+   
             };
 
             const response = await axios.post('http://192.168.100.56:8888/api/rating', data, {
@@ -61,10 +62,27 @@ export default function Rating() {
   return (
     <View style={styles.container}>
         <View style = {styles.form}>
-            <Text style = {styles.text}>
+            {/* <Text style = {styles.text}>
                 BERIKAN RATING ANDA
-            </Text> 
+            </Text>  */}
+            <TextInput
 
+                placeholder='Berikan rating anda pada pelayanan kami,agar kami dapat mengukur kualitas pelayanan kami'
+                editable={false}
+                multiline={true}
+                style={{fontSize:15,textAlign:'center', width:400, alignSelf:'center'}}
+            />
+
+            <Rating
+            ratingCount={5}
+            startingValue={0}
+            showRating
+            onFinishRating={(rating) => handleInputChange('rating', rating)}
+            style={{ paddingVertical: 10 }}
+            value={form.rating}
+/>
+
+{/* 
             <View style= {styles.inputform}>
                     {/* <TextInput
                         style={{ backgroundColor:'#EDA01F', color:'white', marginBottom:20 , height:50 , fontSize:20 , borderRadius:10}}
@@ -73,6 +91,7 @@ export default function Rating() {
                         value={form.rating}
                         onChangeText={(text) => handleInputChange('rating', text)}
                     /> */}
+<<<<<<< HEAD
                     <StarRating
                         
                     />
@@ -87,43 +106,71 @@ export default function Rating() {
                         onChangeText={(text) => handleInputChange('saran', text)}
                     />
                     <View style={{marginTop:10}}>
+=======
+                   
+>>>>>>> cfd6be47fc7dd74ff2bea804477e6d0216d3a230
 
        
-                      <Button
-                        title="Submit"
-                        // style={{marginTop:20}}
+                      <TouchableOpacity
+           
                         onPress={() => {
-                            if (form.rating && form.saran) {
+                            if (form.rating) {
                                 kirimPesanan();
                                 alert('Data berhasil dikirim!');
                                 navigation.navigate('Home');
                             } else {
-                                alert('Harap lengkapi semua form sebelum submit');
+                                alert('Rating Tidak Boleh 0');
                             }
                         
                         }}
-                        color="black" 
-                    />
+                
+                    >
+                        <View         style={styles.submit}>
+                        <Text style={styles.textsubmit}>Submit</Text>
+                        </View>
+                    </TouchableOpacity>
                                  </View>
                     {showMessage && <Text>{showMessage}</Text>}
 
             </View>
 
-        </View>
 
-    </View>
   )
 }
 
 const styles = StyleSheet.create({
 
     submit:{
-        alignSelf:'center',
-        marginTop:20,
+        // alignSelf:'center',
+        // marginTop:20,
         padding:10,
         backgroundColor:'#EDA01F',
-        borderRadius:5
+        borderRadius:10,
+        // justifyContent:'flex-end',
+        // alignItems:'flex-end',
+        // width:100
+        alignSelf:'flex-end',
+        justifyContent:'center',
+        // flex:1
+        // width:100,
+        paddingLeft:100,
+        paddingRight:100,
+        borderRadius:10,
+        elevation:5,
+        marginHorizontal:10,
+        marginVertical:10
+
     },
+    textsubmit:{
+        color:'white',
+        fontWeight:'bold',
+        fontSize:17,
+        textAlign:'center'
+
+    },
+    // submit1:{
+    //     width:10
+    // },
 
     textsubmit:{
         color:'white',
@@ -132,7 +179,7 @@ const styles = StyleSheet.create({
     },
 
     inputform:{
-        padding:10,
+        // padding:10,
         // backgroundColor:'black',
         flexDirection:'column',
         justifyContent:'center',
@@ -151,14 +198,16 @@ const styles = StyleSheet.create({
     container:{
         flex :1,
         backgroundColor:'#EDA01F',
-        padding:10
+        // padding:10,
+        justifyContent:'center'
     },
 
     form:{
         padding:10,
         backgroundColor:'white',
-        borderRadius:10,
-        flex:1/2
+        // borderRadius:10,
+        flex:1,
+        justifyContent:'center'
     }
 
 
