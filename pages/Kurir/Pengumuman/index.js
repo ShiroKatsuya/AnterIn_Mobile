@@ -11,6 +11,8 @@ export default function Pengumuman() {
   const [ambilDataPengumuman, setAmbilDataPengumuman] = useState({});
   // const [dataPribadi,setDataPribadi]=useState({});
 
+  const [refresh,setRefresh]=useState(false)
+
   
 
   useEffect(() => {
