@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios'; 
+import axios from 'axios';
+import StarRating from 'react-native-star-rating'; 
 import { baseUrl } from '../../baseUrl';
 
 export default function Rating() {
@@ -65,12 +66,15 @@ export default function Rating() {
             </Text> 
 
             <View style= {styles.inputform}>
-                    <TextInput
+                    {/* <TextInput
                         style={{ backgroundColor:'#EDA01F', color:'white', marginBottom:20 , height:50 , fontSize:20 , borderRadius:10}}
                         multiline
                         numberOfLines={4}
                         value={form.rating}
                         onChangeText={(text) => handleInputChange('rating', text)}
+                    /> */}
+                    <StarRating
+                        
                     />
                             <Text style = {styles.text}>
                 BERIKAN SARAN ANDA
