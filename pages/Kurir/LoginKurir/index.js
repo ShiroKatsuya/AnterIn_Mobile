@@ -47,11 +47,12 @@ export default function LoginKurir() {
             }
         );
 
-        console.log(response.data);
+
 
         if (response.data.success && response.data.data.role_id === 3) {
             await AsyncStorage.setItem('token', response.data.data.token);
             navigation.navigate('KurirMaintab');
+            console.log(response.data);
         } else {
             setError('Username/Password Salah !');
         }

@@ -41,7 +41,11 @@ export default function ProfileKurir() {
         console.error(error);
       }
     };
-    fetchData();
+    // fetchData();
+
+    const interval = setInterval(fetchData,5000)
+    return () => clearInterval(interval)
+
   }, [dataPribadi.token]);
 
   return (
@@ -61,6 +65,7 @@ export default function ProfileKurir() {
           />
           <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nama}</Text>
           <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.nohp}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{ambilDataProfile.alamat}</Text>
         </View>
     )}
 

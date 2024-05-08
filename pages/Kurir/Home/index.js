@@ -16,6 +16,8 @@ export default function HomeKurir() {
     const [lokasi,setAddress]=useState('');
     const [currentLocation,setCurrentLocation]=useState(null);
 
+    // console.log(lokasi)
+
 
     
   const [refreshing, setRefreshing] = React.useState(false);
@@ -145,9 +147,9 @@ export default function HomeKurir() {
           <View style={styles.userDetails}>
             <Text style={styles.userName}>{ambilDataProfile.nama}</Text>
             {/* <Text style={styles.userName}>{ambilDataProfile.alamat}</Text> */}
-            <Text style={styles.userPhone}>{ambilDataProfile.nohp}</Text>
-             <Text style={styles.userPhone}>{lokasi.address.town}</Text>
-          <Text style={styles.userPhone}>{lokasi.address.city}</Text>
+            {lokasi.address.village && <Text style={styles.userPhone}>{lokasi.address.village}</Text>}
+            {lokasi.address.town && <Text style={styles.userPhone}>{lokasi.address.town}</Text>}
+            {lokasi.address.city && <Text style={styles.userPhone}>{lokasi.address.city}</Text>}
           </View>
 
         </View>
