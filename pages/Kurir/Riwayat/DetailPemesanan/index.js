@@ -89,7 +89,7 @@ const DetailPemansanByUser = (id) => {
             <FlatList
               nestedScrollEnabled={true}
               scrollEnabled={false}
-              data={Array.isArray(ambilDataByAlamat) ? ambilDataByAlamat.filter(item => item.city_name === city_name && item.Nama_Kurir === ambilDataProfile.nama) : []}
+              data={Array.isArray(ambilDataByAlamat) ? ambilDataByAlamat.filter(item => item.city_name === city_name && item.Nama_Kurir === ambilDataProfile.nama && item.status == 'Sudah Dibayar') : []}
               renderItem={({ item }) => (
                 <>
                   <View style={styles.proses}>

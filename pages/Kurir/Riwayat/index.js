@@ -53,7 +53,7 @@ export default function RiwayatPemesanan() {
 
         });
         data(response.data["data"]);
-        // console.log(response.data)
+        console.log(response.data)
       } catch (error) {
         console.error(error);
       }
@@ -99,7 +99,7 @@ export default function RiwayatPemesanan() {
             <FlatList
             nestedScrollEnabled={true}
             scrollEnabled={false}
-            data={Array.isArray(ambilData) ? ambilData.filter((item, index, self) => self.findIndex(t => t.city_name === item.city_name && t.Nama_Kurir === item.Nama_Kurir) === index && item.Nama_Kurir === ambilDataProfile.nama) : [] }
+            data={Array.isArray(ambilData) ? ambilData.filter((item, index, self) => self.findIndex(t => t.city_name === item.city_name && t.Nama_Kurir === item.Nama_Kurir) === index && item.Nama_Kurir === ambilDataProfile.nama && item.status == 'Sudah Dibayar') : [] }
             renderItem={({ item }) => (
               <>
                 <View style={styles.proses}>
