@@ -16,6 +16,7 @@ const InputPesanan = ({ route }) => {
     const [inputEnabled, setInputEnabled] = useState(false);
 
     const [selectedValue, setSelectedValue] = useState(null);
+    const [selectedValueBerat, setSelectedValueBerat] = useState(null);
 
     const [Nama_Barang, setNamaBarang] = useState(null);
     const [Lebar_cm, setLebar_cm] = useState(null);
@@ -37,6 +38,12 @@ const InputPesanan = ({ route }) => {
     const options = [
         { label: 'Opsi 1', value: 'Mobil' },
         { label: 'Opsi 2', value: 'Motor' },
+    ];
+
+    const Berat_kg = [
+        { label: '5-10 kg', value: '5-10 kg' },
+        { label: '11-15 kg', value: '11-15 kg' },
+        { label: '16-20 kg', value: '16-20 kg' },
     ];
 
     useEffect(() => {
@@ -93,11 +100,25 @@ const InputPesanan = ({ route }) => {
         }
     }, [route.params.data]);
 
+    useEffect(() => {
+        if (route.params.data && route.params.data.Berat_kg) {
+            selectedValueBerat(route.params.data.Berat_kg);
+
+            AsyncStorage.setItem('Berat_kg', route.params.data.Berat_kg);
+        } else {
+            AsyncStorage.getItem('Berat_kg').then((value) => {
+                if (value) {
+                    setSelectedValueBerat(value);
+                }
+            });
+        }
+    }, [route.params.data]);
+
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang,
         Lebar_cm: Lebar_cm,
         Tinggi_cm: Tinggi_cm,
-        Berat_kg: '',
+        Berat_kg: null,
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
@@ -149,6 +170,9 @@ const InputPesanan = ({ route }) => {
         if (name == 'Angkutan') {
             setSelectedValue(value);
         }
+        if (name == 'Berat_kg') {
+            setSelectedValueBerat(value);
+        }
         if (name == 'Lebar_cm') {
             setLebar_cm(value);
         }
@@ -197,7 +221,7 @@ const InputPesanan = ({ route }) => {
                 province: pilihalamat.province,
                 postal_code: pilihalamat.postal_code,
                 DetailAlamat: form.DetailAlamat,
-                Berat_kg: form.Berat_kg,
+                Berat_kg: selectedValueBerat,
 
             };
 
@@ -278,11 +302,16 @@ const InputPesanan = ({ route }) => {
                                 setInputEnabled(!inputEnabled);
                             }}
                         />
-                <TextInput
-                placeholder='Masukan Berat_kg'
-                value={form.Berat_kg}
-                // onChangeText={(text) => handleInputChange('Berat_kg', text)}
-                />
+                    <View>
+                            <RNPickerSelect
+                                placeholder={placeholder}
+                                items={Berat_kg}
+                                onValueChange={(value) => setSelectedValueBerat(value)}
+                                onTextChange={(text) => handleInputChange('Berat_kg', text)}
+                                value={selectedValueBerat}
+                            />
+                            {selectedValueBerat && <Text style={[styles.input, styles.forminside]}>Pilihan Berat : {selectedValueBerat}</Text>}
+                        </View>
 
 
                         </View>
@@ -363,7 +392,7 @@ const InputPesanan = ({ route }) => {
                         <Button
                             title="Submit"
                             onPress={() => {
-                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && form.Berat_kg) {
+                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
                                     kirimPesanan();
                                     alert('Data berhasil dikirim!');
                                     navigation.navigate('Checkout');
