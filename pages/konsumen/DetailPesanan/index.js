@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-
+import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 export default function DetailPesanan({ route }) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState({});
+  const [lokasi, setAddress] = useState({});
+
+  // console.log(lokasi)
 
   const htmlContent = `
   <h1>Detail Pesanan Dari Pembelian :  ${pilihPaketData?.Nama_Paket}</h1>
@@ -40,24 +44,73 @@ const cetakPDF = async () => {
   }
 }
 
+const Akseslokasi = async () => {
+  try {
+    const akseslokasi = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Access Required',
+        message: 'This app needs to access your location',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the location');
+      // granted();
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`${baseUrl.url}/lokasi`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setAmbilData(response.data.message);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+useEffect(() => {
+  Akseslokasi().then(() => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude ,accuracy,altitude } = position.coords;
+        setCurrentLocation({ latitude, longitude });
+        // console.log(latitude, longitude);
+        const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        fetch(url).then(res=>res.json()).then(data=>{
+          // console.log(data)
+          setAddress(data)
+        })
+        console.log('Latitude : ',latitude)
+        console.log('Longtitude : ',longitude)
+        // console.log('Accuracy : ',accuracy)
+        // console.log('Altitude : ',altitude)
+
+      },
+      error => {
+        console.error('Error Lokasi:', error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+  });
+}, []);
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       const response = await axios.get(`${baseUrl.url}/lokasi`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       });
+  //       setAmbilData(response.data.message);
+  //       // console.log(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
 
 async function createPDF() {
@@ -75,7 +128,7 @@ async function createPDF() {
           },
         });
         setPilihPaketData(response.data);
-        console.log(response.data)
+        // console.log(response.data)
   
       } catch (error) {
         console.error(error);
@@ -97,11 +150,11 @@ async function createPDF() {
       throw new Error("Paket tidak valid.");
     
     }
-  if(ambilData.Kota_Anda){
+  if(lokasi.address.town || lokasi.address.village){
     try {
       const token = await AsyncStorage.getItem('token');
       const data = {
-        paket_sekarang: ambilData.Kota_Anda,
+        paket_sekarang: lokasi.address.town || lokasi.address.village,
         penerimaan_paket: 'Keluarga!',
       };
   
@@ -172,13 +225,13 @@ async function createPDF() {
 
 
 
-
+{/* 
       <Button
         title='TITIK POINT'
         color='#EDA01F'
         onPress={handleTitikPoint}
        
-      />
+      /> */}
 
 
 

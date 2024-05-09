@@ -6,9 +6,74 @@ import { useNavigation } from '@react-navigation/native';
 import { baseUrl } from '../../baseUrl';
 
 export default function RiwayatPemesanan() {
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilData, data] = useState([]);
+  const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+  
+
   const navigation = useNavigation();
-  const handlePress = () => {
-    navigation.navigate('DetailPemesanan');
+
+
+  useEffect(() => {
+    // getDataUserLocal();
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios(`${baseUrl.url}/datauser`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpesananuser`, {
+
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+
+        });
+        data(response.data["data"]);
+        // console.log(response.data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [dataPribadi.token]);
+
+
+  const handlePress = (item) => {
+    if (item) {
+      console.log("DetailPemesanan:", item);
+      navigation.navigate('DetailPemesanan', { city_name: item.city_name });
+      data(item);
+    } else {
+      console.log("PilihDetailPesanan");
+    }
   };
   return (
     <>
@@ -30,25 +95,34 @@ export default function RiwayatPemesanan() {
               <Text style={{ color: 'black' }}>Cari nama produk yang dikirim</Text>
             </View>
     
-                  <View style={styles.proses}>
-                    <Text style={styles.textproses}>Produk Yang Sedang Dipesan</Text>
-                    <View style={styles.jenispaket}>
-                      <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
-                      <Text style={styles.paketcepat}>Indramayu</Text>
-                    </View>
-                    <View style={styles.produkproses}>
-                      <TouchableOpacity
-                        style={styles.textdetailcontainer}
-                        // onPress={() => navigateToDetail(item.id)}
-                        onPress={handlePress}
-                      >
-                        <Text style={styles.textdetail}>
-                          Cek detail disini
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-      
+                    
+            <FlatList
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
+            data={Array.isArray(ambilData) ? ambilData.filter((item, index, self) => self.findIndex(t => t.city_name === item.city_name && t.Nama_Kurir === item.Nama_Kurir) === index && item.Nama_Kurir === ambilDataProfile.nama) : [] }
+            renderItem={({ item }) => (
+              <>
+                <View style={styles.proses}>
+                  <Text style={styles.textproses}>Produk Yang Sedang Dipesan</Text>
+                  <View style={styles.jenispaket}>
+                    <Image source={require('../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
+                    <Text style={styles.paketcepat}>{item.city_name}</Text>
                   </View>
+                  <View style={styles.produkproses}>
+                    <TouchableOpacity
+                      style={styles.textdetailcontainer}
+                      onPress={() => handlePress(item)}
+                    >
+                      <Text style={styles.textdetail}>
+                        Cek detail disini
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
 
             </View>
   
