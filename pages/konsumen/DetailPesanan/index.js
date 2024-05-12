@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
+
 export default function DetailPesanan({ route }) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
@@ -43,7 +44,19 @@ const cetakPDF = async () => {
     console.log('Failed to create PDF');
   }
 }
-
+const Whatsapp = () => {
+  const { Nama_Kurir,DetailAlamat,Nama_Paket,Nama_Barang,Tinggi_cm,Lebar_cm,status } = pilihPaketData;
+  if (Nama_Kurir && DetailAlamat && Nama_Paket && Nama_Barang && Tinggi_cm && Lebar_cm && status) {
+    const diencodepesannya = encodeURIComponent(`Hai ${Nama_Kurir} Saya ingin menayakan paketan saya dengan Detail Alamat ${DetailAlamat} dengan nama : ${Nama_Paket} dengan nama barang : ${Nama_Barang} dengan tinggi : ${Tinggi_cm} cm dan lebar : ${Lebar_cm} cm dengan status : ${status}` );
+    const url = `https://wa.me/${pilihPaketData.kurir.nohp}?text=${diencodepesannya}`;
+    Linking.openURL(url).catch(err => {
+      console.error('Error UpenORLL:', err);
+    });
+    console.log(url);
+  } else {
+    console.log('Error: Check Nama_Kurir, DetailAlamat, Nama_Paket, Nama_Barang, Tinggi_cm, Lebar_cm, status');
+  }
+};
 const Akseslokasi = async () => {
   try {
     const akseslokasi = await PermissionsAndroid.request(
@@ -128,7 +141,7 @@ async function createPDF() {
           },
         });
         setPilihPaketData(response.data);
-        // console.log(response.data)
+        console.log(response.data)
   
       } catch (error) {
         console.error(error);
@@ -198,6 +211,22 @@ async function createPDF() {
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
         <Text style={styles.textrow}>Metode Pembayaran</Text>
 
+<View style={styles.buttonpdf}>
+
+
+        <TouchableOpacity onPress={Whatsapp}>
+
+        <View style={styles.buttonpdf}>
+          <View>
+         <Image source={require('../../img/pngwing.com.png')} 
+         style={styles.img}
+         />
+         </View>
+
+        </View>
+        </TouchableOpacity>
+
+        
         <TouchableOpacity onPress={cetakPDF}>
 
         <View style={styles.buttonpdf}>
@@ -206,6 +235,7 @@ async function createPDF() {
           </Text>
         </View>
         </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.form1}>
           <Text style={styles.texttop}>📦Paketan Telah Diserahkan Kepada Kurir</Text>
@@ -240,18 +270,35 @@ async function createPDF() {
 }
 
 const styles = StyleSheet.create({
+  img:{
+    width:30,
+    height:30
+  },
   pdf:{
     color:'black',
     fontWeight:'bold',
-    fontSize:11
+    fontSize:11,
+    backgroundColor:'#EDA01F',
+    padding:10,
+    borderRadius:5
   },
   buttonpdf:{
     flexDirection:'row',
-    alignSelf:'flex-end',
-    backgroundColor:'#EDA01F',
-    padding:3,
-    borderRadius:3
+    //   alignSelf:'flex-end',
+    //   backgroundColor:'#EDA01F',
+    //   padding:3,
+    //   borderRadius:3,
+      justifyContent:'space-between',
+      marginTop:10,
+
   },
+  // buttonpdf:{
+  //   flexDirection:'row',
+  //   alignSelf:'flex-end',
+
+  //   padding:3,
+  //   borderRadius:3
+  // },
   scrollView: {
     backgroundColor: 'pink',
     marginHorizontal: 20,
