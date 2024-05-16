@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid,Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
@@ -229,7 +229,7 @@ const handlePressRincianPendapatan = () => {
           
      
           <View style={styles.selesai}>
-              <Text style={styles.texttop}>
+              <Text style={styles.texttop && {color:'white',fontWeight:'bold'}}>
                 Pesanan Selesai !
               </Text>
           </View>    
@@ -239,13 +239,19 @@ const handlePressRincianPendapatan = () => {
       </View>
 
 
+    <TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
+      <Text style={styles.texttop}>
+        TITIK POINT
+      </Text>
+    </TouchableOpacity>
 
-      <Button
+      {/* <TouchableOpacity
         title='TITIK POINT'
         color='#EDA01F'
         onPress={handleTitikPoint}
+        style={{backgroundColor:'#EDA01F'}}
        
-      />
+      /> */}
 
 
 
@@ -257,8 +263,16 @@ const handlePressRincianPendapatan = () => {
 
   )
 }
+const windowDimensions = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  button:{
+    backgroundColor:'#FFFFFF',
+    padding:10,
+    borderRadius:4,
+    marginTop:windowDimensions.height * 0.01,
+
+  },
     pdf:{
       color:'black',
       fontWeight:'bold',
@@ -283,12 +297,14 @@ const styles = StyleSheet.create({
     },
   
     selesai:{
-      flexDirection:'row',
+
       alignSelf:'flex-end',
   
-      padding:5,
+      padding:8,
       backgroundColor:'#EDA01F',
-      borderRadius:4
+      borderRadius:4,
+      marginHorizontal:windowDimensions.width * 0.05,
+      marginTop:windowDimensions.height * 0.02
   
     },
   
@@ -303,22 +319,25 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
     },
     form1:{
-      width: 500,
+      width: windowDimensions.width * 1,
+      // height : windowDimensions.height * 0.9,
       padding: 20,
       paddingBottom: 20,
     //   borderRadius: 10,
       backgroundColor: '#fff',
-      marginTop:40,
+      marginTop: -windowDimensions.height * 0.02,
       flexDirection:'column',
       justifyContent:'flex-start'
       
     },
     form2:{
-      width: 500,
+      width: windowDimensions.width * 1,
       padding: 20,
     //   borderRadius: 10,
       backgroundColor: 'gray',
       flexDirection:'column',
-      justifyContent:'flex-start'
+      justifyContent:'flex-start',
+      marginBottom : windowDimensions.height * 0.02
     },
   })
+

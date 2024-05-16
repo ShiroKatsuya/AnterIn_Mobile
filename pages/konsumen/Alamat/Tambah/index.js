@@ -109,12 +109,12 @@ const tambahAlamat = async () => {
       <View style={styles.tempat}>
         <TouchableOpacity>  
         <View style = {styles.rumah}>
-          <TouchableOpacity onPress={ handelGetLokasi}>
+          {/* <TouchableOpacity onPress={ handelGetLokasi}> */}
         <Text >
         Deteksi Alamat Otomatis Disini !
         </Text>
    
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
   
         </View>
  

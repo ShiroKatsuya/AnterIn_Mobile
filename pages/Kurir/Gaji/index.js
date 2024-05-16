@@ -5,6 +5,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../baseUrl';
 
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
 export default function Gaji() {
   return (
     <View style={styles.container}>
@@ -26,11 +30,7 @@ export default function Gaji() {
         </View>
 
         <View style={styles.submit}>
-          <Image
-              source={require('../../img/money.png')}
-              resizeMode="cover"
-              style={styles.img2}
-            />
+
           <View style={styles.submitbutton}>
             <TouchableOpacity>
             <Text style={styles.text3}>
@@ -80,35 +80,20 @@ export default function Gaji() {
         </View>
       </View>
 
-      <View style={styles.containerdropdown}>
-        <View style={{ marginLeft: 30 }}>
-          <Image
-            source={require('../../img/ArrowUp.png')}
-            resizeMode="cover"
-            style={styles.img3}
-          />
-        </View>
-        <View style={{ marginRight: 30 }}>
-          <Image
-            source={require('../../img/ArrowDown.png')}
-            resizeMode="cover"
-            style={styles.img3}
-          />
-        </View>
-      </View>
+
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   img3: {
-    width: 100,
-    height: 100
+    width: width * 0.25,
+    height: height * 0.1
   },
   containerdropdown: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -190
+    marginTop: -height * 0.2
   },
   textlog: {
     color: 'red',
@@ -117,8 +102,8 @@ const styles = StyleSheet.create({
   riwayat: {
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingLeft: 60,
-    paddingRight: 60
+    paddingLeft: width * 0.15,
+    paddingRight: width * 0.15
   },
   log: {
     backgroundColor: '#0B111F',
@@ -131,17 +116,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   submit: {
-    marginTop: -110,
+    marginTop: -height * 0.12,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   submitbutton: {
-    marginTop: 60,
-    marginLeft: 170,
+    marginTop: height * 0.010,
+    // marginLeft: width * 0.4,
     padding: 5,
     backgroundColor: '#EDA01F',
-    height: 30,
+    // height: 30,
     borderRadius: 4,
+    // justifyContent:'center',
+    // alignItems:'center',
+    alignSelf:'center',
+    marginBottom:height * 0.1
   },
   Text: {
     color: 'black',
@@ -162,19 +151,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: -25
+    marginTop: -height * 0.03
   },
   imagconatiner: {
-    marginTop: -100
+    marginTop: -height * 0.1
   },
   img: {
-    width: 400,
-    height: 120,
+    width: width * 0.95,
+    height: height * 0.12,
     alignSelf: 'center',
   },
   img2: {
-    width: 100,
-    height: 100,
+    width: width * 0.25,
+    height: height * 0.1,
     alignSelf: 'flex-start'
   },
   container: {
@@ -185,21 +174,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#0B111F',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
-    borderRadius: 3,
-    marginLeft: 30,
-    marginRight: 30,
+    // marginTop: height * 0.,
+    borderRadius: 20,
+    marginLeft: width * 0.01,
+    marginRight: width * 0.01,
     justifyContent: 'center',
-    paddingBottom:20
+    paddingBottom:20,
+    marginTop:'10%'
   },
   form1: {
     backgroundColor: '#FFFF',
     padding: 10,
-    width: 450,
-    height: 350,
+    width: width * 0.90,
+    height: height * 0.35,
     marginTop: 20,
     marginBottom: 5,
-    borderRadius: 3,
+    borderRadius: 10,
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
@@ -209,68 +199,13 @@ const styles = StyleSheet.create({
   form2: {
     backgroundColor: '#FFFF',
     padding: 10,
-    width: 450,
-    height: 250,
+    width: width * 0.90,
+    height: height * 0.35,
     marginTop: 20,
     marginBottom: 5,
-    borderRadius: 3,
+    borderRadius: 10,
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center'
   }
 })
-//   },
-//   imagconatiner: {
-//     marginTop: -height * 0.1
-//   },
-//   img: {
-//     width: width * 0.95,
-//     height: height * 0.12,
-//     alignSelf: 'center',
-//   },
-//   img2: {
-//     width: width * 0.25,
-//     height: height * 0.1,
-//     alignSelf: 'flex-start'
-//   },
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#EDA01F',
-//   },
-//   box: {
-//     backgroundColor: '#0B111F',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginTop: height * 0.1,
-//     borderRadius: 3,
-//     marginLeft: width * 0.07,
-//     marginRight: width * 0.07,
-//     justifyContent: 'center',
-//   },
-//   form1: {
-//     backgroundColor: '#FFFF',
-//     padding: 10,
-//     width: width * 0.95,
-//     height: height * 0.35,
-//     marginTop: 20,
-//     marginBottom: 5,
-//     borderRadius: 3,
-//     flexDirection: 'column',
-//     justifyContent: 'center',
-//     alignContent: 'center',
-//     alignItems: 'center',
-//     alignSelf: 'center',
-//   },
-//   form2: {
-//     backgroundColor: '#FFFF',
-//     padding: 10,
-//     width: width * 0.95,
-//     height: height * 0.25,
-//     marginTop: 20,
-//     marginBottom: 5,
-//     borderRadius: 3,
-//     alignSelf: 'center',
-//     flexDirection: 'column',
-//     alignItems: 'center'
-//   }
-// })

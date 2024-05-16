@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking} from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking,Dimensions} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
@@ -213,7 +213,6 @@ async function createPDF() {
 
 <View style={styles.buttonpdf}>
 
-
         <TouchableOpacity onPress={Whatsapp}>
 
         <View style={styles.buttonpdf}>
@@ -269,79 +268,87 @@ async function createPDF() {
   );
 }
 
+const windowDimensions = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   img:{
-    width:30,
-    height:30
+    // width:windowDimensions.width * 0.1,
+    // height:windowDimensions.height * 0.1
+    width:60,
+    height:60
   },
-  pdf:{
-    color:'black',
-    fontWeight:'bold',
-    fontSize:11,
-    backgroundColor:'#EDA01F',
+  button:{
+    backgroundColor:'#FFFFFF',
     padding:10,
-    borderRadius:5
+    borderRadius:4,
+    marginTop:windowDimensions.height * 0.01,
+
   },
-  buttonpdf:{
-    flexDirection:'row',
+    pdf:{
+      color:'black',
+      fontWeight:'bold',
+      fontSize:11,
+      padding:10,
+      backgroundColor:'#FFFFFF',
+      borderRadius:4,
+    },
+    buttonpdf:{
+      flexDirection:'row',
     //   alignSelf:'flex-end',
     //   backgroundColor:'#EDA01F',
     //   padding:3,
     //   borderRadius:3,
       justifyContent:'space-between',
       marginTop:10,
+    },
+    scrollView: {
+      backgroundColor: 'pink',
+      marginHorizontal: 20,
+  
+    },
+  
+    selesai:{
 
-  },
-  // buttonpdf:{
-  //   flexDirection:'row',
-  //   alignSelf:'flex-end',
+      alignSelf:'flex-end',
+  
+      padding:8,
+      backgroundColor:'#EDA01F',
+      borderRadius:4,
+      marginHorizontal:windowDimensions.width * 0.05,
+      marginTop:windowDimensions.height * 0.02
+  
+    },
+  
+    texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
+    texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
+    textrow:{fontWeight:'bold',color: 'white',},
+    container: {
+      flex: 1,
+      backgroundColor: '#EDA01F',
+      padding: 10,
+      alignItems: 'center', 
+      flexDirection: 'column',
+    },
+    form1:{
+      width: windowDimensions.width * 1,
+      // height : windowDimensions.height * 0.9,
+      padding: 20,
+      paddingBottom: 20,
+    //   borderRadius: 10,
+      backgroundColor: '#fff',
+      marginTop: -windowDimensions.height * 0.02,
+      flexDirection:'column',
+      justifyContent:'flex-start'
+      
+    },
+    form2:{
+      width: windowDimensions.width * 1,
+      padding: 20,
+    //   borderRadius: 10,
+      backgroundColor: 'gray',
+      flexDirection:'column',
+      justifyContent:'flex-start',
+      marginBottom : windowDimensions.height * 0.02
+    },
+  })
 
-  //   padding:3,
-  //   borderRadius:3
-  // },
-  scrollView: {
-    backgroundColor: 'pink',
-    marginHorizontal: 20,
-
-  },
-
-  selesai:{
-    flexDirection:'row',
-    alignSelf:'flex-end',
-
-    padding:5,
-    backgroundColor:'#EDA01F',
-    borderRadius:4
-
-  },
-
-  texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
-  texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
-  textrow:{fontWeight:'bold',color: 'white',},
-  container: {
-    flex: 1,
-    backgroundColor: '#EDA01F',
-    padding: 10,
-    alignItems: 'center', 
-    flexDirection: 'column',
-  },
-  form1:{
-    width: 500,
-    padding: 20,
-    paddingBottom: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    marginTop:40,
-    flexDirection:'column',
-    justifyContent:'flex-start'
-    
-  },
-  form2:{
-    width: 500,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'gray',
-    flexDirection:'column',
-    justifyContent:'flex-start'
-  },
-})

@@ -47,12 +47,14 @@ export default function Riwayat() {
       <SafeAreaView style={styles.container}>
       
         <View style={{ marginBottom: 40 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.text}>Semua</Text>
             <Text style={styles.text}>Sedang Dikirim</Text>
             <Text style={styles.text}>Sudah Dikirim</Text>
             <Text style={styles.text}>Selesai</Text>
           </View>
+          </ScrollView>
           <ScrollView style={styles.scrollView}>
           <View>
             <View style={styles.search}>
@@ -136,8 +138,8 @@ const styles = StyleSheet.create({
   },
   mobilcontainer: {
     // padding: 10,
-    marginTop: -135,
-    marginRight: 330,
+    marginTop: -width * 0.3,
+    marginRight: width * 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center', 
@@ -150,11 +152,13 @@ const styles = StyleSheet.create({
     jenispaket:{
         backgroundColor:'#000000',
         padding:20,
-        width:230,
+        width:width * 0.8,
+        // height:width * 0.4,
         paddingBottom:50,
         marginTop:20,
-        marginLeft:40,
-        borderRadius:30
+        // marginLeft:40,
+        borderRadius:30,
+        alignSelf:'center'
 
 
     },

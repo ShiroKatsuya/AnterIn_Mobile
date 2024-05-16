@@ -157,6 +157,7 @@ export default function Chatting() {
 
   );
 }
+const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
 text:{color: 'white'},
   resultcontainer: {
@@ -225,11 +226,16 @@ text:{color: 'white'},
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 10,
+    height: '90%',
+    borderRadius: 20,
   },
   main: {
     backgroundColor: '#FFFFFF',
     marginTop: 15,
-    height: 800,
+    // height: 800,
+    height: '90%',
+    // width: windowWidth * 0.5,
+
   },
   chatbar: {
     marginRight: 20,
@@ -239,7 +245,7 @@ text:{color: 'white'},
   },
   input: {
     height: 40,
-    width: 400,
+      width: '80%',
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,

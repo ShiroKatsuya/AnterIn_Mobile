@@ -79,6 +79,7 @@ export default function Alamat() {
   )
 }
 
+const window = Dimensions.get('window')
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -139,27 +140,28 @@ const styles = StyleSheet.create({
         backgroundColor:'black',
         borderRadius:5,
         padding:10,
-        paddingLeft:100,
-        paddingRight:100
+        paddingLeft: window.width * 0.3,
+        paddingRight: window.width * 0.3
     
    
       },
       textalamat:{
         fontWeight:'bold',
         fontSize:15,
-        color:'white'
+        color:'white',
+        textAlign:'center'
       },
       form:{
 
             borderWidth:2,
             borderRadius:15,
             borderColor:'black',
-            width:400,
+            width: window.width * 0.8,
             padding:20,
             backgroundColor:'white',
             justifyContent:'center', 
             marginTop:40,
-        //    marginLeft:50
+
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.25,
