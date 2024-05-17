@@ -53,7 +53,7 @@ export default function RiwayatPemesanan() {
 
         });
         data(response.data["data"]);
-        console.log(response.data)
+        // console.log(response.data)
       } catch (error) {
         console.error(error);
       }

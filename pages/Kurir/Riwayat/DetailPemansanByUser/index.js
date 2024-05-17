@@ -119,6 +119,8 @@ async function createPDF() {
 
 
 }
+
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -177,9 +179,11 @@ async function createPDF() {
   };
 }
 
-const navigation = useNavigation();
-const handlePressRincianPendapatan = () => {
-  navigation.navigate('RincianPendapatan');
+const navigataion = useNavigation();
+const DetailPendapatan = (id) => {
+
+  navigataion.navigate('RincianPendapatan', { id: id });
+  // console.log(id)
 };
   return (
     <>
@@ -206,7 +210,7 @@ const handlePressRincianPendapatan = () => {
    
 
         <View style={styles.buttonpdf}>
-        <TouchableOpacity onPress={handlePressRincianPendapatan}>
+        <TouchableOpacity  onPress={() => DetailPendapatan(pilihPaketData.id)}>
           <Text style={styles.pdf} >
              RINCIAN PENDAPATAN
           </Text>
