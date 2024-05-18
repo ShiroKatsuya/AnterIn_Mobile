@@ -13,9 +13,9 @@ export default function RincianPendapatan({ route }) {
       if (pilihPaketData && pilihPaketData.id) {
         const status = await AsyncStorage.getItem(String(pilihPaketData.id));
         if (status === 'true') {
-          setIsClickable(false); // If status is 'true', button should not be clickable
+          setIsClickable(false); 
         } else {
-          setIsClickable(true); // Only set to true if status is not 'true'
+          setIsClickable(true); 
         }
       }
     };
@@ -77,7 +77,7 @@ export default function RincianPendapatan({ route }) {
   
       if (gajiResponse.data.success) {
         setIsClickable(false);
-        await AsyncStorage.setItem(String(pilihPaketData.id), 'true'); // Set to 'true' permanently once completed
+        await AsyncStorage.setItem(String(pilihPaketData.id), 'true'); 
       }
     } catch (error) {
       console.error('Error updating salary:', error);
