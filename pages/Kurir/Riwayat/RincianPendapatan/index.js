@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, Image, ScrollView,TouchableOpacity } from 'react-native'
 import { useState,useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -6,8 +6,33 @@ import { baseUrl } from '../../../baseUrl';
 export default function RincianPendapatan({ route }) {
 
   const [pilihPaketData, setPilihPaketData] = useState([]);
+  const [isClickable, setIsClickable] = useState(true);
+
+  useEffect(() => {
+    setIsClickable(true); 
+    const toggleStatus = async () => {
+      if (pilihPaketData && pilihPaketData.id) {
+        const status = await AsyncStorage.getItem(String(pilihPaketData.id));
+        if (status === 'true') {
+          setIsClickable(false); 
+          await AsyncStorage.setItem(String(pilihPaketData.id), 'false');
+        } else {
+          await AsyncStorage.setItem(String(pilihPaketData.id), 'false');
+        }
+      }
+    };
+    toggleStatus();
+  }, [pilihPaketData]);
+
 
   const [rules, setRules] = useState({
+    15000: 5000,
+    20000: 5000,
+    25000: 5000,
+    30000: 5000,
+  });
+  
+  const [rulesdetail, setRulesDetail] = useState({
     15000: 10000,
     20000: 15000,
     25000: 20000,
@@ -36,6 +61,33 @@ export default function RincianPendapatan({ route }) {
   }, [route.params.id]);
 
 
+
+
+  const handleUpdateGaji = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const updateGajiKurir = pilihPaketData.Harga_Paket - rules[pilihPaketData.Harga_Paket];
+
+    try {
+      const gajiResponse = await axios.put(`${baseUrl.url}/updategajikurir/${pilihPaketData.kurirs_id}`, { gaji: updateGajiKurir }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      console.log(gajiResponse.data);
+
+      if (gajiResponse.data.success) {
+        setIsClickable(false);
+        await AsyncStorage.setItem(String(pilihPaketData.id), 'true');
+      }
+    } catch (error) {
+      console.error('Error updating salary:', error);
+    }
+  };
+
+
+
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -47,16 +99,16 @@ export default function RincianPendapatan({ route }) {
 
           </Text>
           <Text style={styles.text4}>
-            Nama :
+            Nama : {pilihPaketData.nama}
             </Text>
             <Text style={styles.text4}>
-            Alamat Yang Perlu Dikirim :
+            Alamat Yang Perlu Dikirim : 
             </Text>
             <Text style={styles.text4}>
-                Jalan...
+            {pilihPaketData.DetailAlamat}
             </Text>
             <Text style={styles.text4}>
-            Harga_Paket :
+            Harga_Paket : {pilihPaketData.Harga_Paket}
             </Text>
         </View>
         <View style={styles.corimage}>
@@ -64,6 +116,17 @@ export default function RincianPendapatan({ route }) {
           source={require('../../../img/logo.png')}
           style={styles.image}
           />
+        </View>
+        <View>
+          <Text>
+            Total Pendapatan 
+          </Text>
+          <Text style={styles.text4}>
+            Harga_Paket : Rp.{pilihPaketData.Harga_Paket} - Rules
+          </Text>
+          <Text style={styles.text4}>
+            Pendapatan Kurir Adalah : 
+          </Text>
         </View>
         <View style={styles.status}>
           <View>
@@ -80,17 +143,21 @@ export default function RincianPendapatan({ route }) {
           </View>
           </View>
           <View>
+    
           <Text style={styles.text2}>
             Status Pesanan By 
           </Text>
+  
           <Text style={styles.text2}>
           Kurir
           </Text>
-          <View style={styles.button}>
-          <Text style={styles.text3}>
-            Belum Selesai
-          </Text>
-          </View>
+          <TouchableOpacity onPress={handleUpdateGaji} disabled={!isClickable}>
+      <View style={styles.button}>
+        <Text style={styles.text3}>
+          {isClickable ? "Belum Selesai" : "Selesai"}
+        </Text>
+      </View>
+    </TouchableOpacity>
           </View>
 
 
@@ -103,7 +170,7 @@ export default function RincianPendapatan({ route }) {
         <Text style={{color:'black', fontSize:15 , marginTop:-10 , textAlign:'center'}} >________________________________________</Text>
         <Text style={styles.text5}>Jika Selesai By Konsumen/Kurir</Text>
         <Text style={{color:'black', fontSize:15 , marginTop:-10 , textAlign:'center'}} >________________________________________</Text>
-        {Object.keys(rules).map((key, index) => (
+        {Object.keys(rulesdetail).map((key, index) => (
           <View key={index} style ={{marginTop:20}}>
             <View style={styles.jenispaket}>
               <Text style={styles.text6}>
@@ -112,7 +179,7 @@ export default function RincianPendapatan({ route }) {
             </View>
             <View style={styles.gajikurir}>
               <Text style={styles.text6}>
-                Gaji Kurir : {rules[key]}
+                Gaji Kurir : {rulesdetail[key]}
               </Text>
             </View>
           </View>

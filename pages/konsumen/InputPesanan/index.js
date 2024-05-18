@@ -122,6 +122,7 @@ const InputPesanan = ({ route }) => {
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
+        kurirs_id: '',
         Angkutan: null,
         city_name: '',
         province: '',
@@ -134,50 +135,45 @@ const InputPesanan = ({ route }) => {
 
     const handleInputChange = (name, value) => {
         if (name === 'Nama_Kurir') {
-            setForm({
-                ...form,
+            setForm(prevForm => ({
+                ...prevForm,
                 Nama_Kurir: pilihKurir.nama,
-            });
-        } else {
-            setForm({
-                ...form,
-                [name]: value,
-            });
-        }
-        if (name == 'city_name') {
-            setForm({
-                ...form,
+            }));
+        } else if (name === 'kurirs_id') {
+            setForm(prevForm => ({
+                ...prevForm,
+                kurirs_id: pilihKurir.kurirs_id,
+            }));
+        } else if (name === 'city_name') {
+            setForm(prevForm => ({
+                ...prevForm,
                 city_name: pilihalamat.city_name,
-            });
-        }
-
-        if (name == 'province') {
-            setForm({
-                ...form,
+            }));
+        } else if (name === 'province') {
+            setForm(prevForm => ({
+                ...prevForm,
                 province: pilihalamat.province,
-            });
-        }
-        if (name == 'postal_code') {
-            setForm({
-                ...form,
+            }));
+        } else if (name === 'postal_code') {
+            setForm(prevForm => ({
+                ...prevForm,
                 postal_code: pilihalamat.postal_code,
-            });
-        }
-        if (name === 'Nama_Barang') {
+            }));
+        } else if (name === 'Nama_Barang') {
             setNamaBarang(value);
-        }
-
-        if (name == 'Angkutan') {
+        } else if (name === 'Angkutan') {
             setSelectedValue(value);
-        }
-        if (name == 'Berat_kg') {
+        } else if (name === 'Berat_kg') {
             setSelectedValueBerat(value);
-        }
-        if (name == 'Lebar_cm') {
+        } else if (name === 'Lebar_cm') {
             setLebar_cm(value);
-        }
-        if (name == 'Tinggi_cm') {
+        } else if (name === 'Tinggi_cm') {
             setTinggi_cm(value);
+        } else {
+            setForm(prevForm => ({
+                ...prevForm,
+                [name]: value,
+            }));
         }
     };
 
@@ -204,6 +200,8 @@ const InputPesanan = ({ route }) => {
             setShowMessage('Masukan Detail Alamat')
         }else if (!form.Berat_kg) {
             setShowMessage('Masukan Berat_kg')
+        }else if (!form.kurirs_id) {
+            setShowMessage('Pilih Kurir')
         }
 
 
@@ -217,6 +215,7 @@ const InputPesanan = ({ route }) => {
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir,
+                kurirs_id: form.kurirs_id,
                 city_name: pilihalamat.city_name,
                 province: pilihalamat.province,
                 postal_code: pilihalamat.postal_code,
@@ -364,19 +363,21 @@ const InputPesanan = ({ route }) => {
                                     <Image source={require('../../img/JNE.png')} style={styles.logo2} />
                                 </View>
                             </TouchableOpacity>
-                            {/* <View style={styles.logo}>
+                            <View style={styles.logo}>
                                 <Text>Logo Here</Text>
-                            </View> */}
+                            </View>
                         </View>
                         <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
                         <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
+                        <Text style={[styles.input, styles.forminside]}>{pilihKurir.kurirs_id}</Text>
                         <Button
                             title="Simpan Pilihan Kurir"
                             onPress={() => {
                                 handleInputChange('Nama_Kurir', form.Nama_Kurir);
+                                handleInputChange('kurirs_id', form.kurirs_id);
                                 alert('Data kurir berhasil disimpan!');
                             }}
-                            disabled={!pilihKurir.nama}
+                            disabled={!pilihKurir.nama && !pilihKurir.kurirs_id}
                         />
                         <View>
                             <RNPickerSelect
@@ -392,7 +393,7 @@ const InputPesanan = ({ route }) => {
                         <Button
                             title="Submit"
                             onPress={() => {
-                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
+                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && pilihKurir.kurirs_id && form.kurirs_id && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
                                     kirimPesanan();
                                     alert('Data berhasil dikirim!');
                                     navigation.navigate('Checkout');
@@ -413,26 +414,20 @@ const InputPesanan = ({ route }) => {
 const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   camera:{
-    height: windowWidth * 0.3,
-    width: windowWidth * 0.3,
-    // justifyContent:'center',
-    // alignItems:'center',
-    alignSelf:'center',
-    marginTop : '-10%',
-    
+    height: windowWidth * 0.20,
+    width: windowWidth * 0.20,
+    marginTop : -30
 },
 txt:{
     fontWeight:'bold',
     fontSize: 15,
-
+    marginTop : -30,
     // marginLeft:25
-    marginTop : '-10%',
 
 },
 kamera:{
   justifyContent:'center',
   alignItems: 'center',
-//   marginTop: '5%'
 },
   pilihkurir:{
     flexDirection:'row',
