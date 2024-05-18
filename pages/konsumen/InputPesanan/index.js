@@ -144,38 +144,49 @@ const InputPesanan = ({ route }) => {
                 ...prevForm,
                 kurirs_id: pilihKurir.kurirs_id,
             }));
-        } else if (name === 'city_name') {
-            setForm(prevForm => ({
-                ...prevForm,
-                city_name: pilihalamat.city_name,
-            }));
-        } else if (name === 'province') {
-            setForm(prevForm => ({
-                ...prevForm,
-                province: pilihalamat.province,
-            }));
-        } else if (name === 'postal_code') {
-            setForm(prevForm => ({
-                ...prevForm,
-                postal_code: pilihalamat.postal_code,
-            }));
-        } else if (name === 'Nama_Barang') {
-            setNamaBarang(value);
-        } else if (name === 'Angkutan') {
-            setSelectedValue(value);
-        } else if (name === 'Berat_kg') {
-            setSelectedValueBerat(value);
-        } else if (name === 'Lebar_cm') {
-            setLebar_cm(value);
-        } else if (name === 'Tinggi_cm') {
-            setTinggi_cm(value);
         } else {
             setForm(prevForm => ({
                 ...prevForm,
                 [name]: value,
             }));
         }
+        if (name == 'city_name') {
+            setForm({
+                ...form,
+                city_name: pilihalamat.city_name,
+            });
+        }
+
+        if (name == 'province') {
+            setForm({
+                ...form,
+                province: pilihalamat.province,
+            });
+        }
+        if (name == 'postal_code') {
+            setForm({
+                ...form,
+                postal_code: pilihalamat.postal_code,
+            });
+        }
+        if (name === 'Nama_Barang') {
+            setNamaBarang(value);
+        }
+
+        if (name == 'Angkutan') {
+            setSelectedValue(value);
+        }
+        if (name == 'Berat_kg') {
+            setSelectedValueBerat(value);
+        }
+        if (name == 'Lebar_cm') {
+            setLebar_cm(value);
+        }
+        if (name == 'Tinggi_cm') {
+            setTinggi_cm(value);
+        }
     };
+
 
     const kirimPesanan = async () => {
         if (!Nama_Barang || !Lebar_cm || !Tinggi_cm) {
