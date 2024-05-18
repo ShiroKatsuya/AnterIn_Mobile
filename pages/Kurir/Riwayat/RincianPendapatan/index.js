@@ -9,20 +9,19 @@ export default function RincianPendapatan({ route }) {
   const [isClickable, setIsClickable] = useState(true);
 
   useEffect(() => {
-    setIsClickable(true); 
     const toggleStatus = async () => {
       if (pilihPaketData && pilihPaketData.id) {
         const status = await AsyncStorage.getItem(String(pilihPaketData.id));
         if (status === 'true') {
-          setIsClickable(false); 
-          await AsyncStorage.setItem(String(pilihPaketData.id), 'false');
+          setIsClickable(false); // If status is 'true', button should not be clickable
         } else {
-          await AsyncStorage.setItem(String(pilihPaketData.id), 'false');
+          setIsClickable(true); // Only set to true if status is not 'true'
         }
       }
     };
     toggleStatus();
   }, [pilihPaketData]);
+  
 
 
   const [rules, setRules] = useState({
@@ -66,19 +65,19 @@ export default function RincianPendapatan({ route }) {
   const handleUpdateGaji = async () => {
     const token = await AsyncStorage.getItem('token');
     const updateGajiKurir = pilihPaketData.Harga_Paket - rules[pilihPaketData.Harga_Paket];
-
+  
     try {
       const gajiResponse = await axios.put(`${baseUrl.url}/updategajikurir/${pilihPaketData.kurirs_id}`, { gaji: updateGajiKurir }, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
-
+  
       console.log(gajiResponse.data);
-
+  
       if (gajiResponse.data.success) {
         setIsClickable(false);
-        await AsyncStorage.setItem(String(pilihPaketData.id), 'true');
+        await AsyncStorage.setItem(String(pilihPaketData.id), 'true'); // Set to 'true' permanently once completed
       }
     } catch (error) {
       console.error('Error updating salary:', error);
