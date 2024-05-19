@@ -15,7 +15,7 @@ export default function DetailPemansanByUser({route}) {
   const [availableApps, setAvailableApps] = useState([]);
 
   // console.log(lokasi)
-
+  
   const htmlContent = `
   <h1>Detail Pesanan Dari Pembelian :  ${pilihPaketData?.Nama_Paket}</h1>
   <p><strong>Nama Barang:</strong> ${pilihPaketData?.Nama_Barang}</p>
@@ -308,8 +308,8 @@ const DetailPendapatan = (id) => {
 
   )
 }
-const windowDimensions = Dimensions.get('window');
 
+const windowDimensions = Dimensions.get('window');
 const styles = StyleSheet.create({
   img:{
     // width:windowDimensions.width * 0.1,
