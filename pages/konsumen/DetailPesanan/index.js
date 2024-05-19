@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking,Dimensions} from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking,Dimensions,Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
+import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 
@@ -11,6 +12,8 @@ export default function DetailPesanan({ route }) {
   const [pilihPaketData, setPilihPaketData] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({});
   const [lokasi, setAddress] = useState({});
+  const [availableApps, setAvailableApps] = useState([]);
+  // const [availableApps, setAvailableApps] = useState([]);
 
   // console.log(lokasi)
 
@@ -130,6 +133,27 @@ async function createPDF() {
 
 
 }
+
+useEffect(() => {
+  if (pilihPaketData) {
+    const [latitude, longitude] = pilihPaketData.titikjemput.split(" ");
+    (async () => {
+      try {
+        const result = await getApps({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          title: 'Politeknik Negeri Indramayu',
+          googleForceLatLon: true,
+          alwaysIncludeGoogle: true,
+          appsWhiteList: ['google-maps'],
+        });
+        setAvailableApps(result);
+      } catch (error) {
+        console.error("Error fetching apps:", error);
+      }
+    })();
+  }
+}, [pilihPaketData]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -157,6 +181,7 @@ async function createPDF() {
       </View>
     );
   }
+
 
   const handleTitikPoint = async () => {
     if (!route.params.id) {
@@ -204,6 +229,33 @@ async function createPDF() {
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
         <Text style={styles.texttop}>Tinggi | {pilihPaketData.Tinggi_cm} cm</Text>
         <Text style={styles.texttop}>Lebar | {pilihPaketData.Lebar_cm} cm</Text>
+        <Text style={styles.texttop}>Perkiraan Sampai | {pilihPaketData.PerkiraanSampai.slice(0,10)}</Text>
+        <Text style={styles.texttop}>Titik Jemput Paket Konsumen  : </Text>
+        <TouchableOpacity>
+        <Text style={styles.texttop}>{pilihPaketData.titikjemput}</Text>
+        </TouchableOpacity>
+
+                    <View style={styles.maps}>
+
+    
+            <Text style={styles.texthead}>
+                  OPEN MAPS DISINI !!!
+                </Text>
+            </View>
+            <View style={styles.maps}>
+            <React.Fragment>
+              {availableApps.map(({icon, name, id, open}) => (
+                <Pressable key={id} onPress={open}>
+                  <Image source={icon} 
+                  style={styles.img}
+                  />
+                  {/* <Text>{name}</Text> */}
+                </Pressable>
+              ))}
+            </React.Fragment>
+            </View>
+   
+              
         
       </View>
       <View style={styles.form2}>
@@ -262,8 +314,11 @@ async function createPDF() {
        
       /> */}
 
+<Text style={{  backgroundColor: '#0B111F', padding: '100%',flex:1, }}>
+                {/* Login button content */}
+            </Text>
 
-
+    
     </View>
   );
 }
@@ -271,6 +326,24 @@ async function createPDF() {
 const windowDimensions = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  texthead:{
+    marginTop:20,
+    alignSelf:'center',
+    fontWeight:'bold',
+    // animation: 'fade 5s',
+  },
+    maps:{
+      justifyContent:'center',
+      alignSelf:'center',
+      // flex:1,
+      // width:windowDimensions.width * 0.2,
+      // height:windowDimensions.height * 0.2,
+
+    },
+    // map:{
+    //     width: '100%',
+    //     height: '100%',
+    // },
   img:{
     // width:windowDimensions.width * 0.1,
     // height:windowDimensions.height * 0.1

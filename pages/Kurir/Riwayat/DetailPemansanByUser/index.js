@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid,Dimensions } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid,Dimensions,Pressable,Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { baseUrl } from '../../../baseUrl';
 import { useNavigation } from '@react-navigation/native';
-
+import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
 export default function DetailPemansanByUser({route}) {
   const [ambilData, setAmbilData] = useState({});
   const [pilihPaketData, setPilihPaketData] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({});
   const [lokasi, setAddress] = useState({});
+  const [availableApps, setAvailableApps] = useState([]);
 
   // console.log(lokasi)
 
@@ -119,7 +120,26 @@ async function createPDF() {
 
 
 }
-
+useEffect(() => {
+  if (pilihPaketData) {
+    const [latitude, longitude] = pilihPaketData.titikjemput.split(" ");
+    (async () => {
+      try {
+        const result = await getApps({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          title: 'Politeknik Negeri Indramayu',
+          googleForceLatLon: true,
+          alwaysIncludeGoogle: true,
+          appsWhiteList: ['google-maps'],
+        });
+        setAvailableApps(result);
+      } catch (error) {
+        console.error("Error fetching apps:", error);
+      }
+    })();
+  }
+}, [pilihPaketData]);
 
   
   useEffect(() => {
@@ -200,8 +220,29 @@ const DetailPendapatan = (id) => {
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
         <Text style={styles.texttop}>Tinggi | {pilihPaketData.Tinggi_cm} cm</Text>
         <Text style={styles.texttop}>Lebar | {pilihPaketData.Lebar_cm} cm</Text>
-        
+        <Text style={styles.texttop}>Titik Jemput Paket Konsumen : </Text>
+        <Text style={styles.texttop}>{pilihPaketData.titikjemput}</Text>
+        <View style={styles.maps}>
+
+            
+<Text style={styles.texthead}>
+      OPEN MAPS DISINI !!!
+    </Text>
+</View>
+<View style={styles.maps}>
+<React.Fragment>
+  {availableApps.map(({icon, name, id, open}) => (
+    <Pressable key={id} onPress={open}>
+      <Image source={icon} 
+      style={styles.img}
+      />
+      {/* <Text>{name}</Text> */}
+    </Pressable>
+  ))}
+</React.Fragment>
+</View>
       </View>
+       
       <View style={styles.form2}>
       <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.Harga_Paket}</Text>
         <Text style={styles.textrow}>Subtotal Pengiriman | {pilihPaketData.status}</Text>
@@ -270,6 +311,12 @@ const DetailPendapatan = (id) => {
 const windowDimensions = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  img:{
+    // width:windowDimensions.width * 0.1,
+    // height:windowDimensions.height * 0.1
+    width:60,
+    height:60
+  },
   button:{
     backgroundColor:'#FFFFFF',
     padding:10,
@@ -277,6 +324,24 @@ const styles = StyleSheet.create({
     marginTop:windowDimensions.height * 0.01,
 
   },
+  texthead:{
+    marginTop:20,
+    alignSelf:'center',
+    fontWeight:'bold',
+    // animation: 'fade 5s',
+  },
+    maps:{
+      justifyContent:'center',
+      alignSelf:'center',
+      // flex:1,
+      // width:windowDimensions.width * 0.2,
+      // height:windowDimensions.height * 0.2,
+
+    },
+    // map:{
+    //     width: '100%',
+    //     height: '100%',
+    // },
     pdf:{
       color:'black',
       fontWeight:'bold',
