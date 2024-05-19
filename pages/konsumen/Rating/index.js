@@ -65,7 +65,7 @@ export default function BerikanRating() {
                 placeholder='Berikan rating anda pada pelayanan kami,agar kami dapat mengukur kualitas pelayanan kami'
                 editable={false}
                 multiline={true}
-                style={{fontSize:15,textAlign:'center', width:400, alignSelf:'center'}}
+                style={{fontSize:15,textAlign:'center', width:dimensi.width * 0.8, alignSelf:'center'}}
             />
 
             <Rating
@@ -94,7 +94,7 @@ export default function BerikanRating() {
                         onPress={() => {
                             if (form.rating) {
                                 kirimPesanan();
-                                alert('Data berhasil dikirim!');
+                                alert('Rating Berhasil Di Kirim');
                                 navigation.navigate('Home');
                             } else {
                                 alert('Rating Tidak Boleh 0');
@@ -115,6 +115,7 @@ export default function BerikanRating() {
 
   )
 }
+const dimensi = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 
@@ -127,8 +128,9 @@ const styles = StyleSheet.create({
         // justifyContent:'flex-end',
         // alignItems:'flex-end',
         // width:100
-        alignSelf:'flex-end',
+        alignSelf:'center',
         justifyContent:'center',
+        
         // flex:1
         // width:100,
         paddingLeft:100,
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
         padding:10,
         backgroundColor:'white',
         // borderRadius:10,
+        // width:40,
         flex:1,
         justifyContent:'center'
     }

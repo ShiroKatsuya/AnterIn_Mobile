@@ -67,7 +67,9 @@ export default function RiwayatTopUp() {
     <>
       <SafeAreaView style={styles.container}>
 
+
         <View style={{ marginBottom: 40 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.text}>Semua</Text>
             <Text style={styles.text}>Transaksi</Text>
@@ -76,6 +78,7 @@ export default function RiwayatTopUp() {
             <Text style={styles.text}>Selesai</Text>
             </TouchableOpacity>
           </View>
+          </ScrollView>
           <ScrollView style={styles.scrollView}>
             <View>
               <View style={styles.search}>
@@ -135,6 +138,8 @@ export default function RiwayatTopUp() {
             />
           </ScrollView>
         </View>
+
+
       </SafeAreaView>
       <View style={{ backgroundColor: '#0B111F', padding: 20 }} />
     </>
@@ -252,6 +257,8 @@ const styles = StyleSheet.create({
 
         // width: width * 0.4, 
         // height: width * 0.4, 
+
+        
 
         justifyContent:'space-between',
         // marginTop:'20',

@@ -4,9 +4,6 @@ import { launchCamera } from 'react-native-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
-
-const windowWidth = Dimensions.get('window').width;
-
 export default function KlasifikasiObjek() {
     const navigation = useNavigation();
     const [cameraData, setCameraData] = useState(null);
@@ -87,6 +84,8 @@ export default function KlasifikasiObjek() {
         const options = {
             mediaType: 'photo',
             quality: 1,
+            maxWidth: 1280, 
+            maxHeight: 720, 
         };
 
         launchCamera(options, (response) => {
@@ -107,8 +106,10 @@ export default function KlasifikasiObjek() {
     };
 
     const requestCameraPermission = async () => {
+        let granted;
+        do {
         try {
-            const granted = await PermissionsAndroid.request(
+            granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.CAMERA,
                 {
                     title: "App Camera Permission",
@@ -121,12 +122,15 @@ export default function KlasifikasiObjek() {
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("Camera permission given");
                 openCamera();
+                break;
             } else {
-                console.log("Camera permission denied");
+                console.log('Camera permission denied, asking again...');
             }
         } catch (err) {
             console.warn(err);
+            break;
         }
+    } while (granted !== PermissionsAndroid.RESULTS.GRANTED);
     };
 
     useEffect(() => {
@@ -174,15 +178,17 @@ export default function KlasifikasiObjek() {
 }
 
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
     button:{
         marginTop: 15,
         backgroundColor: 'black',
-        width: windowWidth * 0.3,
+        // width: windowWidth * 0.3,
         padding: 8,
         alignSelf: 'flex-end',
         borderRadius: 5,
-
     },
     resultcontainer:{
         backgroundColor:'#FFFFFF',
@@ -235,20 +241,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     camera:{
-        height: windowWidth * 0.35,
-        width: windowWidth * 0.35,
+        height: windowWidth * 0.50,
+        width: windowWidth * 0.50,
         marginTop : -60
     },
     txt:{
         fontWeight:'bold',
         fontSize: 20,
         marginTop : -60
-
     },
     img:{
-        width:450 ,
-        height: 400,
-        borderRadius: 10,
+        width: windowWidth * 0.8,
+        height: windowHeight * 0.3,
+        // borderRadius: 10,
+
         alignSelf:'center'
     }
 })

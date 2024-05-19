@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking} from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid ,Image,Linking,Dimensions,Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
+import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 
@@ -11,6 +12,8 @@ export default function DetailPesanan({ route }) {
   const [pilihPaketData, setPilihPaketData] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({});
   const [lokasi, setAddress] = useState({});
+  const [availableApps, setAvailableApps] = useState([]);
+  // const [availableApps, setAvailableApps] = useState([]);
 
   // console.log(lokasi)
 
@@ -130,6 +133,27 @@ async function createPDF() {
 
 
 }
+
+useEffect(() => {
+  if (pilihPaketData) {
+    const [latitude, longitude] = pilihPaketData.titikjemput.split(" ");
+    (async () => {
+      try {
+        const result = await getApps({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          title: 'Politeknik Negeri Indramayu',
+          googleForceLatLon: true,
+          alwaysIncludeGoogle: true,
+          appsWhiteList: ['google-maps'],
+        });
+        setAvailableApps(result);
+      } catch (error) {
+        console.error("Error fetching apps:", error);
+      }
+    })();
+  }
+}, [pilihPaketData]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -157,6 +181,7 @@ async function createPDF() {
       </View>
     );
   }
+
 
   const handleTitikPoint = async () => {
     if (!route.params.id) {
@@ -204,6 +229,33 @@ async function createPDF() {
         <Text style={styles.texttop}>Nama Kurir | {pilihPaketData.Nama_Kurir}</Text>
         <Text style={styles.texttop}>Tinggi | {pilihPaketData.Tinggi_cm} cm</Text>
         <Text style={styles.texttop}>Lebar | {pilihPaketData.Lebar_cm} cm</Text>
+        <Text style={styles.texttop}>Perkiraan Sampai | {pilihPaketData.PerkiraanSampai.slice(0,10)}</Text>
+        <Text style={styles.texttop}>Titik Jemput Paket Konsumen  : </Text>
+        <TouchableOpacity>
+        <Text style={styles.texttop}>{pilihPaketData.titikjemput}</Text>
+        </TouchableOpacity>
+
+                    <View style={styles.maps}>
+
+    
+            <Text style={styles.texthead}>
+                  OPEN MAPS DISINI !!!
+                </Text>
+            </View>
+            <View style={styles.maps}>
+            <React.Fragment>
+              {availableApps.map(({icon, name, id, open}) => (
+                <Pressable key={id} onPress={open}>
+                  <Image source={icon} 
+                  style={styles.img}
+                  />
+                  {/* <Text>{name}</Text> */}
+                </Pressable>
+              ))}
+            </React.Fragment>
+            </View>
+   
+              
         
       </View>
       <View style={styles.form2}>
@@ -212,7 +264,6 @@ async function createPDF() {
         <Text style={styles.textrow}>Metode Pembayaran</Text>
 
 <View style={styles.buttonpdf}>
-
 
         <TouchableOpacity onPress={Whatsapp}>
 
@@ -263,85 +314,114 @@ async function createPDF() {
        
       /> */}
 
+<Text style={{  backgroundColor: '#0B111F', padding: '100%',flex:1, }}>
+                {/* Login button content */}
+            </Text>
 
-
+    
     </View>
   );
 }
 
+const windowDimensions = Dimensions.get('window');
+
 const styles = StyleSheet.create({
-  img:{
-    width:30,
-    height:30
-  },
-  pdf:{
-    color:'black',
+  texthead:{
+    marginTop:20,
+    alignSelf:'center',
     fontWeight:'bold',
-    fontSize:11,
-    backgroundColor:'#EDA01F',
-    padding:10,
-    borderRadius:5
+    // animation: 'fade 5s',
   },
-  buttonpdf:{
-    flexDirection:'row',
+    maps:{
+      justifyContent:'center',
+      alignSelf:'center',
+      // flex:1,
+      // width:windowDimensions.width * 0.2,
+      // height:windowDimensions.height * 0.2,
+
+    },
+    // map:{
+    //     width: '100%',
+    //     height: '100%',
+    // },
+  img:{
+    // width:windowDimensions.width * 0.1,
+    // height:windowDimensions.height * 0.1
+    width:60,
+    height:60
+  },
+  button:{
+    backgroundColor:'#FFFFFF',
+    padding:10,
+    borderRadius:4,
+    marginTop:windowDimensions.height * 0.01,
+
+  },
+    pdf:{
+      color:'black',
+      fontWeight:'bold',
+      fontSize:11,
+      padding:10,
+      backgroundColor:'#FFFFFF',
+      borderRadius:4,
+    },
+    buttonpdf:{
+      flexDirection:'row',
     //   alignSelf:'flex-end',
     //   backgroundColor:'#EDA01F',
     //   padding:3,
     //   borderRadius:3,
       justifyContent:'space-between',
       marginTop:10,
+    },
+    scrollView: {
+      backgroundColor: 'pink',
+      marginHorizontal: 20,
+  
+    },
+  
+    selesai:{
 
-  },
-  // buttonpdf:{
-  //   flexDirection:'row',
-  //   alignSelf:'flex-end',
+      alignSelf:'flex-end',
+  
+      padding:8,
+      backgroundColor:'#EDA01F',
+      borderRadius:4,
+      marginHorizontal:windowDimensions.width * 0.05,
+      marginTop:windowDimensions.height * 0.02
+  
+    },
+  
+    texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
+    texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
+    textrow:{fontWeight:'bold',color: 'white',},
+    container: {
+      flex: 1,
+      backgroundColor: '#EDA01F',
+      padding: 10,
+      alignItems: 'center', 
+      flexDirection: 'column',
+    },
+    form1:{
+      width: windowDimensions.width * 1,
+      // height : windowDimensions.height * 0.9,
+      padding: 20,
+      paddingBottom: 20,
+    //   borderRadius: 10,
+      backgroundColor: '#fff',
+      marginTop: -windowDimensions.height * 0.02,
+      flexDirection:'column',
+      justifyContent:'flex-start'
+      
+    },
+    form2:{
+      width: windowDimensions.width * 1,
+      padding: 20,
+    //   borderRadius: 10,
+      backgroundColor: 'gray',
+      flexDirection:'column',
+      justifyContent:'flex-start',
+      marginBottom : windowDimensions.height * 0.02
+    },
+  })
 
-  //   padding:3,
-  //   borderRadius:3
-  // },
-  scrollView: {
-    backgroundColor: 'pink',
-    marginHorizontal: 20,
-
-  },
-
-  selesai:{
-    flexDirection:'row',
-    alignSelf:'flex-end',
-
-    padding:5,
-    backgroundColor:'#EDA01F',
-    borderRadius:4
-
-  },
-
-  texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
-  texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
-  textrow:{fontWeight:'bold',color: 'white',},
-  container: {
-    flex: 1,
-    backgroundColor: '#EDA01F',
-    padding: 10,
-    alignItems: 'center', 
-    flexDirection: 'column',
-  },
-  form1:{
-    width: 500,
-    padding: 20,
-    paddingBottom: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    marginTop:40,
-    flexDirection:'column',
-    justifyContent:'flex-start'
-    
-  },
-  form2:{
-    width: 500,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'gray',
-    flexDirection:'column',
-    justifyContent:'flex-start'
-  },
-})

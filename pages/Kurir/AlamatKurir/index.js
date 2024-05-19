@@ -86,96 +86,98 @@ export default function AlamatKurir() {
   )
 }
 
+const window = Dimensions.get('window')
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      backgroundColor: '#EDA01F',
-      padding: 10,
-      alignItems: 'center', 
-      flexDirection: 'column',
-      
-    },
-    button1:{
-      backgroundColor:'red',
-      padding:10,
-      borderRadius:5,
-      paddingLeft:40,
-      paddingRight:40,
+    container: {
+        flex: 1,
+        backgroundColor: '#EDA01F',
+        padding: 10,
+        alignItems: 'center', 
+        flexDirection: 'column',
+        
+      },
+      button1:{
+        backgroundColor:'red',
+        padding:10,
+        borderRadius:5,
+        paddingLeft:40,
+        paddingRight:40,
 
-      marginRight:20
-
-
-    },
-
-    button2:{
-      // backgroundColor:'green',
-      padding:10,
-      borderRadius:5,
-   backgroundColor:'#EBBC42',
-      paddingLeft:50,
-      paddingRight:50,
-
-    },
-  
-    button:{
-      // display:'flex',
-      flexDirection:'row-reverse',
-      alignContent:'flex-end',
-      // justifyContent:'space-around'
-      // paddingLeft:20,
-      marginTop:20,
-      alignItems:'center',
-      // marginRight:1
-      
-  
-    },
-    cardtext:{
-      fontWeight:'bold',
-      fontSize:15,
-      color:'black',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-
-    alamat:{
-      alignItems:'center',
-      marginTop:20,
-      backgroundColor:'black',
-      borderRadius:5,
-      padding:10,
-      paddingLeft:100,
-      paddingRight:100
-  
+        marginRight:20
  
-    },
-    textalamat:{
-      fontWeight:'bold',
-      fontSize:15,
-      color:'white'
-    },
-    form:{
 
-          borderWidth:2,
-          borderRadius:15,
-          borderColor:'black',
-          width:400,
-          padding:20,
-          backgroundColor:'white',
-          justifyContent:'center', 
-          marginTop:40,
-      //    marginLeft:50
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
+      },
 
+      button2:{
+        // backgroundColor:'green',
+        padding:10,
+        borderRadius:5,
+     backgroundColor:'#EBBC42',
+        paddingLeft:50,
+        paddingRight:50,
 
-
-          
-    }
+      },
     
+      button:{
+        // display:'flex',
+        flexDirection:'row-reverse',
+        alignContent:'flex-end',
+        // justifyContent:'space-around'
+        // paddingLeft:20,
+        marginTop:20,
+        alignItems:'center',
+        // marginRight:1
+        
+    
+      },
+      cardtext:{
+        fontWeight:'bold',
+        fontSize:15,
+        color:'black',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+
+      alamat:{
+        alignItems:'center',
+        marginTop:20,
+        backgroundColor:'black',
+        borderRadius:5,
+        padding:10,
+        paddingLeft: window.width * 0.3,
+        paddingRight: window.width * 0.3
+    
+   
+      },
+      textalamat:{
+        fontWeight:'bold',
+        fontSize:15,
+        color:'white',
+        textAlign:'center'
+      },
+      form:{
+
+            borderWidth:2,
+            borderRadius:15,
+            borderColor:'black',
+            width: window.width * 0.8,
+            padding:20,
+            backgroundColor:'white',
+            justifyContent:'center', 
+            marginTop:40,
+
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+
+
+
+            
+      }
+      
 })

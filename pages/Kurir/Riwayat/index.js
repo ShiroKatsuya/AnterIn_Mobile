@@ -82,12 +82,15 @@ export default function RiwayatPemesanan() {
        
       
         <View style={{ marginBottom: 40 }}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.header}>
+
             <Text style={styles.text}>Semua</Text>
             <Text style={styles.text}>Sedang Dikirim</Text>
             <Text style={styles.text}>Sudah Dikirim</Text>
             <Text style={styles.text}>Selesai</Text>
           </View>
+          </ScrollView>
           <ScrollView style={styles.scrollView}>
 
           <View>
