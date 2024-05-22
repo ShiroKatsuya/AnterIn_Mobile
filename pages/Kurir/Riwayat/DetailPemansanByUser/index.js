@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid,Dimensions,Pressable,Image } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,Button, Alert, ScrollView, PermissionsAndroid,Dimensions,Pressable,Image,Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Geolocation from '@react-native-community/geolocation';
@@ -13,8 +13,9 @@ export default function DetailPemansanByUser({route}) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [lokasi, setAddress] = useState({});
   const [availableApps, setAvailableApps] = useState([]);
+  const [userlocation, setUserLocation] = useState([]);
 
-  // console.log(lokasi)
+  console.log(userlocation)
   
   const htmlContent = `
   <h1>Detail Pesanan Dari Pembelian :  ${pilihPaketData?.Nama_Paket}</h1>
@@ -82,8 +83,8 @@ useEffect(() => {
           // console.log(data)
           setAddress(data)
         })
-        console.log('Latitude : ',latitude)
-        console.log('Longtitude : ',longitude)
+        // console.log('Latitude : ',latitude)
+        // console.log('Longtitude : ',longitude)
         // console.log('Accuracy : ',accuracy)
         // console.log('Altitude : ',altitude)
 
@@ -141,6 +142,25 @@ useEffect(() => {
   }
 }, [pilihPaketData]);
 
+
+useEffect(() => {
+  if (pilihPaketData) {
+    const [latitude, longitude] = pilihPaketData.titikjemput.split(" ");
+    (async () => {
+      try {
+        const data = {
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+        };
+        setUserLocation(data);
+      } catch (error) {
+        console.error("Error setting user location:", error);
+      }
+    })();
+  }
+}, [pilihPaketData]);
+
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -188,7 +208,7 @@ useEffect(() => {
         }
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       alert('Data Berhasil Di Update'); 
       return response.data; 
 
@@ -205,8 +225,10 @@ const DetailPendapatan = (id) => {
   navigataion.navigate('RincianPendapatan', { id: id });
   // console.log(id)
 };
+
   return (
     <>
+    
     <View style={styles.container}>
 
       <View style={styles.form1}>
@@ -225,21 +247,22 @@ const DetailPendapatan = (id) => {
         <View style={styles.maps}>
 
             
-<Text style={styles.texthead}>
+{/* <Text style={styles.texthead}>
       OPEN MAPS DISINI !!!
-    </Text>
+    </Text> */}
 </View>
 <View style={styles.maps}>
-<React.Fragment>
-  {availableApps.map(({icon, name, id, open}) => (
-    <Pressable key={id} onPress={open}>
-      <Image source={icon} 
-      style={styles.img}
-      />
-      {/* <Text>{name}</Text> */}
-    </Pressable>
-  ))}
-</React.Fragment>
+<Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${userlocation.latitude},${userlocation.longitude}`)}>
+          <Image source={require('../../../img/maps.png')}  style={styles.openmaps}/>
+        </Pressable>
+        <Text style={styles.texthead}>
+          OPEN MAPS DISINI !!!
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
+      <Text style={styles.texttop3}>
+        TITIK POINT
+      </Text>
+    </TouchableOpacity>
 </View>
       </View>
        
@@ -284,11 +307,7 @@ const DetailPendapatan = (id) => {
       </View>
 
 
-    <TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
-      <Text style={styles.texttop}>
-        TITIK POINT
-      </Text>
-    </TouchableOpacity>
+
 
       {/* <TouchableOpacity
         title='TITIK POINT'
@@ -298,12 +317,11 @@ const DetailPendapatan = (id) => {
        
       /> */}
 
-
-
-    </View>
-              <View style={{  backgroundColor: '#0B111F', padding: 20 }} >
+ <View style={{  backgroundColor: '#0B111F', padding: 20 }} >
    
    </View>
+    </View>
+             
    </>
 
   )
@@ -317,15 +335,36 @@ const styles = StyleSheet.create({
     width:60,
     height:60
   },
+  // texthead:{
+  //   justifyContent:'center',
+  //   alignItems:'center',
+  //   alignSelf:'center',
+  //   fontWeight:'bold',
+  //   // animation: 'fade 5s',
+  //   marginTop:-400,
+  //   fontSize:20,
+  //   color:'black'
+
+  // },
+  openmaps:{
+    width: '100%',
+    height: '40%',
+  resizeMode:'center',
+  justifyContent:'center',
+  alignItems:'center',
+  // backgroundColor:'black',
+  // marginTop:-100
+
+  },
   button:{
-    backgroundColor:'#FFFFFF',
+    backgroundColor:'black',
     padding:10,
     borderRadius:4,
     marginTop:windowDimensions.height * 0.01,
 
   },
   texthead:{
-    marginTop:20,
+    marginTop:-30,
     alignSelf:'center',
     fontWeight:'bold',
     // animation: 'fade 5s',
@@ -336,6 +375,7 @@ const styles = StyleSheet.create({
       // flex:1,
       // width:windowDimensions.width * 0.2,
       // height:windowDimensions.height * 0.2,
+      marginTop:-windowDimensions.height * 0.02,
 
     },
     // map:{
@@ -380,6 +420,7 @@ const styles = StyleSheet.create({
     texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
     texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
     textrow:{fontWeight:'bold',color: 'white',},
+    texttop3:{fontWeight:'bold',color: 'white', fontSize: 15, textAlign:'center'},
     container: {
       flex: 1,
       backgroundColor: '#EDA01F',
@@ -406,7 +447,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'gray',
       flexDirection:'column',
       justifyContent:'flex-start',
-      marginBottom : windowDimensions.height * 0.02
+      marginBottom : windowDimensions.height * 0.02,
+      marginTop: -windowDimensions.height * 0.1,
     },
   })
 

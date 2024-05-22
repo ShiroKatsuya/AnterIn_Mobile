@@ -13,6 +13,7 @@ export default function DetailPesanan({ route }) {
   const [currentLocation, setCurrentLocation] = useState({});
   const [lokasi, setAddress] = useState({});
   const [availableApps, setAvailableApps] = useState([]);
+  const [userlocation, setUserLocation] = useState([]);
   // const [availableApps, setAvailableApps] = useState([]);
 
   // console.log(lokasi)
@@ -60,6 +61,8 @@ const Whatsapp = () => {
     console.log('Error: Check Nama_Kurir, DetailAlamat, Nama_Paket, Nama_Barang, Tinggi_cm, Lebar_cm, status');
   }
 };
+
+
 const Akseslokasi = async () => {
   try {
     const akseslokasi = await PermissionsAndroid.request(
@@ -108,6 +111,23 @@ useEffect(() => {
     );
   });
 }, []);
+
+useEffect(() => {
+  if (pilihPaketData) {
+    const [latitude, longitude] = pilihPaketData.titikjemput.split(" ");
+    (async () => {
+      try {
+        const data = {
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+        };
+        setUserLocation(data);
+      } catch (error) {
+        console.error("Error setting user location:", error);
+      }
+    })();
+  }
+}, [pilihPaketData]);
 
 
   // useEffect(() => {
@@ -234,26 +254,19 @@ useEffect(() => {
         <TouchableOpacity>
         <Text style={styles.texttop}>{pilihPaketData.titikjemput}</Text>
         </TouchableOpacity>
-
-                    <View style={styles.maps}>
-
-    
-            <Text style={styles.texthead}>
-                  OPEN MAPS DISINI !!!
-                </Text>
-            </View>
-            <View style={styles.maps}>
-            <React.Fragment>
-              {availableApps.map(({icon, name, id, open}) => (
-                <Pressable key={id} onPress={open}>
-                  <Image source={icon} 
-                  style={styles.img}
-                  />
-                  {/* <Text>{name}</Text> */}
-                </Pressable>
-              ))}
-            </React.Fragment>
-            </View>
+        <View style={styles.maps}>
+<Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${userlocation.latitude},${userlocation.longitude}`)}>
+          <Image source={require('../../img/maps.png')}  style={styles.openmaps}/>
+        </Pressable>
+        <Text style={styles.texthead}>
+          OPEN MAPS DISINI !!!
+        </Text>
+        {/* <TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
+      <Text style={styles.texttop3}>
+        TITIK POINT
+      </Text>
+    </TouchableOpacity> */}
+</View>
    
               
         
@@ -326,8 +339,42 @@ useEffect(() => {
 const windowDimensions = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  img:{
+    // width:windowDimensions.width * 0.1,
+    // height:windowDimensions.height * 0.1
+    width:60,
+    height:60
+  },
+  // texthead:{
+  //   justifyContent:'center',
+  //   alignItems:'center',
+  //   alignSelf:'center',
+  //   fontWeight:'bold',
+  //   // animation: 'fade 5s',
+  //   marginTop:-400,
+  //   fontSize:20,
+  //   color:'black'
+
+  // },
+  openmaps:{
+    width: '100%',
+    height: '40%',
+  resizeMode:'center',
+  justifyContent:'center',
+  alignItems:'center',
+  // backgroundColor:'black',
+  // marginTop:-100
+
+  },
+  button:{
+    backgroundColor:'black',
+    padding:10,
+    borderRadius:4,
+    marginTop:windowDimensions.height * 0.01,
+
+  },
   texthead:{
-    marginTop:20,
+    marginTop:-30,
     alignSelf:'center',
     fontWeight:'bold',
     // animation: 'fade 5s',
@@ -338,25 +385,13 @@ const styles = StyleSheet.create({
       // flex:1,
       // width:windowDimensions.width * 0.2,
       // height:windowDimensions.height * 0.2,
+      marginTop:-windowDimensions.height * 0.07,
 
     },
     // map:{
     //     width: '100%',
     //     height: '100%',
     // },
-  img:{
-    // width:windowDimensions.width * 0.1,
-    // height:windowDimensions.height * 0.1
-    width:60,
-    height:60
-  },
-  button:{
-    backgroundColor:'#FFFFFF',
-    padding:10,
-    borderRadius:4,
-    marginTop:windowDimensions.height * 0.01,
-
-  },
     pdf:{
       color:'black',
       fontWeight:'bold',
@@ -387,14 +422,15 @@ const styles = StyleSheet.create({
       padding:8,
       backgroundColor:'#EDA01F',
       borderRadius:4,
-      marginHorizontal:windowDimensions.width * 0.05,
-      marginTop:windowDimensions.height * 0.02
+      // marginHorizontal:windowDimensions.width * 0.05,
+      // marginTop:windowDimensions.height * 0.02
   
     },
   
     texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
     texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
     textrow:{fontWeight:'bold',color: 'white',},
+    texttop3:{fontWeight:'bold',color: 'white', fontSize: 15, textAlign:'center'},
     container: {
       flex: 1,
       backgroundColor: '#EDA01F',
@@ -421,7 +457,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'gray',
       flexDirection:'column',
       justifyContent:'flex-start',
-      marginBottom : windowDimensions.height * 0.02
+      marginBottom : windowDimensions.height * 0.02,
+      marginTop: -windowDimensions.height * 0.1,
     },
   })
-

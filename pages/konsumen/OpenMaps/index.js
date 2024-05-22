@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Pressable,Image,PermissionsAndroid} from 'react-native'
+import { StyleSheet, Text, View,Pressable,Image,PermissionsAndroid,Linking} from 'react-native'
 // import React from 'react'
 import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
 import React, { useState, useEffect } from 'react';
@@ -107,15 +107,10 @@ export default function Maps() {
   return (
     <View style={styles.container}>
       <View style={styles.maps}>
-
-    <React.Fragment>
-      {availableApps.map(({icon, name, id, open}) => (
-        <Pressable key={id} onPress={open}>
-          <Image source={icon} />
-          {/* <Text>{name}</Text> */}
+  <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}`)}>
+          <Image source={require('../../img/maps.png')}  style={styles.openmaps}/>
         </Pressable>
-      ))}
-    </React.Fragment>
+        {/* <Text>sdfsdf</Text> */}
     <Text style={styles.texthead}>
           OPEN MAPS DISINI !!!
         </Text>
@@ -129,12 +124,28 @@ export default function Maps() {
 }
 
 const styles = StyleSheet.create({
+  openmaps:{
+    width: '100%',
+    height: '40%',
+  resizeMode:'center',
+  justifyContent:'center',
+  alignItems:'center',
+  // backgroundColor:'white'
+
+  },
   texthead:{
-    marginTop:20,
+    justifyContent:'center',
+    alignItems:'center',
     alignSelf:'center',
     fontWeight:'bold',
     // animation: 'fade 5s',
+    marginTop:-200,
+    fontSize:20,
+    color:'white'
+
   },
+
+
     maps:{
       justifyContent:'center',
       alignSelf:'center',
@@ -144,10 +155,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#EDA01F'
     },
-    map:{
-        width: '100%',
-        height: '100%',
-    },
+    // map:{
+    //     width: '100%',
+    //     height: '100%',
+    // },
 });
 
 
