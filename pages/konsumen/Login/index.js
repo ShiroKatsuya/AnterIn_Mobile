@@ -1,5 +1,5 @@
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error } from 'react-native';
-import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,  } from 'react-native';
+import React, { useState,useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,15 +30,28 @@ export default function Login() {
       }
     }
 
+    
+    useEffect(() => {
+        checkToken();
+    }, []);
+
+    const checkToken = async () => {
+        const token = await AsyncStorage.getItem('token');
+        const role = await AsyncStorage.getItem('role_id'); // Menyimpan role saat login
+        if (token && role === '2') {
+            navigation.navigate('MainTab');
+        } else if (token) {
+            navigation.navigate('KurirMaintab'); 
+        }
+    };
+
+
     const handleLoginPress = async () => {
       try {
           const formData = new FormData();
           formData.append('email', email);
           formData.append('password', password);
-          formData.append('role_id', 2);
-
-
-  
+          formData.append('role_id', '2');
           const response = await axios.post(
               `${baseUrl.url}/login`,
               formData,
@@ -53,6 +66,7 @@ export default function Login() {
   
           if (response.data.success && response.data.data.role_id === 2) {
               await AsyncStorage.setItem('token', response.data.data.token);
+              await AsyncStorage.setItem('role_id', '2');
               navigation.navigate('MainTab');
               console.log(response.data);
 

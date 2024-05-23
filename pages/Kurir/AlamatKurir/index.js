@@ -38,7 +38,7 @@ export default function AlamatKurir() {
     // fetchData();
     const interval = setInterval(() => {
       fetchData();
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [dataPribadi.token]);
 

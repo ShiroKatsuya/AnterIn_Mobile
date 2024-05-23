@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Pressable,Image,PermissionsAndroid,Linking} from 'react-native'
+import { StyleSheet, Text, View,Pressable,Image,PermissionsAndroid,Linking,Dimensions} from 'react-native'
 // import React from 'react'
 import { showLocation , getApps, GetAppResult} from 'react-native-map-link';
 import React, { useState, useEffect } from 'react';
@@ -123,7 +123,7 @@ export default function MapsKurir() {
          
   );
 }
-
+const { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   openmaps:{
     width: '100%',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     fontWeight:'bold',
     // animation: 'fade 5s',
-    marginTop:-200,
+    marginTop: -height * 0.2,
     fontSize:20,
     color:'white'
 

@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get('window');
 
 
 export default function Gaji() {
-  const [waktu, setWaktu] = useState('');
+  // const [waktu, setWaktu] = useState('');
   const [ambilDataGaji,setAmbilDataGaji]=useState('');
 
 
@@ -42,12 +42,12 @@ export default function Gaji() {
     fetchData();
   }, []);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setWaktu(moment().locale('id').format('MMMM Do YYYY, h:mm:ss a'));
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     setWaktu(moment().locale('id').format('MMMM Do YYYY, h:mm:ss a'));
+//   }, 1000);
+//   return () => clearInterval(interval);
+// }, []);
   return (
     <View style={styles.container}>
 
@@ -55,7 +55,7 @@ useEffect(() => {
         <View style={styles.form1}>
           <View style={styles.imagconatiner}>
           <Text style={styles.textwaktu}>
-              {waktu}
+              {/* {waktu} */}
             </Text>
           </View>
 

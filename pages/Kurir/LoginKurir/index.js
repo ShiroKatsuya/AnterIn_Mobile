@@ -20,6 +20,8 @@ export default function LoginKurir() {
     }
   }
 
+      
+
 
   const handleEmailChange = (value) => {
     setEmail(value);
@@ -29,13 +31,28 @@ export default function LoginKurir() {
       setError('');
     }
   }
-  
-  const handleKurirDashboard = async() => {
+
+
+  useEffect(() => {
+    checkToken();
+}, []);
+
+const checkToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const role = await AsyncStorage.getItem('role_id'); // Menyimpan role saat login
+    if (token && role === '3') { 
+        navigation.navigate('KurirMaintab');
+    } else if (token) {
+        navigation.navigate('MainTab'); 
+    }
+};
+
+const handleKurirDashboard = async () => {
     try {
         const formData = new FormData();
         formData.append('email', email);
         formData.append('password', password);
-        formData.append('role_id', 3); 
+        formData.append('role_id', '3'); 
 
         const response = await axios.post(
             `${baseUrl.url}/login`,
@@ -47,10 +64,9 @@ export default function LoginKurir() {
             }
         );
 
-
-
         if (response.data.success && response.data.data.role_id === 3) {
             await AsyncStorage.setItem('token', response.data.data.token);
+            await AsyncStorage.setItem('role_id', '3'); // Menyimpan role sebagai string 'kurir'
             navigation.navigate('KurirMaintab');
             console.log(response.data);
         } else {
@@ -60,7 +76,7 @@ export default function LoginKurir() {
         console.log('Username/Password Salah !');
         setError('Username/Password Salah !');
     }
-  };
+};
   return (
     <>  
 

@@ -237,7 +237,7 @@ useEffect(() => {
 
 
     <View style={styles.container}>
-
+      <ScrollView>
       <View style={styles.form1}>
         <Text style={styles.texttop}>Nama Barang | {pilihPaketData.Nama_Barang}</Text>
         <Text style={styles.texttop}>Nama User | {pilihPaketData.nama}</Text>
@@ -331,7 +331,7 @@ useEffect(() => {
                 {/* Login button content */}
             </Text>
 
-    
+            </ScrollView>
     </View>
   );
 }
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#EDA01F',
-      padding: 10,
+      // padding: 10,
       alignItems: 'center', 
       flexDirection: 'column',
     },
@@ -458,6 +458,6 @@ const styles = StyleSheet.create({
       flexDirection:'column',
       justifyContent:'flex-start',
       marginBottom : windowDimensions.height * 0.02,
-      marginTop: -windowDimensions.height * 0.1,
+      marginTop: -windowDimensions.height * 0.3,
     },
   })
