@@ -470,9 +470,9 @@ const InputPesanan = ({ route }) => {
                                     <Image source={require('../../img/JNE.png')} style={styles.logo2} />
                                 </View>
                             </TouchableOpacity>
-                            <View style={styles.logo}>
+                            {/* <View style={styles.logo}>
                                 <Text>Logo Here</Text>
-                            </View>
+                            </View> */}
                         </View>
                         <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
                         <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
@@ -526,7 +526,10 @@ const styles = StyleSheet.create({
   camera:{
     height: windowWidth * 0.20,
     width: windowWidth * 0.20,
-    marginTop : -30
+    marginTop : -30,
+    alignSelf: 'center',
+    marginBottom: 10
+    
 },
 txt:{
     fontWeight:'bold',
@@ -538,6 +541,8 @@ txt:{
 kamera:{
   justifyContent:'center',
   alignItems: 'center',
+  alignSelf: 'center',
+  marginTop: 10
 },
   pilihkurir:{
     flexDirection:'row',

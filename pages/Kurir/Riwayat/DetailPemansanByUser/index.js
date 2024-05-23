@@ -227,10 +227,10 @@ const DetailPendapatan = (id) => {
 };
 
   return (
-    <>
+
     
     <View style={styles.container}>
-
+    <ScrollView>
       <View style={styles.form1}>
       <Text style={styles.texttop}>Nama Barang | {pilihPaketData.Nama_Barang}</Text>
         <Text style={styles.texttop}>Nama User | {pilihPaketData.nama}</Text>
@@ -254,16 +254,20 @@ const DetailPendapatan = (id) => {
 <View style={styles.maps}>
 <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${userlocation.latitude},${userlocation.longitude}`)}>
           <Image source={require('../../../img/maps.png')}  style={styles.openmaps}/>
-        </Pressable>
-        <Text style={styles.texthead}>
+          <Text style={styles.texthead}>
           OPEN MAPS DISINI !!!
         </Text>
-        <TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
+        </Pressable>
+</View>
+
+<View style={styles.titikpoint}>
+<TouchableOpacity style={styles.button} onPress={handleTitikPoint}>
       <Text style={styles.texttop3}>
         TITIK POINT
       </Text>
+
     </TouchableOpacity>
-</View>
+    </View>
       </View>
        
       <View style={styles.form2}>
@@ -317,15 +321,18 @@ const DetailPendapatan = (id) => {
        
       /> */}
 
- <View style={{  backgroundColor: '#0B111F', padding: 20 }} >
+ {/* <View style={{  backgroundColor: '#0B111F', padding: 20 }} >
    
-   </View>
-    </View>
-             
-   </>
+   </View> */}
+<Text style={{  backgroundColor: '#0B111F', padding: '100%',flex:1, }}>
+                {/* Login button content */}
+            </Text>
 
-  )
+            </ScrollView>
+    </View>
+  );
 }
+
 
 const windowDimensions = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -346,6 +353,12 @@ const styles = StyleSheet.create({
   //   color:'black'
 
   // },
+  titikpoint:{
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    marginTop:-windowDimensions.height * 0.1,
+  },
   openmaps:{
     width: '100%',
     height: '40%',
@@ -364,10 +377,11 @@ const styles = StyleSheet.create({
 
   },
   texthead:{
-    marginTop:-30,
+    // marginTop:-30,
     alignSelf:'center',
     fontWeight:'bold',
     // animation: 'fade 5s',
+    
   },
     maps:{
       justifyContent:'center',
@@ -420,11 +434,11 @@ const styles = StyleSheet.create({
     texttop:{fontWeight:'bold',color: 'black', fontSize: 15},
     texttop2:{fontWeight:'bold',color: 'black',fontSize: 14 ,marginTop: 20},
     textrow:{fontWeight:'bold',color: 'white',},
-    texttop3:{fontWeight:'bold',color: 'white', fontSize: 15, textAlign:'center'},
+    texttop3:{fontWeight:'bold',color: 'white', fontSize: 15, textAlign:'center' },
     container: {
       flex: 1,
       backgroundColor: '#EDA01F',
-      padding: 10,
+      // padding: 10,
       alignItems: 'center', 
       flexDirection: 'column',
     },
@@ -448,7 +462,7 @@ const styles = StyleSheet.create({
       flexDirection:'column',
       justifyContent:'flex-start',
       marginBottom : windowDimensions.height * 0.02,
-      marginTop: -windowDimensions.height * 0.1,
+      marginTop: -windowDimensions.height * 0.2,
     },
   })
 
