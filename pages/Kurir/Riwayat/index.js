@@ -53,7 +53,7 @@ export default function RiwayatPemesanan() {
 
         });
         data(response.data["data"]);
-        console.log(response.data)
+        // console.log(response.data)
       } catch (error) {
         console.error(error);
       }
@@ -68,7 +68,7 @@ export default function RiwayatPemesanan() {
 
   const handlePress = (item) => {
     if (item) {
-      console.log("DetailPemesanan:", item);
+      // console.log("DetailPemesanan:", item);
       navigation.navigate('DetailPemesanan', { city_name: item.city_name });
       data(item);
     } else {

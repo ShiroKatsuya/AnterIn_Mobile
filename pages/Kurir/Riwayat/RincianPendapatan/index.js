@@ -8,19 +8,19 @@ export default function RincianPendapatan({ route }) {
   const [pilihPaketData, setPilihPaketData] = useState([]);
   const [isClickable, setIsClickable] = useState(true);
 
-  useEffect(() => {
-    const toggleStatus = async () => {
-      if (pilihPaketData && pilihPaketData.id) {
-        const status = await AsyncStorage.getItem(String(pilihPaketData.id));
-        if (status === 'true') {
-          setIsClickable(false); 
-        } else {
-          setIsClickable(true); 
-        }
-      }
-    };
-    toggleStatus();
-  }, [pilihPaketData]);
+  // useEffect(() => {
+  //   const toggleStatus = async () => {
+  //     if (pilihPaketData && pilihPaketData.id) {
+  //       const status = await AsyncStorage.getItem(String(pilihPaketData.id));
+  //       if (status === 'true') {
+  //         setIsClickable(false); 
+  //       } else {
+  //         setIsClickable(true); 
+  //       }
+  //     }
+  //   };
+  //   toggleStatus();
+  // }, [pilihPaketData]);
   
 
 
@@ -60,29 +60,66 @@ export default function RincianPendapatan({ route }) {
   }, [route.params.id]);
 
 
+  // useEffect(()=>{
+  //   handleStatus()
+
+  // },[])
 
 
-  const handleUpdateGaji = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const updateGajiKurir = pilihPaketData.Harga_Paket - rules[pilihPaketData.Harga_Paket];
   
+
+
+
+
+
+  const handleStatus = async () => {
+    if (!route.params.id) {
+      throw new Error("Paket tidak valid.");
+    }
+
     try {
-      const gajiResponse = await axios.put(`${baseUrl.url}/updategajikurir/${pilihPaketData.kurirs_id}`, { gaji: updateGajiKurir }, {
+      const token = await AsyncStorage.getItem('token');
+      const data = {
+        infostatusbykurir: 'Selesai',
+      };
+  
+      const response = await axios.put(`${baseUrl.url}/updatestatusbykurir/${route.params.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
-  
-      console.log(gajiResponse.data);
-  
-      if (gajiResponse.data.success) {
-        setIsClickable(false);
-        await AsyncStorage.setItem(String(pilihPaketData.id), 'true'); 
+
+      alert('Data Berhasil Di Update');        
+      if (response.data.success) {
+        const updateGajiKurir = pilihPaketData.Harga_Paket - rules[pilihPaketData.Harga_Paket];
+        const nama = pilihPaketData.Nama_Kurir;
+        try {
+          const gajiResponse = await axios.put(`${baseUrl.url}/updategajikurir/${nama}`, { gaji: updateGajiKurir }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          });
+          console.log(gajiResponse.data);
+          const updatedData = await axios.get(`${baseUrl.url}/riwayatpesananuser/${route.params.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+          });
+          setPilihPaketData(updatedData.data);
+        } catch (error) {
+          console.error('Error update gaji:', error);
+        }
       }
+      return response.data; 
+
     } catch (error) {
-      console.error('Error updating salary:', error);
+      console.error("Gagal memperbarui status:", error);
+      throw error; 
     }
-  };
+}
+
+
+
 
 
 
@@ -150,13 +187,22 @@ export default function RincianPendapatan({ route }) {
           <Text style={styles.text2}>
           Kurir
           </Text>
-          <TouchableOpacity onPress={handleUpdateGaji} disabled={!isClickable}>
+          {/* <TouchableOpacity onPress={() => { handleUpdateGaji(); setIsClickable(false); }} disabled={!isClickable}>
       <View style={styles.button}>
         <Text style={styles.text3}>
           {isClickable ? "Belum Selesai" : "Selesai"}
         </Text>
       </View>
+    </TouchableOpacity> */}
+
+    <TouchableOpacity onPress={handleStatus} disabled={!isClickable || pilihPaketData.infostatusbykurir === "Selesai"}>
+      <View style={styles.button}>
+        <Text style={styles.text3}>
+          {pilihPaketData.infostatusbykurir}
+        </Text>
+      </View>
     </TouchableOpacity>
+
           </View>
 
 

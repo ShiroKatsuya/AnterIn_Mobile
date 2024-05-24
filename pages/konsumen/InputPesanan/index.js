@@ -193,7 +193,7 @@ const InputPesanan = ({ route }) => {
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
-        kurirs_id: '',
+        // kurirs_id: null,
         Angkutan: null,
         city_name: '',
         province: '',
@@ -212,11 +212,11 @@ const InputPesanan = ({ route }) => {
                 ...prevForm,
                 Nama_Kurir: pilihKurir.nama,
             }));
-        } else if (name === 'kurirs_id') {
-            setForm(prevForm => ({
-                ...prevForm,
-                kurirs_id: pilihKurir.kurirs_id,
-            }));
+        // } else if (name === 'kurirs_id') {
+        //     setForm(prevForm => ({
+        //         ...prevForm,
+        //         kurirs_id: pilihKurir.kurirs_id,
+        //     }));
         } else {
             setForm(prevForm => ({
                 ...prevForm,
@@ -286,8 +286,8 @@ const InputPesanan = ({ route }) => {
             setShowMessage('Masukan Detail Alamat')
         }else if (!form.Berat_kg) {
             setShowMessage('Masukan Berat_kg')
-        }else if (!form.kurirs_id) {
-            setShowMessage('Pilih Kurir')
+        // }else if (!form.kurirs_id) {
+        //     setShowMessage('Pilih Kurir')
         }else if (!titikjemput) {
             setShowMessage('Pilih Titik Jemput')
         }
@@ -303,7 +303,7 @@ const InputPesanan = ({ route }) => {
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir,
-                kurirs_id: form.kurirs_id,
+                // kurirs_id: form.kurirs_id,
                 city_name: pilihalamat.city_name,
                 province: pilihalamat.province,
                 postal_code: pilihalamat.postal_code,
@@ -476,15 +476,15 @@ const InputPesanan = ({ route }) => {
                         </View>
                         <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
                         <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
-                        <Text style={[styles.input, styles.forminside]}>{pilihKurir.kurirs_id}</Text>
+                        {/* <Text style={[styles.input, styles.forminside]}>{pilihKurir.kurirs_id}</Text> */}
                         <Button
                             title="Simpan Pilihan Kurir"
                             onPress={() => {
                                 handleInputChange('Nama_Kurir', form.Nama_Kurir);
-                                handleInputChange('kurirs_id', form.kurirs_id);
+                                // handleInputChange('kurirs_id', form.kurirs_id);
                                 alert('Data kurir berhasil disimpan!');
                             }}
-                            disabled={!pilihKurir.nama && !pilihKurir.kurirs_id}
+                            disabled={!pilihKurir.nama}
                         />
                         <View>
                             <RNPickerSelect
@@ -500,7 +500,7 @@ const InputPesanan = ({ route }) => {
                         <Button
                             title="Submit"
                             onPress={() => {
-                                if (titikjemput && Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && pilihKurir.kurirs_id && form.kurirs_id && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
+                                if (titikjemput && Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
                                     kirimPesanan();
                                     alert('Data berhasil dikirim!');
                                     navigation.navigate('Checkout');
