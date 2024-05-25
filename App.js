@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, RiwayatStatusSucces, BerikanRating, } from './pages/route'; 
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, RiwayatStatusSucces, BerikanRating, TambahNomorHp, } from './pages/route'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
 
 
@@ -175,6 +175,8 @@ function MainTab() {
           )
         }}
       />
+
+      
             <Tab.Screen
         name="RiwayatTopUp"
         component={RiwayatTopUp}
@@ -209,6 +211,16 @@ function App() {
                 <Stack.Screen
     name="RajaOngkir"
     component={RajaOngkir}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Raja Ongkir",
+    }}
+        />
+
+<Stack.Screen
+    name="TambahNomorHp"
+    component={TambahNomorHp}
     options={{
       ...headerOption,
       HeaderCustome: (props) => <headerTitle {...props} />, 
