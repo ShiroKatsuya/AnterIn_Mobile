@@ -52,7 +52,7 @@ const Whatsapp = () => {
   const { Nama_Kurir,DetailAlamat,Nama_Paket,Nama_Barang,Tinggi_cm,Lebar_cm,status } = pilihPaketData;
   if (Nama_Kurir && DetailAlamat && Nama_Paket && Nama_Barang && Tinggi_cm && Lebar_cm && status) {
     const diencodepesannya = encodeURIComponent(`Hai ${Nama_Kurir} Saya ingin menayakan paketan saya dengan Detail Alamat ${DetailAlamat} dengan nama : ${Nama_Paket} dengan nama barang : ${Nama_Barang} dengan tinggi : ${Tinggi_cm} cm dan lebar : ${Lebar_cm} cm dengan status : ${status}` );
-    const url = `https://wa.me/${pilihPaketData.kurir.nohp}?text=${diencodepesannya}`;
+    const url = `https://wa.me/${pilihPaketData.NomorHpKurir}?text=${diencodepesannya}`;
     Linking.openURL(url).catch(err => {
       console.error('Error UpenORLL:', err);
     });
