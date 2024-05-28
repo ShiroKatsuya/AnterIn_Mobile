@@ -27,6 +27,31 @@ export default function RiwayatTopUp() {
   }
 
   
+  const hapusTopUp = async (id) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.delete(`${baseUrl.url}/desytroypembayaran/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      if (response.data) {
+        alert('Pesanan Berhasil Dihapus');
+        const updatedResponse = await axios.get(`${baseUrl.url}/riwayatpembayaran`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        data(updatedResponse.data["data"]);
+      }
+    } catch (error) {
+      console.error("Gagal memperbarui status:", error);
+      throw error;
+    }
+  }
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,7 +141,9 @@ export default function RiwayatTopUp() {
                           </Text>
                         </View>
                       </View>
+                      <TouchableOpacity onPress={() => hapusTopUp(item.id)}>
                       <View>
+
                         <View style={styles.info}>
                           <Image
                             source={require('../../../img/message.png')}
@@ -124,7 +151,9 @@ export default function RiwayatTopUp() {
                             style={styles.img}
                           />
                         </View>
+                   
                       </View>
+                      </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.info2} onPress={() => handleDetail(item.id)}>
                       <Text style={styles.info}>

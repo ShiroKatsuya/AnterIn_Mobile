@@ -8,6 +8,7 @@ export default function Riwayat() {
   const navigation = useNavigation();
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, data] = useState([]);
+  // const [item, setItem] = useState({});
 
 
   const navigateToDetail = (id) => {
@@ -17,6 +18,30 @@ export default function Riwayat() {
 
   };
 
+
+  const hapusPesanan = async (id) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.delete(`${baseUrl.url}/inputpesanan/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      if (response.data) {
+        alert('Pesanan Berhasil Dihapus');
+        const updatedResponse = await axios.get(`${baseUrl.url}/riwayatpesanan`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        data(updatedResponse.data);
+      }
+    } catch (error) {
+      console.error("Gagal memperbarui status:", error);
+      throw error;
+    }
+  }
   
 
   useEffect(() => {
@@ -83,7 +108,13 @@ export default function Riwayat() {
                         <Text style={styles.textdetail}>
                           Cek detail disini
                         </Text>
+                    
                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.textdetailcontainer} onPress={() => hapusPesanan(item.id)}>
+                      <Text style={styles.textdetail}>
+                          Hapus Pesanan 
+                        </Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.mobilcontainer}>
                       <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil} />
@@ -134,7 +165,7 @@ const styles = StyleSheet.create({
   textdetailcontainer: {
     padding: 10,
     alignSelf: 'flex-end',
-    marginTop: 40,
+    // marginTop: 40,
   },
   mobilcontainer: {
     // padding: 10,
@@ -202,6 +233,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         // width:200,
         // height:200,
+
 
     },
     
