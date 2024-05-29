@@ -13,6 +13,8 @@ export default function Chatting() {
   const [text, setText] = useState('');
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
 
+  const [ambildatapesan,setAmbilDataPesan] = useState([]);
+
   const [dataPribadi,setDataPribadi]=useState({});
 
   const [AmbilPesan,AmbilPesanMasuk]= useState ([]);
@@ -48,6 +50,9 @@ export default function Chatting() {
         })
       );
     };
+
+
+    
 
     socket.on('message', messageListener);
 
@@ -93,6 +98,28 @@ export default function Chatting() {
     // resolve();
   };
 
+
+  // useEffect(() => {
+  //   const ambildatapesan = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       const response = await axios(`${baseUrl.url}/riwayatpesan`,{
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         },
+  //         method: "GET"
+  //       });
+  //       setAmbilDataPesan(response.data["data"]);
+  //     //   console.log(response.data)
+
+  //     //  //lu cobain dulu dah console.log ada kgk datanya 
+  //       console.log(response.data) 
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   ambildatapesan();
+  // }, [dataPribadi.token]);
   return (
     <View style={styles.container}>
       <View style={styles.header}>

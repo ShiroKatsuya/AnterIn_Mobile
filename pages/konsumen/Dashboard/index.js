@@ -310,7 +310,7 @@ const Dashboard = () => {
           {/* <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
             <Text style={styles.unggulanText}>Detail Pesanan</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ListRiwayatChatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Maps')}>
