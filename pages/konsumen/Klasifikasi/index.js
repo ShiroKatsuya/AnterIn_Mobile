@@ -16,6 +16,8 @@ export default function KlasifikasiObjek() {
     const [Lebar_cm, setLebar_cm] = useState(null);
     const [Tinggi_cm,setTinggi_cm]= useState(null);
 
+    const [gagal,setGagal]=useState(null);
+
 
     const generateUniquePictureName = () => {
         return Math.random().toString(36).substring(2, 15);
@@ -59,7 +61,7 @@ export default function KlasifikasiObjek() {
 
                 setLebar_cm(responseJson.response.Lebar_cm);
                 setTinggi_cm(responseJson.response.Tinggi_cm);
-                setgagal(responseJson.response.error)
+                // setgagal(responseJson.response.error)
 
 
             } else {
@@ -166,6 +168,7 @@ export default function KlasifikasiObjek() {
 
                     <Text style={styles.textresul}>Lebar : {Lebar_cm} cm</Text>
                     <Text style={styles.textresul}>Tinggi : {Tinggi_cm} cm</Text>
+                    <Text style={styles.textresul}>{gagal}</Text>
 
                 </View>
             </View>
