@@ -34,32 +34,35 @@ const Dashboard = () => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 3000);
   }, []);
 
   const Akseslokasi = async () => {
-    try {
-      const akseslokasi = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Access Required',
-          message: 'This app needs to access your location',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the location');
-        // granted();
-      } else {
-        console.log('Location permission denied');
+    let akseslokasi;
+    do {
+      try {
+        akseslokasi = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Access Required',
+            message: 'This app needs to access your location',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the location');
+          break; 
+        } else {
+          console.log('Location permission denied, asking again...');
+        }
+      } catch (err) {
+        console.warn(err);
+        break; 
       }
-    } catch (err) {
-      console.warn(err);
-    }
+    } while (akseslokasi !== PermissionsAndroid.RESULTS.GRANTED);
   };
-
   useEffect(() => {
     Akseslokasi().then(() => {
       Geolocation.getCurrentPosition(
@@ -116,7 +119,7 @@ const Dashboard = () => {
       }
     };
     // fetchData()
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
   }, [dataPribadi.token]);
 
@@ -161,7 +164,7 @@ const Dashboard = () => {
     };
   
     // fetchData();
-    const interval = setInterval(fetchData,5000)
+    const interval = setInterval(fetchData,3000)
     return()=>clearInterval(interval)
 
   }, []);
@@ -299,19 +302,19 @@ const Dashboard = () => {
         </View>
         <View style={styles.unggulanRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
-            <Text style={styles.unggulanText}>Pesan</Text>
+            <Text style={styles.unggulanText}>Check</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
-            <Text style={styles.unggulanText}>Riwayat</Text>
+            <Text style={styles.unggulanText2}>Info</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => navigation.navigate('DetailPesanan')}>
             <Text style={styles.unggulanText}>Detail Pesanan</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ListRiwayatChatting')}>
             <Text style={styles.unggulanText}>Chat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Maps')}>
-            <Text style={styles.unggulanText}>Maps</Text>
+            <Text style={styles.unggulanText2}>Maps</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => navigation.navigate('KlasifikasiObjek')}>
             <Text style={styles.unggulanText}>Scan</Text>
@@ -392,8 +395,9 @@ const styles = StyleSheet.create({
 
   cardratingteks:{
     color:'white',
-    marginTop:5,
-    textAlign:'auto'
+  
+    textAlign:'auto',
+
   },
   cardrating:{
     flexDirection: 'row',
@@ -404,7 +408,7 @@ const styles = StyleSheet.create({
   cardmessage:{
     backgroundColor: 'black',
     width: width * 0.3, 
-    height: width * 0.2, 
+    height: width * 0.3, 
     borderRadius: 7,
     color: 'white',
     padding: 10,
@@ -488,33 +492,69 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 30,
     padding: 1,
-    marginTop: 10,
+    marginTop: '2%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginRight: '5%',
+    marginLeft: '5%'
+    // width: width * 1, 
+    // height: width * 0, 
 
   },
   unggulanRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // marginBottom: 10,
-    marginRight:90,
-    marginLeft:90
+    marginRight: '10%',
+    marginLeft: '10%',
+    // marginTop:10
+    // marginVertical:2
+
   },
   unggulanText: {
     // backgroundColor: 'black',
     width: width * 0.1, 
     height: width * 0.1, 
-    borderRadius: 7,
+    // borderRadius: 7,
     color: 'black',
-    // padding: 5,
-    marginRight: 10,
-    textAlign:'center',
+    // marginRight:1,
+    // textAlign:'center',
     // justifyContent:'center',
-    // alignItems:'center'
+    // alignItems:'center',
     marginTop:5,
+    // paddingLeft:10,
+    // marginLeft:
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // paddingLeft:10,
+    // paddingRight:10
+    textAlign:'center',
+    justifyContent:'center',
+    alignItems:'center',
+    marginVertical:10
+    
+  
+  },
+  unggulanText2:{
+        // backgroundColor: 'black',
+        width: width * 0.1, 
+        height: width * 0.1, 
+        borderRadius: 7,
+        color: 'black',
+        // marginRight:1,
+        textAlign:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:5,
+        // paddingLeft:10,
+        // marginRight:1,
+        // paddingLeft:10,
+        // paddingRight:
+// marginHorizontal:10
+// marginVertical:10
+marginVertical:10
   },
 
   unggulanArtikel:{
@@ -531,9 +571,10 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     color: 'white',
     // padding: 5,
-    marginRight: 10,
+    // marginRight: 4,
     marginTop:40,
     padding: 20
+    
  
   },
 });

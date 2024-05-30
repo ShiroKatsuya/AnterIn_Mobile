@@ -45,6 +45,7 @@ export default function Kurir() {
             <Image source={require('../../img/logo.png')} style={styles.logo} />
             <View style={styles.userDetails}>
               <Text style={styles.userName}>Nama : {pkg.nama}</Text>
+              <Text style={styles.userName}>kurirs_id : {pkg.kurirs_id}</Text>
               <Text style={styles.userPhone}>Nomor Hp : {pkg.nohp}</Text>
               <Text style={styles.userPhone}>Role_id : {pkg.role_id}</Text>
             </View>

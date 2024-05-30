@@ -13,6 +13,8 @@ export default function Chatting() {
   const [text, setText] = useState('');
   const [ambilDataProfile, setAmbilDataProfile] = useState([]);
 
+  const [ambildatapesan,setAmbilDataPesan] = useState([]);
+
   const [dataPribadi,setDataPribadi]=useState({});
 
   const [AmbilPesan,AmbilPesanMasuk]= useState ([]);
@@ -48,6 +50,9 @@ export default function Chatting() {
         })
       );
     };
+
+
+    
 
     socket.on('message', messageListener);
 
@@ -93,6 +98,28 @@ export default function Chatting() {
     // resolve();
   };
 
+
+  // useEffect(() => {
+  //   const ambildatapesan = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       const response = await axios(`${baseUrl.url}/riwayatpesan`,{
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         },
+  //         method: "GET"
+  //       });
+  //       setAmbilDataPesan(response.data["data"]);
+  //     //   console.log(response.data)
+
+  //     //  //lu cobain dulu dah console.log ada kgk datanya 
+  //       console.log(response.data) 
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   ambildatapesan();
+  // }, [dataPribadi.token]);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -157,6 +184,7 @@ export default function Chatting() {
 
   );
 }
+const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
 text:{color: 'white'},
   resultcontainer: {
@@ -225,11 +253,16 @@ text:{color: 'white'},
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 10,
+    height: '90%',
+    borderRadius: 20,
   },
   main: {
     backgroundColor: '#FFFFFF',
     marginTop: 15,
-    height: 800,
+    // height: 800,
+    height: '90%',
+    // width: windowWidth * 0.5,
+
   },
   chatbar: {
     marginRight: 20,
@@ -239,7 +272,7 @@ text:{color: 'white'},
   },
   input: {
     height: 40,
-    width: 400,
+      width: '80%',
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,

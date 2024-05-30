@@ -1,4 +1,4 @@
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image,error } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -12,9 +12,31 @@ export default function ProfileKurir() {
   const navigation = useNavigation();
 
 
+  const logout = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await axios.get(`${baseUrl.url}/logout`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+          console.log(response.data);
+  
+   
+      }
+    } catch (error) {
+      // console.error("Logout error:", error);
+    } finally {
+      await AsyncStorage.removeItem('token'); 
+      navigation.navigate('LoginKurir'); 
+   
+    }
+  };
 
   const handleLogout = () => {
-    navigation.navigate('LoginKurir')
+    logout();
+    Alert.alert('Logout Success');
   };
 
   const handleAlamat = () => {
@@ -43,7 +65,7 @@ export default function ProfileKurir() {
     };
     // fetchData();
 
-    const interval = setInterval(fetchData,5000)
+    const interval = setInterval(fetchData,3000)
     return () => clearInterval(interval)
 
   }, [dataPribadi.token]);

@@ -8,6 +8,7 @@ export default function Riwayat() {
   const navigation = useNavigation();
   const [dataPribadi, setDataPribadi] = useState({});
   const [ambilData, data] = useState([]);
+  // const [item, setItem] = useState({});
 
 
   const navigateToDetail = (id) => {
@@ -17,6 +18,30 @@ export default function Riwayat() {
 
   };
 
+
+  const hapusPesanan = async (id) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.delete(`${baseUrl.url}/inputpesanan/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      if (response.data) {
+        alert('Pesanan Berhasil Dihapus');
+        const updatedResponse = await axios.get(`${baseUrl.url}/riwayatpesanan`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        data(updatedResponse.data);
+      }
+    } catch (error) {
+      console.error("Gagal memperbarui status:", error);
+      throw error;
+    }
+  }
   
 
   useEffect(() => {
@@ -47,12 +72,14 @@ export default function Riwayat() {
       <SafeAreaView style={styles.container}>
       
         <View style={{ marginBottom: 40 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.text}>Semua</Text>
             <Text style={styles.text}>Sedang Dikirim</Text>
             <Text style={styles.text}>Sudah Dikirim</Text>
             <Text style={styles.text}>Selesai</Text>
           </View>
+          </ScrollView>
           <ScrollView style={styles.scrollView}>
           <View>
             <View style={styles.search}>
@@ -81,7 +108,13 @@ export default function Riwayat() {
                         <Text style={styles.textdetail}>
                           Cek detail disini
                         </Text>
+                    
                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.textdetailcontainer} onPress={() => hapusPesanan(item.id)}>
+                      <Text style={styles.textdetail}>
+                          Hapus Pesanan 
+                        </Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.mobilcontainer}>
                       <Image source={require('../../img/ikon-riwayatpesanan/cepat.png')} style={styles.mobil} />
@@ -132,12 +165,12 @@ const styles = StyleSheet.create({
   textdetailcontainer: {
     padding: 10,
     alignSelf: 'flex-end',
-    marginTop: 40,
+    // marginTop: 40,
   },
   mobilcontainer: {
     // padding: 10,
-    marginTop: -135,
-    marginRight: 330,
+    marginTop: -width * 0.3,
+    marginRight: width * 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center', 
@@ -150,11 +183,13 @@ const styles = StyleSheet.create({
     jenispaket:{
         backgroundColor:'#000000',
         padding:20,
-        width:230,
+        width:width * 0.8,
+        // height:width * 0.4,
         paddingBottom:50,
         marginTop:20,
-        marginLeft:40,
-        borderRadius:30
+        // marginLeft:40,
+        borderRadius:30,
+        alignSelf:'center'
 
 
     },
@@ -198,6 +233,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         // width:200,
         // height:200,
+
 
     },
     

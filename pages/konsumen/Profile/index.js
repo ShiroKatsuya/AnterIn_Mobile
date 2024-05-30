@@ -1,5 +1,5 @@
 import React, {useEffect,useState} from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet,Dimensions,ScrollView, FlatList, RefreshControl, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -15,6 +15,11 @@ export default function Profile() {
 useEffect(()=>{
 },[dataPribadi.token])
 
+
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +31,7 @@ useEffect(()=>{
           method: "GET"
         });
         setAmbilDataProfile(response.data["data"]);
-      //   console.log(response.data)
+        console.log(response.data)
 
       //  //lu cobain dulu dah console.log ada kgk datanya 
         // console.log(response.data) 
@@ -37,12 +42,37 @@ useEffect(()=>{
     fetchData();
   }, [dataPribadi.token]);
 
-  const handleLoginPress = () => {
-    navigation.navigate('Login'); 
+  const logout = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await axios.get(`${baseUrl.url}/logout`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+          console.log(response.data);
+  
+   
+      }
+    } catch (error) {
+      // console.error("Logout error:", error);
+    } finally {
+      await AsyncStorage.removeItem('token'); 
+      navigation.navigate('Login'); 
+   
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    Alert.alert('Logout Success');
   };
   const handleAlamat = () => {
     navigation.navigate('Alamat'); 
   };
+
+
   return (
     <>
       <View style={{ alignItems: 'center', flexDirection: 'column' , ...StyleSheet.absoluteFillObject, backgroundColor: '#EDA01F' }}>
@@ -110,7 +140,7 @@ useEffect(()=>{
                           borderWidth:1.3,
                           borderRadius:4,
     }}>
-         <TouchableOpacity onPress={handleLoginPress}>
+         <TouchableOpacity onPress={handleLogout}>
           <Text style={styles.text}>Keluar</Text>
           </TouchableOpacity>
           </View>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image, Dimensions, ScrollView,PermissionsAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../baseUrl';
 import RNPickerSelect from 'react-native-picker-select';
+import Geolocation from '@react-native-community/geolocation';
 
 const InputPesanan = ({ route }) => {
     const navigation = useNavigation();
@@ -13,13 +14,18 @@ const InputPesanan = ({ route }) => {
     const [pilihalamat, setpilihalamat] = useState(route.params.pilihalamat || {});
     const [pilihKurir, setPilihKurir] = useState(route.params.pilihkurir || {});
     const [pilihPaketData, setPilihPaketData] = useState({});
-    const [inputEnabled, setInputEnabled] = useState(false);
 
+    const [titikjemput, setTitikJemput] = useState('');
+    const [inputEnabled, setInputEnabled] = useState(false);
+    const [currentLocation,setCurrentLocation]=useState(null);
     const [selectedValue, setSelectedValue] = useState(null);
+    const [selectedValueBerat, setSelectedValueBerat] = useState(null);
 
     const [Nama_Barang, setNamaBarang] = useState(null);
     const [Lebar_cm, setLebar_cm] = useState(null);
     const [Tinggi_cm, setTinggi_cm] = useState(null);
+
+    console.log(titikjemput)
 
     console.log(Lebar_cm);
     console.log(Tinggi_cm);
@@ -29,6 +35,64 @@ const InputPesanan = ({ route }) => {
         navigation.navigate('RajaOngkir');
     }
 
+    const [lokasi,setAddress]=useState('');
+
+    // console.log(lokasi)
+
+    // console.log(currentLocation)
+
+    const Akseslokasi = async () => {
+        let akseslokasi;
+        do {
+          try {
+            akseslokasi = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: 'Location Access Required',
+                message: 'This app needs to access your location',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+              },
+            );
+            if (akseslokasi === PermissionsAndroid.RESULTS.GRANTED) {
+              console.log('You can use the location');
+              break; 
+            } else {
+              console.log('Location permission denied, asking again...');
+            }
+          } catch (err) {
+            console.warn(err);
+            break; 
+          }
+        } while (akseslokasi !== PermissionsAndroid.RESULTS.GRANTED);
+      };
+      useEffect(() => {
+        Akseslokasi().then(() => {
+          Geolocation.getCurrentPosition(
+            position => {
+              const { latitude, longitude ,accuracy,altitude } = position.coords;
+              setCurrentLocation({ latitude, longitude });
+              // console.log(latitude, longitude);
+              const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+              fetch(url).then(res=>res.json()).then(data=>{
+                // console.log(data)
+                setAddress(data)
+              })
+            //   console.log('Latitude : ',latitude)
+            //   console.log('Longtitude : ',longitude)
+              // console.log('Accuracy : ',accuracy)
+              // console.log('Altitude : ',altitude)
+    
+            },
+            error => {
+              console.error('Error Lokasi:', error.message);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+          );
+        });
+      }, []);
+
     const placeholder = {
         label: 'Pilihan Penganggkutan...',
         value: null,
@@ -37,6 +101,12 @@ const InputPesanan = ({ route }) => {
     const options = [
         { label: 'Opsi 1', value: 'Mobil' },
         { label: 'Opsi 2', value: 'Motor' },
+    ];
+
+    const Berat_kg = [
+        { label: '5-10 kg', value: '5-10 kg' },
+        { label: '11-15 kg', value: '11-15 kg' },
+        { label: '16-20 kg', value: '16-20 kg' },
     ];
 
     useEffect(() => {
@@ -80,6 +150,14 @@ const InputPesanan = ({ route }) => {
     }, [pilihPaket]);
 
     useEffect(() => {
+        if (currentLocation && Object.keys(currentLocation).length !== 0) {
+            setTitikJemput(currentLocation.latitude + ' '+ currentLocation.longitude);
+            // console.log(LokasiJemputan)
+        }
+    }, [currentLocation]);
+
+
+    useEffect(() => {
         if (route.params.data && route.params.data.Angkutan) {
             selectedValue(route.params.data.Angkutan);
 
@@ -93,19 +171,37 @@ const InputPesanan = ({ route }) => {
         }
     }, [route.params.data]);
 
+    useEffect(() => {
+        if (route.params.data && route.params.data.Berat_kg) {
+            selectedValueBerat(route.params.data.Berat_kg);
+
+            AsyncStorage.setItem('Berat_kg', route.params.data.Berat_kg);
+        } else {
+            AsyncStorage.getItem('Berat_kg').then((value) => {
+                if (value) {
+                    setSelectedValueBerat(value);
+                }
+            });
+        }
+    }, [route.params.data]);
+
     const [form, setForm] = useState({
         Nama_Barang: Nama_Barang,
         Lebar_cm: Lebar_cm,
         Tinggi_cm: Tinggi_cm,
-        Berat_kg: '',
+        Berat_kg: null,
         Nama_Paket: '',
         Harga_Paket: '',
         Nama_Kurir: '',
+        NomorHpKurir:'',
+        // kurirs_id: null,
         Angkutan: null,
         city_name: '',
         province: '',
         postal_code: '',
         DetailAlamat: '',
+        titikjemput:titikjemput
+
 
     });
 
@@ -113,15 +209,26 @@ const InputPesanan = ({ route }) => {
 
     const handleInputChange = (name, value) => {
         if (name === 'Nama_Kurir') {
-            setForm({
-                ...form,
+            setForm(prevForm => ({
+                ...prevForm,
                 Nama_Kurir: pilihKurir.nama,
-            });
-        } else {
-            setForm({
-                ...form,
+            }));
+        // } else if (name === 'kurirs_id') {
+        //     setForm(prevForm => ({
+        //         ...prevForm,
+        //         kurirs_id: pilihKurir.kurirs_id,
+        //     }));
+        } else if (name === 'NomorHpKurir') {
+            setForm(prevForm => ({
+                ...prevForm,
+                NomorHpKurir: pilihKurir.nohp,
+            }));
+        }
+        else {
+            setForm(prevForm => ({
+                ...prevForm,
                 [name]: value,
-            });
+            }));
         }
         if (name == 'city_name') {
             setForm({
@@ -149,13 +256,19 @@ const InputPesanan = ({ route }) => {
         if (name == 'Angkutan') {
             setSelectedValue(value);
         }
+        if (name == 'Berat_kg') {
+            setSelectedValueBerat(value);
+        }
         if (name == 'Lebar_cm') {
             setLebar_cm(value);
         }
         if (name == 'Tinggi_cm') {
             setTinggi_cm(value);
+        }if (name == 'titikjemput') {
+            setLokasiJemputan(value);
         }
     };
+
 
     const kirimPesanan = async () => {
         if (!Nama_Barang || !Lebar_cm || !Tinggi_cm) {
@@ -164,7 +277,7 @@ const InputPesanan = ({ route }) => {
         } else if (!pilihPaketData.Nama_Paket || !pilihPaketData.Harga_Paket) {
             setShowMessage('Pilih Jenis Paket');
             return;
-        } else if (!form.Nama_Kurir) {
+        } else if (!form.Nama_Kurir || !form.NomorHpKurir) {
             setShowMessage('Pilih Nama Kurir');
             return;
         } else if (!pilihalamat.city_name) {
@@ -180,6 +293,10 @@ const InputPesanan = ({ route }) => {
             setShowMessage('Masukan Detail Alamat')
         }else if (!form.Berat_kg) {
             setShowMessage('Masukan Berat_kg')
+        // }else if (!form.kurirs_id) {
+        //     setShowMessage('Pilih Kurir')
+        }else if (!titikjemput) {
+            setShowMessage('Pilih Titik Jemput')
         }
 
 
@@ -193,11 +310,14 @@ const InputPesanan = ({ route }) => {
                 Nama_Paket: pilihPaketData.Nama_Paket,
                 Harga_Paket: pilihPaketData.Harga_Paket,
                 Nama_Kurir: form.Nama_Kurir,
+                NomorHpKurir: form.NomorHpKurir,
+                // kurirs_id: form.kurirs_id,
                 city_name: pilihalamat.city_name,
                 province: pilihalamat.province,
                 postal_code: pilihalamat.postal_code,
                 DetailAlamat: form.DetailAlamat,
-                Berat_kg: form.Berat_kg,
+                Berat_kg: selectedValueBerat,
+                titikjemput: titikjemput,
 
             };
 
@@ -278,11 +398,16 @@ const InputPesanan = ({ route }) => {
                                 setInputEnabled(!inputEnabled);
                             }}
                         />
-                <TextInput
-                placeholder='Masukan Berat_kg'
-                value={form.Berat_kg}
-                // onChangeText={(text) => handleInputChange('Berat_kg', text)}
-                />
+                    <View>
+                            <RNPickerSelect
+                                placeholder={placeholder}
+                                items={Berat_kg}
+                                onValueChange={(value) => setSelectedValueBerat(value)}
+                                onTextChange={(text) => handleInputChange('Berat_kg', text)}
+                                value={selectedValueBerat}
+                            />
+                            {selectedValueBerat && <Text style={[styles.input, styles.forminside]}>Pilihan Berat : {selectedValueBerat}</Text>}
+                        </View>
 
 
                         </View>
@@ -304,12 +429,30 @@ const InputPesanan = ({ route }) => {
                         <Text style={[styles.input, styles.forminside]}>{pilihalamat.province}</Text>
                         <Text style={[styles.input, styles.forminside]}>{pilihalamat.postal_code}</Text>
 
+             
+           
+
+                        {/* <Text style={[styles.input, styles.forminside]}></Text>
+                        <Text style={[styles.input, styles.forminside]}></Text> */}
+
                         <TextInput
                             style={[styles.input, styles.forminside]}
                             placeholder="Masukan Detail Alamat Jalan.Rt/Rw"
                             value={form.DetailAlamat}
                             onChangeText={(text) => handleInputChange('DetailAlamat', text)}
                         />
+                    </View>
+                    <View style={styles.form}>
+                        <Text style={styles.text}>Titik Jemput</Text>
+                        <TextInput
+                            style={[styles.input, styles.forminside]}
+                            placeholder="Titik Jemput"
+                            value={titikjemput}
+                            onChangeText={(text) => handleInputChange('titikjemput', text)}
+                            editable={false}
+                        />
+    
+                         
                     </View>
                     <View style={styles.form}>
                         <Text style={styles.text}>Jenis Paket</Text>
@@ -335,19 +478,23 @@ const InputPesanan = ({ route }) => {
                                     <Image source={require('../../img/JNE.png')} style={styles.logo2} />
                                 </View>
                             </TouchableOpacity>
-                            <View style={styles.logo}>
+                            {/* <View style={styles.logo}>
                                 <Text>Logo Here</Text>
-                            </View>
+                            </View> */}
                         </View>
                         <Text style={styles.text}>Kurir Yang Anda Pilih Adalah</Text>
                         <Text style={[styles.input, styles.forminside]}>{pilihKurir.nama}</Text>
+                        {/* <Text style={[styles.input, styles.forminside]}>{pilihKurir.kurirs_id}</Text> */}
+                        <Text style={[styles.input, styles.forminside]}>{pilihKurir.nohp}</Text>
                         <Button
                             title="Simpan Pilihan Kurir"
                             onPress={() => {
                                 handleInputChange('Nama_Kurir', form.Nama_Kurir);
+                                handleInputChange('NomorHpKurir', form.NomorHpKurir);
+                                // handleInputChange('kurirs_id', form.kurirs_id);
                                 alert('Data kurir berhasil disimpan!');
                             }}
-                            disabled={!pilihKurir.nama}
+                            disabled={!pilihKurir.nama || !pilihKurir.nohp}
                         />
                         <View>
                             <RNPickerSelect
@@ -363,7 +510,7 @@ const InputPesanan = ({ route }) => {
                         <Button
                             title="Submit"
                             onPress={() => {
-                                if (Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && form.Berat_kg) {
+                                if (titikjemput && Nama_Barang && Lebar_cm && Tinggi_cm && pilihKurir.nama && form.Nama_Kurir && form.NomorHpKurir && selectedValue && pilihalamat.city_name && pilihalamat.province && pilihalamat.postal_code && form.DetailAlamat && selectedValueBerat) {
                                     kirimPesanan();
                                     alert('Data berhasil dikirim!');
                                     navigation.navigate('Checkout');
@@ -375,6 +522,9 @@ const InputPesanan = ({ route }) => {
                         />
                         {showMessage && <Text>{showMessage}</Text>}
                     </View>
+
+           
+                    
                 </View>
             </ScrollView>
         </View>
@@ -386,7 +536,10 @@ const styles = StyleSheet.create({
   camera:{
     height: windowWidth * 0.20,
     width: windowWidth * 0.20,
-    marginTop : -30
+    marginTop : -30,
+    alignSelf: 'center',
+    marginBottom: 10
+    
 },
 txt:{
     fontWeight:'bold',
@@ -398,6 +551,8 @@ txt:{
 kamera:{
   justifyContent:'center',
   alignItems: 'center',
+  alignSelf: 'center',
+  marginTop: 10
 },
   pilihkurir:{
     flexDirection:'row',

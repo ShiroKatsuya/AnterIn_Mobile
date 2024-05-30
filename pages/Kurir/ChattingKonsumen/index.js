@@ -157,114 +157,119 @@ export default function ChattingKonsumen() {
   );
 }
 const styles = StyleSheet.create({
-text:{color: 'white'},
-  resultcontainer: {
-    flexDirection: 'column',
-    marginTop: 40,
-  },
-  text2:{
-    color:'black',
-    fontWeight:'bold'
-
-  },
-  result1: {
-    backgroundColor: 'black',
-    padding: 30,
-    borderRadius: 10,
-    alignItems: 'flex-start',
-    alignContent: 'flex-start',
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: width * 0.30, 
-  },
-  result2: {
-    backgroundColor: 'black',
-    padding: 30,
-    borderRadius: 10,
-    alignItems: 'flex-start',
-    alignContent: 'flex-start',
-    marginLeft: width * 0.30, 
-    marginRight: 20,
-    marginTop: 20,
-  },
-  result3: {
-    backgroundColor: 'black',
-    padding: 30,
-    borderRadius: 10,
-    alignItems: 'flex-end',
-    alignContent: 'flex-end',
-    justifyContent: 'flex-end',
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: width * 0.30, 
-  },
-  logo: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-  cardInfo: {
-    backgroundColor: '#0B111F',
-    padding: 15,
-  },
-  cardInfoRow: {
-    marginRight: 40,
-    marginLeft: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#EDA01F',
-    padding: 10,
-  },
-  header: {
-    marginTop: 15,
-    backgroundColor: 'black',
-    padding: 10,
-    borderRadius: 10,
-  },
-  main: {
-    backgroundColor: '#FFFFFF',
-    marginTop: 15,
-    height: 800,
-  },
-  chatbar: {
-    marginRight: 20,
-    marginLeft: 20,
-    // marginTop:300,
-    flexDirection: "row",
-  },
-  input: {
-    height: 40,
-    width: 400,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    
-
-  },
-  form2: {
-    backgroundColor:'#d9d9d9',
-    color:'white'
-  },
-  buttonsend:{
-    backgroundColor:'pink',
-    width:40,
-    height:40,
-    justifyContent: 'space-between',
-    marginLeft:10,
-    borderRadius:100,
-    alignItems: 'center',
-  },
-  sendbuttonicon:{
-    width:40,
-    height: 40,
-    borderRadius: 3,
-    marginLeft: 5,
-    alignSelf:'center',
-  }
-});
+  text:{color: 'white'},
+    resultcontainer: {
+      flexDirection: 'column',
+      marginTop: 40,
+    },
+    text2:{
+      color:'black',
+      fontWeight:'bold'
+  
+    },
+    result1: {
+      backgroundColor: 'black',
+      padding: 30,
+      borderRadius: 10,
+      alignItems: 'flex-start',
+      alignContent: 'flex-start',
+      marginTop: 20,
+      marginLeft: 20,
+      marginRight: width * 0.30, 
+    },
+    result2: {
+      backgroundColor: 'black',
+      padding: 30,
+      borderRadius: 10,
+      alignItems: 'flex-start',
+      alignContent: 'flex-start',
+      marginLeft: width * 0.30, 
+      marginRight: 20,
+      marginTop: 20,
+    },
+    result3: {
+      backgroundColor: 'black',
+      padding: 30,
+      borderRadius: 10,
+      alignItems: 'flex-end',
+      alignContent: 'flex-end',
+      justifyContent: 'flex-end',
+      marginTop: 20,
+      marginLeft: 20,
+      marginRight: width * 0.30, 
+    },
+    logo: {
+      width: 50,
+      height: 50,
+      marginRight: 10,
+    },
+    cardInfo: {
+      backgroundColor: '#0B111F',
+      padding: 15,
+    },
+    cardInfoRow: {
+      marginRight: 40,
+      marginLeft: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    container: {
+      flex: 1,
+      backgroundColor: '#EDA01F',
+      padding: 10,
+    },
+    header: {
+      marginTop: 15,
+      backgroundColor: 'black',
+      padding: 10,
+      borderRadius: 10,
+      height: '90%',
+      borderRadius: 20,
+    },
+    main: {
+      backgroundColor: '#FFFFFF',
+      marginTop: 15,
+      // height: 800,
+      height: '90%',
+      // width: windowWidth * 0.5,
+  
+    },
+    chatbar: {
+      marginRight: 20,
+      marginLeft: 20,
+      // marginTop:300,
+      flexDirection: "row",
+    },
+    input: {
+      height: 40,
+        width: '80%',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 10,
+      
+  
+    },
+    form2: {
+      backgroundColor:'#d9d9d9',
+      color:'white'
+    },
+    buttonsend:{
+      backgroundColor:'pink',
+      width:40,
+      height:40,
+      justifyContent: 'space-between',
+      marginLeft:10,
+      borderRadius:100,
+      alignItems: 'center',
+    },
+    sendbuttonicon:{
+      width:40,
+      height: 40,
+      borderRadius: 3,
+      marginLeft: 5,
+      alignSelf:'center',
+    }
+  });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios'; 
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,10 @@ export default function DaftarKurir() {
 
   const [showPassword, setShowPassword] = useState(true);
 
+  const [isSuccessSend, setIsSuccessSend] = useState(false);
+  const [countdownTime, setCountdownTime] = useState(0);
+  const [countingDown, setCountingDown] = useState(false);
+
   const navigation = useNavigation();
   const [form, setForm] = useState({
     nama: '',
@@ -16,17 +20,58 @@ export default function DaftarKurir() {
     email: '',
     password: '',
     role_id: '3', 
+    code:''
   });
+
+
+  
+  useEffect(() => {
+    let intervalId;
+    if (countingDown && countdownTime > 0) {
+      intervalId = setInterval(() => {
+        setCountdownTime((time) => time - 1);
+      }, 1000);
+    } else if (countdownTime === 0) {
+      setCountingDown(false);
+    }
+    return () => clearInterval(intervalId);
+  }, [countingDown, countdownTime]);
+
+
+  const sendCode = async () => {
+    setShowMessage(null);
+    setIsSuccessSend(false);
+
+    const isNumeric = !isNaN(form.nohp) && !isNaN(parseFloat(form.nohp));
+    if (!form.nohp || !isNumeric) {
+      setShowMessage('Nomor HP harus numerik');
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseUrl.url}/send-otp-wa`, {
+        nohp: form.nohp,
+      });
+      const result = response.data;
+      if (result.success) {
+        setIsSuccessSend(true);
+        setCountdownTime(30);
+        setCountingDown(true);
+      }
+      setShowMessage(result.message);
+    } catch (error) {
+      // Handle error
+    }
+  };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleInputChange = (name, value) => {
-    setForm({
-      ...form,
+    setForm(prevForm => ({
+      ...prevForm,
       [name]: value,
-    });
+    }));
   };
 
 
@@ -49,14 +94,22 @@ export default function DaftarKurir() {
     } else if (!form.nohp) {
       setShowMessage('Masukkan No.Hp');
       return;
+    }else if (!form.code) {
+      setShowMessage('Masukkan Code Otp');
+      return;
     }
-                                    //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
+                                   //Nanti aturlah buat base url nya ini modelan hardcode gini bakal ribet ganti2 nya lagi
     try {                           // jangan lupa /api/... adalah benar untuk routing nya
       const response = await axios.post(`${baseUrl.url}/register`, form); 
-      if (response.data) {
+      if (response.data.success) {
         setShowMessage('Registrasi berhasil');
+        console.log(response.data);
+        alert('Anda Berhasil Daftar');
+        navigation.navigate('LoginKurir');
         console.log(response.data)
 
+      }else{
+        setShowMessage('Kesalahan Kode Verifikasi');
       }
     } catch (error) {
       setShowMessage(error.response.data.message || 'Terjadi kesalahan');
@@ -87,12 +140,14 @@ export default function DaftarKurir() {
             placeholder="Nama"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
             onChangeText={(text) => handleInputChange('nama', text)}
+            value={form.nama}
           />
           <TextInput
             style={[styles.input, styles.form2]}
             placeholder="Email"
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
             onChangeText={(text) => handleInputChange('email', text)}
+            value={form.email}
           />
 
           <View>
@@ -102,6 +157,7 @@ export default function DaftarKurir() {
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               onChangeText={(text) => handleInputChange('password', text)}
               secureTextEntry={showPassword}
+              value={form.password}
             />
             <TouchableOpacity onPress={toggleShowPassword}>
               <Text style={{ backgroundColor: 'red', padding: 7, borderRadius: 10, alignSelf: 'flex-end', textAlign: 'center', color: 'white', fontSize: 10, marginTop: -6, marginBottom: 3 }}>
@@ -110,12 +166,25 @@ export default function DaftarKurir() {
             </TouchableOpacity>
           </View>
 
+
+
           <TextInput
             style={[styles.input, styles.form2]}
             placeholder="No.Hp"
+            value={form.nohp}
             placeholderTextColor="rgba(255, 255, 255, 0.5)"
             onChangeText={(text) => handleInputChange('nohp', text)}
           />
+
+<TextInput
+              style={[styles.input, styles.form2]}
+              value={form.code}
+              // keyBoardType="numeric"
+              placeholder="Masukkan kode verifikasi"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              onChangeText={(text) => handleInputChange('code', text)}
+            />
+
 
         {/* <TextInput
             style={[styles.input, styles.form2]}
@@ -125,23 +194,28 @@ export default function DaftarKurir() {
           /> */}  
           {/* Bagian bottom */}
           <Button title="Daftar" color="#EDA01F"
-           onPress={() => {
-               if ( form.nama && form.email && form.password && form.nohp) {
-                   register()
-                   alert('Anda Berhasil Daftar');
-                   navigation.navigate('LoginKurir');
-             
-               } else {
-                   alert('Harap lengkapi semua form sebelum submit');
-               }
-           }}
+          onPress={register}
   
           />
           {showMessage && <Text>{showMessage}</Text>}
-  
+            <TouchableOpacity onPress={handleLogin}>
           <Text style={styles.akun}>
             Jika Memiliki Akun?
           </Text>
+          </TouchableOpacity>
+
+          <View>
+
+{!countingDown ? (
+    <TouchableOpacity onPress={sendCode} style={styles.buttonKirim}>
+      <Text style={styles.buttonText}>Kirim OTP</Text>
+    </TouchableOpacity>
+  ) : (
+    <Text style={styles.countdown}>Kirim Ulang ({countdownTime})</Text>
+  )}
+  {/* {showMessage && <Text style={isSuccessSend ? styles.messageSuccess : styles.messageError}>{showMessage}</Text>} */}
+
+</View>
     
           {/* <TouchableOpacity onPress={handleLogin}> */}
           <View style={{marginTop:12}}>

@@ -3,44 +3,108 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { baseUrl } from '../../baseUrl';
+import { baseUrl } from '../../../baseUrl';
 
-export default function DetailPemesanan() {
-  navigataion = useNavigation()
-  const handlePress = ()=>{
-    navigataion.navigate('DetailPemansanByUser')
-  }
+export default function DetailPemesanan({route}) {
+  const [dataPribadi, setDataPribadi] = useState({});
+  const [ambilDataByAlamat, dataByAlamat] = useState([]);
+  const [city_name, setcity_name] = useState(route.params.city_name || {});
+    const [ambilDataProfile, setAmbilDataProfile] = useState([]);
+   const navigataion = useNavigation()
+
+
+  useEffect(() => {
+    setcity_name(route.params.city_name || {});
+}, [route.params.city_name]);
+
+const DetailPemansanByUser = (id) => {
+
+  navigataion.navigate('DetailPemansanByUser', { id: id });
+  // console.log(id)
+
+};
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${baseUrl.url}/riwayatpesananuser`, {
+
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+
+        });
+        dataByAlamat(response.data["data"]);
+        // console.log(response.data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 5000);
+    // return () => clearInterval(interval);
+  }, [dataPribadi.token]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios(`${baseUrl.url}/datauser`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          method: "GET"
+        });
+        setAmbilDataProfile(response.data["data"]);
+      //   console.log(response.data)
+
+      //  //lu cobain dulu dah console.log ada kgk datanya 
+        // console.log(response.data) 
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [dataPribadi.token]);
+
+  
   return (
     <>
       <SafeAreaView style={styles.container}>
       
         <View style={{ marginBottom: 40 }}>
+    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.text}>Semua</Text>
             <Text style={styles.text}>Sedang Dikirim</Text>
             <Text style={styles.text}>Sudah Dikirim</Text>
             <Text style={styles.text}>Selesai</Text>
           </View>
+          </ScrollView>
+
           <ScrollView style={styles.scrollView}>
           <View>
             <View style={styles.search}>
               <Text style={{ color: 'black' }}>Cari nama produk yang dipesan</Text>
             </View>
-            
-   
-       
- 
+            <FlatList
+              nestedScrollEnabled={true}
+              scrollEnabled={false}
+              data={Array.isArray(ambilDataByAlamat) ? ambilDataByAlamat.filter(item => item.city_name === city_name && item.Nama_Kurir === ambilDataProfile.nama && item.status == 'Sudah Dibayar') : []}
+              renderItem={({ item }) => (
+                <>
                   <View style={styles.proses}>
-                    <Text style={styles.textproses}>Produk yang Sedang Dipesan</Text>
+                    <Text style={styles.textproses}>{item.city_name}</Text>
                     <View style={styles.jenispaket}>
                       <Image source={require('../../../img/ikon-riwayatpesanan/limited.png')} style={styles.img} />
-                      <Text style={styles.paketcepat}>Paket Ekonomis</Text>
+                      <Text style={styles.paketcepat}>{item.Nama_Paket}</Text>
                     </View>
                     <View style={styles.produkproses}>
                       <TouchableOpacity
                         style={styles.textdetailcontainer}
-                        // onPress={() => navigateToDetail(item.id)}
-                        onPress={handlePress}
+                        onPress={() => DetailPemansanByUser(item.id)}
                       >
                         <Text style={styles.textdetail}>
                           Cek detail disini
@@ -54,7 +118,10 @@ export default function DetailPemesanan() {
                       </Text>
                     </View>
                   </View>
-
+                </>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
               
             </View>
   
@@ -103,8 +170,8 @@ const styles = StyleSheet.create({
   },
   mobilcontainer: {
     // padding: 10,
-    marginTop: -135,
-    marginRight: 330,
+    marginTop: -width * 0.3,
+    marginRight: width * 0.5,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center', 
@@ -117,11 +184,13 @@ const styles = StyleSheet.create({
     jenispaket:{
         backgroundColor:'#000000',
         padding:20,
-        width:230,
+        width:width * 0.8,
+        // height:width * 0.4,
         paddingBottom:50,
         marginTop:20,
-        marginLeft:40,
-        borderRadius:30
+        // marginLeft:40,
+        borderRadius:30,
+        alignSelf:'center'
 
 
     },
