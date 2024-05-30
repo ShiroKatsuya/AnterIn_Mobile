@@ -11,6 +11,8 @@ export default function KlasifikasiObjek() {
     const [Deskription, SetDeskription] = useState(null);
     const [Dedection, SetDedection] = useState(null);
 
+    const [gagal,setGagal]=useState(null)
+
     // const [lebar,Setlebar]=useState(null)
 
     const [Lebar_cm, setLebar_cm] = useState(null);
@@ -52,6 +54,7 @@ export default function KlasifikasiObjek() {
                 SetNamaBarang(responseJson.response.Nama_Barang);
                 SetDeskription(responseJson.response.Deskripsi);
                 SetDedection(responseJson.response.Persentase);
+                setGagal(responseJson.response.error)
 
                 // Setlebar(responseJson.response.Lebar_cm)
                 // SetDedection(responseJson.response.Tinggi_cm)
@@ -164,6 +167,7 @@ export default function KlasifikasiObjek() {
 
                     <Text style={styles.textresul}>Lebar : {Lebar_cm} cm</Text>
                     <Text style={styles.textresul}>Tinggi : {Tinggi_cm} cm</Text>
+                    <Text style={styles.textresul}>{gagal}</Text>
 
                 </View>
             </View>
