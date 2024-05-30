@@ -169,6 +169,7 @@ export default function KlasifikasiObjek() {
                     <Text style={styles.textresul}>Lebar : {Lebar_cm} cm</Text>
                     <Text style={styles.textresul}>Tinggi : {Tinggi_cm} cm</Text>
                     <Text style={styles.textresul}>{gagal}</Text>
+                    
 
                 </View>
             </View>
