@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, RiwayatStatusSucces, BerikanRating, TambahNomorHp, ListRiwayatChatting, DetailChatting, } from './pages/route'; 
+import { RincianPendapatan,Login, Dashboard, Daftar, Profile, Transaksi, Alamat, TambahALamat, KlasifikasiObjek, Chatting, Riwayat, DetailPesanan, Checkout, InputPesanan, Kurir, rating, Rating, Maps, RajaOngkir, DaftarKurir, LoginKurir, HomeKurir, Pengumuman, Gaji, RiwayatPemesanan, MapsKurir, ChattingKonsumen, ProfileKurir, TambahAlamatKurir, DetailPemesanan, DetailPemansanByUser, TambahAlamatLengkapKurir, AlamatKurir, TopUp, DetailTopUp, RiwayatTopUp, RiwayatStatusSucces, BerikanRating, TambahNomorHp, ListRiwayatChatting, DetailChatting, LupaPassword, TambahPasswordBaru, } from './pages/route'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
 
 
@@ -497,6 +497,27 @@ function App() {
                   title: "Tambah Alamat Lengkap Kurirr",
                 }}
               />
+
+<Tab.Screen
+                name="LupaPassword"
+                component={LupaPassword}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Lupa Password",
+                }}
+              />
+
+              
+<Tab.Screen
+                name="TambahPasswordBaru"
+                component={TambahPasswordBaru}
+                options={{
+                  ...headerOption,
+                  HeaderCustome: (props) => <headerTitle {...props} />, 
+                  title: "Tambah Password Baru",
+                }}
+              />
                                                      <Tab.Screen
                 name="AlamatKurir"
                 component={AlamatKurir}
@@ -521,6 +542,8 @@ function App() {
           component={KurirMaintab}
           options={{ headerShown: false }} 
         />
+
+        
 
         <Stack.Screen
           name="MainTab"
