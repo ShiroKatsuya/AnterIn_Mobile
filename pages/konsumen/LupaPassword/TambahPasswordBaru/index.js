@@ -12,6 +12,47 @@ export default function TambahPasswordBaru({route}) {
 
     const [email, setEmail] = useState(route.params.email || '');
     const [showMessage, setShowMessage] = useState(null);
+    const [isSuccessSend, setIsSuccessSend] = useState(false);
+    const [countdownTime, setCountdownTime] = useState(0);
+    const [countingDown, setCountingDown] = useState(false);
+
+    useEffect(() => {
+        let intervalId;
+        if (countingDown && countdownTime > 0) {
+          intervalId = setInterval(() => {
+            setCountdownTime((time) => time - 1);
+          }, 1000);
+        } else if (countdownTime === 0) {
+          setCountingDown(false);
+        }
+        return () => clearInterval(intervalId);
+      }, [countingDown, countdownTime]);
+
+
+      const sendCode = async () => {
+        setShowMessage(null);
+        setIsSuccessSend(false);
+    
+        if (!form.email) {
+          setShowMessage('Masukkan Email');
+          return;
+        }
+        try {
+          const response = await axios.post(`${baseUrl.url}/send-otp-email`, {
+            email: form.email,
+          });
+          const result = response.data;
+          if (result.success) {
+            setIsSuccessSend(true);
+            setCountdownTime(30);
+            setCountingDown(true);
+            Alert.alert("Kode OTP Berhasil dikirim")
+          }
+          setShowMessage(result.message);
+        } catch (error) {
+          // Handle error
+        }
+      };
 
     const navigation = useNavigation();
 
@@ -25,7 +66,8 @@ export default function TambahPasswordBaru({route}) {
     const [form, setForm] = useState({
         email: email,
         password: '',
-        confirmasipassword: ''
+        confirmasipassword: '',
+        code: ''
     });
 
 
@@ -54,6 +96,11 @@ export default function TambahPasswordBaru({route}) {
             return;
         }
 
+        if (!form.code){
+            setShowMessage('Masukkan Kode OTP');
+            return;
+        }
+
         // if (form.password !=== form.confirmasipassword){
         //     setShowMessage('Password tidak sama dengan Konfirmasi Password');
         //     return;
@@ -72,13 +119,15 @@ export default function TambahPasswordBaru({route}) {
             const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {
                 email: form.email,
                 password: form.password,
-                confirmasipassword: form.confirmasipassword
+                confirmasipassword: form.confirmasipassword,
+                code: form.code
             });
 
             console.log (response.data.message)
 
             if (response.data.message){
-                Alert("password berhasil dirubah")
+                Alert.alert("password berhasil dirubah")
+                navigation.navigate('Login')
             }
         } catch (error) {
             if (error.response) {
@@ -123,16 +172,39 @@ export default function TambahPasswordBaru({route}) {
                     onChangeText={(value) => handleInputChange('confirmasipassword', value)}
                 />
 
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Kode OTP"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    value={form.code}
+                    onChangeText={(value) => handleInputChange('code', value)}
+                />
+
                 <TouchableOpacity style={styles.button} onPress={changepassword}>
                     <Text style={styles.text2}>Submit</Text>
                 </TouchableOpacity>
                 {showMessage ? <Text style={styles.text}>{showMessage}</Text> : null}
+          {!countingDown ? (
+              <TouchableOpacity onPress={sendCode} style={styles.buttonKirim}>
+                <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Kirim Verifikasi Kode</Text>
+
+              </TouchableOpacity>
+              
+            ) : (
+              <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Kirim Ulang ({countdownTime})</Text>
+            )}
+
+        <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Tekan Sekali Jangan Spam !</Text>
+
+
             </View>
         </View>
     )
 }
     
     const styles = StyleSheet.create({
+
+        
     
         button:{
             backgroundColor:'#d3d3d3',
