@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TextInput,Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TextInput,Button, TouchableOpacity, Alert } from 'react-native'
 // import React from 'react'
 
 import React, { useState,useEffect } from 'react';
@@ -11,18 +11,66 @@ import { baseUrl } from '../../../baseUrl';
 export default function TambahPasswordBaru({route}) {
 
     const [email, setEmail] = useState(route.params.email || '');
-    const [showMessage, setShowMessage] = useState('');
+    const [showMessage, setShowMessage] = useState(null);
+    const [isSuccessSend, setIsSuccessSend] = useState(false);
+    const [countdownTime, setCountdownTime] = useState(0);
+    const [countingDown, setCountingDown] = useState(false);
+
     useEffect(() => {
-        if (route.params.email) {
+        let intervalId;
+        if (countingDown && countdownTime > 0) {
+          intervalId = setInterval(() => {
+            setCountdownTime((time) => time - 1);
+          }, 1000);
+        } else if (countdownTime === 0) {
+          setCountingDown(false);
+        }
+        return () => clearInterval(intervalId);
+      }, [countingDown, countdownTime]);
+
+
+      const sendCode = async () => {
+        setShowMessage(null);
+        setIsSuccessSend(false);
+    
+        if (!form.email) {
+          setShowMessage('Masukkan Email');
+          return;
+        }
+        try {
+          const response = await axios.post(`${baseUrl.url}/send-otp-email`, {
+            email: form.email,
+          });
+          const result = response.data;
+          if (result.success) {
+            setIsSuccessSend(true);
+            setCountdownTime(30);
+            setCountingDown(true);
+            Alert.alert("Kode OTP Berhasil dikirim")
+          }
+          setShowMessage(result.message);
+        } catch (error) {
+          // Handle error
+        }
+      };
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        if (route.params?.email) {
             setEmail(route.params.email);
         }
     }, [route.params]);
 
+
     const [form, setForm] = useState({
-        email: route.params.email || '',
+        email: email,
         password: '',
-        confirmasipassword: ''
+        confirmasipassword: '',
+        code: ''
     });
+
+
 
     const handleInputChange = (name, value) => {
         setForm(prevForm => ({
@@ -31,103 +79,132 @@ export default function TambahPasswordBaru({route}) {
         }));
     }
 
-    const TambahPasswordBaru = async () => {
+
+    const changepassword = async () => {
         if (!form.email) {
             setShowMessage('Masukkan Email');
             return;
         }
-        if (!form.password) {
-            setShowMessage('Masukkan Password Baru');
+
+        if (!form.password){
+            setShowMessage('Masukkan Password');
             return;
         }
-        if (!form.confirmasipassword) {
-            setShowMessage('Masukkan Konfirmasi Password Baru');
+
+        if (!form.confirmasipassword){
+            setShowMessage('Masukkan Konfirmasi Password');
             return;
         }
-        if (form.password !== form.confirmasipassword) {
-            setShowMessage('Password dan Konfirmasi Password tidak sama');
+
+        if (!form.code){
+            setShowMessage('Masukkan Kode OTP');
             return;
         }
+
+        // if (form.password !=== form.confirmasipassword){
+        //     setShowMessage('Password tidak sama dengan Konfirmasi Password');
+        //     return;
+        // }
+
+        // if (!form.password || !form.confirmasipassword) {
+        //     setShowMessage('Masukkan password dan konfirmasi password');
+        //     return;
+        // }
+        // if (form.password !== form.confirmasipassword) {
+        //     setShowMessage('Password Tidak Sama');
+        //     return;
+        // }
 
         try {
             const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {
                 email: form.email,
                 password: form.password,
-                confirmasipassword: form.confirmasipassword
+                confirmasipassword: form.confirmasipassword,
+                code: form.code
             });
-            console.log(response.data.message);
 
-            // if (response.data.message === "Email Ditemukan") {
-            //     console.log(response.data.message);
-            // } else if (response.data.message === 'Email Tidak Ditemukan') {
-            //     console.log(response.data.message);
-            // }
+            console.log (response.data.message)
 
+            if (response.data.message){
+                Alert.alert("password berhasil dirubah")
+                navigation.navigate('Login')
+            }
         } catch (error) {
             if (error.response) {
                 setShowMessage(error.response.data.message);
             } else {
-                setShowMessage('Error: Network Error');
+                setShowMessage('Password Berhasil Dirubah');
+                navigation.navigate('Login')
+                Alert.alert("Password Berhasil Dirubah")
+                
             }
         }
-    }
+
+    };
     return (
         <View style={styles.container}>
-    
-          <View style={styles.form}>
+            <View style={styles.form}>
+                <Text style={styles.text}>Isikan Email Yang Benar Disini</Text>
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Email"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    value={form.email}
+                    onChangeText={value => handleInputChange('email', value)}
+                    editable={false}
+                />
 
-          <Text style={styles.text}>Isikan Email Ynag Benar Disini</Text>
-                            <TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Email"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                value={email}
-                                // onChangeText={handleEmailChange}
-                                // secureTextEntry={true}
-                                onChangeText={(value) => handleInputChange('email', value)}
-                                // editable={false}
-                            />
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Password Baru"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    secureTextEntry={true}
+                    value={form.password}
+                    onChangeText={(value) => handleInputChange('password', value)}
+                />
 
-<TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Password Baru"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                value={form.password}
-                                onChangeText={(value) => handleInputChange('password', value)}
-                                // secureTextEntry={true}
-                            />
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Konfirmasi Password Baru"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    secureTextEntry={true}
+                    value={form.confirmasipassword}
+                    onChangeText={(value) => handleInputChange('confirmasipassword', value)}
+                />
 
-                            
-<TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Konfirmasi Password Baru"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                value={form.confirmasipassword}
-                                onChangeText={(value) => handleInputChange('confirmasipassword', value)}
-                                // secureTextEntry={true}
-                            />
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Kode OTP"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    value={form.code}
+                    onChangeText={(value) => handleInputChange('code', value)}
+                />
+
+                <TouchableOpacity style={styles.button} onPress={changepassword}>
+                    <Text style={styles.text2}>Submit</Text>
+                </TouchableOpacity>
+                {showMessage ? <Text style={styles.text}>{showMessage}</Text> : null}
+          {!countingDown ? (
+              <TouchableOpacity onPress={sendCode} style={styles.buttonKirim}>
+                <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Kirim Verifikasi Kode</Text>
+
+              </TouchableOpacity>
+              
+            ) : (
+              <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Kirim Ulang ({countdownTime})</Text>
+            )}
+
+        <Text style={styles.text && {marginTop: 10 , color: 'white'}}>Tekan Sekali Jangan Spam !</Text>
 
 
-
-            
-    
-    
-            <TouchableOpacity style={styles.button} onPress={TambahPasswordBaru}>
-                        <View>
-                        <Text style={styles.text2}>Submit</Text>
-                        </View>
-                        </TouchableOpacity>
-
-
-        {showMessage && <Text style={styles.text}>{showMessage}</Text>}
-        
-          </View>
-          
+            </View>
         </View>
-      )
-    }
+    )
+}
     
     const styles = StyleSheet.create({
+
+        
     
         button:{
             backgroundColor:'#d3d3d3',

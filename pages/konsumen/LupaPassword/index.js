@@ -10,20 +10,19 @@ import { baseUrl } from '../../baseUrl';
 
 export default function LupaPassword() {
 
-    const [email, setEmail] = useState(null);
+    const [email, setEmail] = useState('');
 
 
     const navigation = useNavigation();
     const [showMessage, setShowMessage] = useState(null);
 
-    const [showAfterConfirm, setShowAfterConfirm] = useState(null);
+    const [showAfterConfirm, setShowAfterConfirm] = useState('');
 
     const [form, setForm] = useState({
         email: '',
         // password: '',
         // confirmasipassword: ''
     });
-
 
     const handleInputChange = (name, value) => {
         setForm({
@@ -47,13 +46,22 @@ export default function LupaPassword() {
         // }
 
         try {
-            const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {});
+            const response = await axios.put(`${baseUrl.url}/checkemail/${form.email}`, {
+                // password: form.password,
+                // confirmasipassword: form.confirmasipassword
+            });
             setEmail(form.email);
             setShowMessage(response.data.message);
-            if (response.data.message) {
+            // setShowAfterConfirm(null);
+       
+            // console.log(response.data.message);
+            if (response.data.message === 'Email Ditemukan'){
+                // navigation.navigate('TambahPasswordBaru',{
+                //     email: email
+                // });  
                 setShowAfterConfirm('Apakah Email Ini Mau Password Baru ?');
-            } else {
-                setShowAfterConfirm(null);
+        
+            console.log(email);
             }
 
 
@@ -118,7 +126,7 @@ export default function LupaPassword() {
                 <TouchableOpacity onPress={() => navigation.navigate('TambahPasswordBaru', {
                     email: email
                 })}>
-                    {showAfterConfirm ? <Text style={styles.text}>{showAfterConfirm}</Text> : null}
+                {showAfterConfirm ? <Text style={styles.text}>{showAfterConfirm}</Text> : null}
                 </TouchableOpacity>
             </View>
         </View>
