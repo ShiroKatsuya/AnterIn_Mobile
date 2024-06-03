@@ -24,6 +24,7 @@ export default function LupaPassword() {
         // confirmasipassword: ''
     });
 
+
     const handleInputChange = (name, value) => {
         setForm({
             ...form,
@@ -46,22 +47,13 @@ export default function LupaPassword() {
         // }
 
         try {
-            const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {
-                // password: form.password,
-                // confirmasipassword: form.confirmasipassword
-            });
+            const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {});
             setEmail(form.email);
             setShowMessage(response.data.message);
-            // setShowAfterConfirm(null);
-       
-            // console.log(response.data.message);
-            if (response.data.message === 'Email Ditemukan'){
-                // navigation.navigate('TambahPasswordBaru',{
-                //     email: email
-                // });  
+            if (response.data.message) {
                 setShowAfterConfirm('Apakah Email Ini Mau Password Baru ?');
-        
-            console.log(email);
+            } else {
+                setShowAfterConfirm(null);
             }
 
 
@@ -123,10 +115,10 @@ export default function LupaPassword() {
                     </View>
                 </TouchableOpacity>
                 {showMessage ? <Text style={styles.text}>{showMessage}</Text> : null}
-                <TouchableOpacity onPress={()=>navigation.navigate('TambahPasswordBaru',{
+                <TouchableOpacity onPress={() => navigation.navigate('TambahPasswordBaru', {
                     email: email
                 })}>
-                {showAfterConfirm ? <Text style={styles.text}>{showAfterConfirm}</Text> : null}
+                    {showAfterConfirm ? <Text style={styles.text}>{showAfterConfirm}</Text> : null}
                 </TouchableOpacity>
             </View>
         </View>
