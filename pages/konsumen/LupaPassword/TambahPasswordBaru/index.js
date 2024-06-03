@@ -1,73 +1,136 @@
-import { StyleSheet, Text, View,TextInput,Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TextInput,Button, TouchableOpacity, Alert } from 'react-native'
 // import React from 'react'
 
 import React, { useState,useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { baseUrl } from '../../baseUrl';
+import { baseUrl } from '../../../baseUrl';
 
 
 export default function TambahPasswordBaru({route}) {
 
-    const [email, setEmail] = useState(null);
+    const [email, setEmail] = useState(route.params.email || '');
+    const [showMessage, setShowMessage] = useState(null);
+
+    const navigation = useNavigation();
+
     useEffect(() => {
-        if (route.params) {
-            const { email } = route.params;
-            setEmail(email);
+        if (route.params?.email) {
+            setEmail(route.params.email);
         }
     }, [route.params]);
+
+
+    const [form, setForm] = useState({
+        email: email,
+        password: '',
+        confirmasipassword: ''
+    });
+
+
+
+    const handleInputChange = (name, value) => {
+        setForm(prevForm => ({
+            ...prevForm,
+            [name]: value,
+        }));
+    }
+
+
+    const changepassword = async () => {
+        if (!form.email) {
+            setShowMessage('Masukkan Email');
+            return;
+        }
+
+        if (!form.password){
+            setShowMessage('Masukkan Password');
+            return;
+        }
+
+        if (!form.confirmasipassword){
+            setShowMessage('Masukkan Konfirmasi Password');
+            return;
+        }
+
+        // if (form.password !=== form.confirmasipassword){
+        //     setShowMessage('Password tidak sama dengan Konfirmasi Password');
+        //     return;
+        // }
+
+        // if (!form.password || !form.confirmasipassword) {
+        //     setShowMessage('Masukkan password dan konfirmasi password');
+        //     return;
+        // }
+        // if (form.password !== form.confirmasipassword) {
+        //     setShowMessage('Password Tidak Sama');
+        //     return;
+        // }
+
+        try {
+            const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {
+                email: form.email,
+                password: form.password,
+                confirmasipassword: form.confirmasipassword
+            });
+
+            console.log (response.data.message)
+
+            if (response.data.message){
+                Alert("password berhasil dirubah")
+            }
+        } catch (error) {
+            if (error.response) {
+                setShowMessage(error.response.data.message);
+            } else {
+                setShowMessage('Password Berhasil Dirubah');
+                navigation.navigate('Login')
+                Alert.alert("Password Berhasil Dirubah")
+                
+            }
+        }
+
+    };
     return (
         <View style={styles.container}>
-    
-          <View style={styles.form}>
+            <View style={styles.form}>
+                <Text style={styles.text}>Isikan Email Yang Benar Disini</Text>
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Email"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    value={form.email}
+                    onChangeText={value => handleInputChange('email', value)}
+                    editable={false}
+                />
 
-          <Text style={styles.text}>Isikan Email Ynag Benar Disini</Text>
-                            <TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Email"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                value={email}
-                                // onChangeText={handleEmailChange}
-                                // secureTextEntry={true}
-                                editable={false}
-                            />
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Password Baru"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    secureTextEntry={true}
+                    value={form.password}
+                    onChangeText={(value) => handleInputChange('password', value)}
+                />
 
-<TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Password Baru"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                // value={email}
-                                // onChangeText={handleEmailChange}
-                                // secureTextEntry={true}
-                            />
+                <TextInput
+                    style={[styles.input, styles.form2]}
+                    placeholder="Konfirmasi Password Baru"
+                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                    secureTextEntry={true}
+                    value={form.confirmasipassword}
+                    onChangeText={(value) => handleInputChange('confirmasipassword', value)}
+                />
 
-                            
-<TextInput
-                                style={[styles.input, styles.form2]}
-                                placeholder="Konfirmasi Password Baru"
-                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                                // value={email}
-                                // onChangeText={handleEmailChange}
-                                // secureTextEntry={true}
-                            />
-
-
-
-            
-    
-    
-            <TouchableOpacity style={styles.button}>
-                        <View>
-                        <Text style={styles.text2}>Submit</Text>
-                        </View>
-                        </TouchableOpacity>
-        
-          </View>
-          
+                <TouchableOpacity style={styles.button} onPress={changepassword}>
+                    <Text style={styles.text2}>Submit</Text>
+                </TouchableOpacity>
+                {showMessage ? <Text style={styles.text}>{showMessage}</Text> : null}
+            </View>
         </View>
-      )
-    }
+    )
+}
     
     const styles = StyleSheet.create({
     
