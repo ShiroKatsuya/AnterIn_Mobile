@@ -10,13 +10,13 @@ import { baseUrl } from '../../baseUrl';
 
 export default function LupaPassword() {
 
-    const [email, setEmail] = useState(null);
+    const [email, setEmail] = useState('');
 
 
     const navigation = useNavigation();
     const [showMessage, setShowMessage] = useState(null);
 
-    const [showAfterConfirm, setShowAfterConfirm] = useState(null);
+    const [showAfterConfirm, setShowAfterConfirm] = useState('');
 
     const [form, setForm] = useState({
         email: '',
@@ -46,7 +46,7 @@ export default function LupaPassword() {
         // }
 
         try {
-            const response = await axios.put(`${baseUrl.url}/changepassword/${form.email}`, {
+            const response = await axios.put(`${baseUrl.url}/checkemail/${form.email}`, {
                 // password: form.password,
                 // confirmasipassword: form.confirmasipassword
             });
@@ -123,7 +123,7 @@ export default function LupaPassword() {
                     </View>
                 </TouchableOpacity>
                 {showMessage ? <Text style={styles.text}>{showMessage}</Text> : null}
-                <TouchableOpacity onPress={()=>navigation.navigate('TambahPasswordBaru',{
+                <TouchableOpacity onPress={() => navigation.navigate('TambahPasswordBaru', {
                     email: email
                 })}>
                 {showAfterConfirm ? <Text style={styles.text}>{showAfterConfirm}</Text> : null}
