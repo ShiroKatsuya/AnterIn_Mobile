@@ -218,6 +218,28 @@ function App() {
     }}
         />
 
+                        {/* <Stack.Screen
+    name="BerikanRating"
+    component={BerikanRating}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Berikan Rating",
+    }}
+        /> */}
+
+
+{/* <Stack.Screen
+    name="RajaOngkir"
+    component={RajaOngkir}
+    options={{
+      ...headerOption,
+      HeaderCustome: (props) => <headerTitle {...props} />, 
+      title: "Raja Ongkir",
+    }}
+        /> */}
+
+
 <Stack.Screen
     name="ListRiwayatChatting"
     component={ListRiwayatChatting}
