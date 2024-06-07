@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions, ViewComponent } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Image,Dimensions, ViewComponent, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'; 
 import { baseUrl } from '../../baseUrl';
 import { Rating, AirbnbRating } from 'react-native-ratings';
+import Alamat from '../Alamat';
 export default function BerikanRating() {
 
     const [showMessage, setShowMessage] = useState(''); 
     const navigation = useNavigation();
 
-
+console.log(showMessage);
 
     const [form, setForm] = useState({
         rating: '',
@@ -28,8 +29,11 @@ export default function BerikanRating() {
 
     const kirimPesanan = async () => {
         if (!form.rating) {
-            setShowMessage('Jumlah Rating');
+            setShowMessage('Rating Tidak Boleh Kosong');
+            Alert.alert('Rating Tidak Boleh Kosong');
             return;
+
+
         }
 
         try {
@@ -45,6 +49,11 @@ export default function BerikanRating() {
                 }
             });
             console.log(response.data);
+
+            if (response.data.message === false) {
+                navigation.navigate('Home');
+                Alert.alert(response.data.Pesan);
+            }
 
         } catch (error) {
             console.error(error);
@@ -96,11 +105,15 @@ export default function BerikanRating() {
                                 kirimPesanan();
                                 alert('Rating Berhasil Di Kirim');
                                 navigation.navigate('Home');
-                            } else {
+                            }
+                            
+                            else {
                                 alert('Rating Tidak Boleh 0');
                             }
                         
                         }}
+
+                        // onPress={kirimPesanan}
                 
                     >
                         <View         style={styles.submit}>
@@ -108,7 +121,11 @@ export default function BerikanRating() {
                         </View>
                     </TouchableOpacity>
                                  </View>
-                    {showMessage && <Text>{showMessage}</Text>}
+                    {/* {showMessage && <Text>{showMessage}</Text>} */}
+
+                    {/* {} */}
+
+                    {showMessage && <Text>{showMessage}</Text> ? <Text>{showMessage}</Text> : null}
 
             </View>
 

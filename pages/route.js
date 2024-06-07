@@ -38,5 +38,7 @@ import RiwayatStatusSucces from "./konsumen/TopUp/RiwayatStatusSucces";
 import TambahNomorHp from "./konsumen/Alamat/TambahNomorHp";
 import ListRiwayatChatting from "./konsumen/List Riwayat Chatting";
 import DetailChatting from "./konsumen/List Riwayat Chatting/DetailChatting";
-export {DetailChatting,TambahNomorHp,RiwayatStatusSucces,RiwayatTopUp,DetailTopUp,TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,BerikanRating,baseUrl,Maps,RajaOngkir,HomeKurir,ListRiwayatChatting}
+import LupaPassword from "./konsumen/LupaPassword";
+import TambahPasswordBaru from "./konsumen/LupaPassword/TambahPasswordBaru";
+export {TambahPasswordBaru,LupaPassword,DetailChatting,TambahNomorHp,RiwayatStatusSucces,RiwayatTopUp,DetailTopUp,TopUp,AlamatKurir,TambahAlamatLengkapKurir ,RincianPendapatan,DetailPemansanByUser,DetailPemesanan,TambahAlamatKurir,ProfileKurir,ChattingKonsumen,MapsKurir,RiwayatPemesanan,Gaji,Pengumuman,LoginKurir,DaftarKurir,Login,Dashboard,Daftar,Profile,Transaksi,Alamat,TambahALamat,KlasifikasiObjek,Chatting,Riwayat,DetailPesanan,Checkout,InputPesanan,Kurir,BerikanRating,baseUrl,Maps,RajaOngkir,HomeKurir,ListRiwayatChatting}
 

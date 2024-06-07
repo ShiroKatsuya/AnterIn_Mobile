@@ -146,9 +146,11 @@ export default function Login() {
                         </TouchableOpacity>
                         </View>
                     </View>
+                    <TouchableOpacity onPress={()=>navigation.navigate('LupaPassword')}>
                     <View style={styles.links}>
                         <Text style={styles.link}>Lupa Password?</Text>
                     </View>
+                    </TouchableOpacity>
                 </View>
             </View>
             <Text style={{ marginTop: 10, backgroundColor: '#0B111F', padding: 10 }}>
