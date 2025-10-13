@@ -1,79 +1,147 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## AnterIn — Aplikasi Pengantaran & Ekspedisi
 
-# Getting Started
+AnterIn adalah aplikasi mobile berbasis React Native untuk memfasilitasi proses pengantaran paket/ekspedisi antara konsumen dan kurir. Aplikasi ini menyediakan alur end-to-end mulai dari pendaftaran, input pesanan, pemilihan kurir, pelacakan, hingga penyelesaian dan penilaian layanan. Selain itu, terdapat fitur khusus untuk kurir seperti melihat pesanan, navigasi peta, rincian pendapatan, dan pengelolaan profil.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+### Tujuan
+- Mempermudah konsumen membuat dan melacak pesanan pengiriman.
+- Memberikan sarana bagi kurir untuk menerima, mengeksekusi, dan menyelesaikan pesanan secara efisien.
 
-## Step 1: Start the Metro Server
+---
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### Fitur Utama
+- Autentikasi & Akun: Login/Daftar, Lupa Password, Tambah Password Baru, pengelolaan profil.
+- Beranda & Navigasi: Navigasi tab bawah dan stack untuk akses cepat ke halaman-halaman utama.
+- Pesanan: Input Pesanan, Checkout, Riwayat Pesanan, Detail Pesanan, status selesai.
+- Alamat & Klasifikasi: Tambah/kelola alamat, klasifikasi objek yang akan dikirim.
+- Kurir: Daftar sebagai kurir, rekomendasi/list kurir, Maps Kurir, Rincian Pendapatan, Gaji, Alamat Kurir, Tambah Alamat Kurir.
+- Komunikasi: Chatting konsumen–kurir, riwayat chat, detail chat.
+- Penilaian: Berikan rating/ulasan layanan.
+- TopUp: TopUp saldo dan riwayat TopUp.
+- Peta & Ongkir: Integrasi peta dan RajaOngkir untuk estimasi ongkos kirim.
+- Pemberitahuan: Pengumuman/pemberitahuan untuk kurir.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Catatan: Nama-nama layar/fitur didasarkan pada konfigurasi navigator di `App.js`.
 
+---
+
+### Arsitektur Singkat
+- Teknologi: React Native `^0.73.6`, React `18.2.0`.
+- Navigasi: React Navigation (native stack + bottom tabs).
+- Komponen UI: `react-native-paper`, `react-native-vector-icons`.
+- Komunikasi data: `axios`, `socket.io-client`.
+- Utilitas: `moment`, `@react-native-async-storage/async-storage`, image picker, PDF generator, peta, rating, dan komponen pendukung lainnya.
+
+---
+
+### Prasyarat
+- Node.js >= 18
+- NPM atau Yarn
+- Android: Android Studio (SDK, emulator/Perangkat fisik dengan USB debugging)
+- iOS (opsional, macOS): Xcode & iOS Simulator
+- Java/JDK yang diperlukan oleh toolchain Android
+
+Pastikan mengikuti panduan resmi React Native untuk menyiapkan lingkungan pengembangan.
+
+---
+
+### Instalasi
 ```bash
-# using npm
+# 1) Clone repositori
+git clone <url-repo-anda>
+cd Delivery-Expedition-PT-Dwi-Dharma-Djaya
+
+# 2) Install dependensi
+npm install
+# atau
+yarn
+```
+
+Jika menggunakan React Native 0.73, sebagian besar modul sudah auto-link. Untuk iOS, jalankan `pod install` di dalam direktori `ios` bila diperlukan.
+
+---
+
+### Menjalankan Aplikasi
+```bash
+# Jalankan Metro bundler
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
+# Menjalankan di Android (emulator/perangkat)
 npm run android
 
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
+# Menjalankan di iOS (Simulator, macOS)
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Tips:
+- Buka dua terminal terpisah: satu untuk `npm start`, satu lagi untuk `npm run android`/`npm run ios`.
+- Jika emulator tidak berjalan, buka dari Android Studio atau Xcode terlebih dahulu.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+---
 
-## Step 3: Modifying your App
+### Contoh Alur Penggunaan
+- Konsumen:
+  1. Daftar atau Login.
+  2. Tambah alamat pengirim/penerima.
+  3. Input detail pesanan dan klasifikasi objek.
+  4. Pilih kurir yang direkomendasikan.
+  5. Lakukan checkout dan pantau status pengiriman di Riwayat/Detail Pesanan.
+  6. Setelah selesai, beri rating dan ulasan.
 
-Now that you have successfully run the app, let's modify it.
+- Kurir:
+  1. Daftar sebagai kurir atau Login kurir.
+  2. Lihat daftar pesanan dan detailnya.
+  3. Gunakan Maps Kurir untuk navigasi.
+  4. Selesaikan pesanan dan cek Rincian Pendapatan/Gaji.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+---
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+### Konfigurasi (Opsional)
+Beberapa integrasi mungkin membutuhkan konfigurasi variabel lingkungan, misalnya:
+- BASE_URL API backend
+- Endpoint `socket.io`
 
-## Congratulations! :tada:
+Silakan gunakan mekanisme konfigurasi yang Anda pilih (mis. `.env` + library terkait) dan pastikan izin aplikasi (lokasi, kamera, penyimpanan) di Android `AndroidManifest.xml` serta Info.plist (iOS) telah diatur sesuai kebutuhan modul (geolocation, image picker, file system, dll.).
 
-You've successfully run and modified your React Native App. :partying_face:
+---
 
-### Now what?
+### Dependensi Utama
+Ringkasan dari `package.json`:
+- Navigasi: `@react-navigation/native-stack`, `@react-navigation/bottom-tabs`, `@react-navigation/material-bottom-tabs`
+- UI & Ikon: `react-native-paper`, `react-native-vector-icons`, `@expo/vector-icons`
+- Data & Utilitas: `axios`, `moment`, `@react-native-async-storage/async-storage`, `async`
+- Media & Dokumen: `react-native-image-picker`, `react-native-html-to-pdf`, `react-native-fs`
+- Lokasi & Peta: `@react-native-community/geolocation`, `react-native-map-link`, `react-native-screens`, `react-native-safe-area-context`
+- Form/Input: `@react-native-picker/picker`, `react-native-picker-select`, `@react-native-community/checkbox`, `@react-native-clipboard/clipboard`
+- Komunikasi Real-time & Chat: `socket.io`, `socket.io-client`, `react-native-gifted-chat`
+- Lainnya: `react-native-ratings`, `react-native-rating-star`
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+Skrip NPM yang tersedia:
+```bash
+npm run start   # Menjalankan Metro bundler
+npm run android # Menjalankan di Android
+npm run ios     # Menjalankan di iOS
+npm run test    # Menjalankan pengujian Jest
+npm run lint    # Menjalankan ESLint
+```
 
-# Troubleshooting
+---
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### Pengujian
+Aplikasi dikonfigurasi dengan Jest. Jalankan:
+```bash
+npm test
+```
 
-# Learn More
+---
 
-To learn more about React Native, take a look at the following resources:
+### Lisensi
+Proyek ini dilisensikan di bawah lisensi MIT. Lihat berkas `LICENSE` untuk detail lengkap.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Hak Cipta (c) 2024 Rizky Sulaeman
+
+---
+
+### Kontribusi
+Kontribusi sangat disambut! Silakan buat issue untuk pelaporan bug/fitur dan ajukan pull request untuk perbaikan atau penambahan.
+
+
